@@ -22,6 +22,9 @@ package enumerable
 // - The channel should only be read through the enumerator
 func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 	return func(yield func(T) bool) {
+		if ch == nil {
+			return
+		}
 		for item := range ch {
 			if !yield(item) {
 				return
