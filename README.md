@@ -150,7 +150,7 @@ Convert lazy sequences into concrete data structures.
 | [`ToMap`](./pkg/enumerable/to_map.go) | Converts an enumeration to a map[T]struct{} for efficient set-like operations. This operation is useful for creating memory-efficient lookup collections or for removing duplicates while materializing an enumeration.<br/><br/>⚠️ Performance note: This is a terminal operation that must iterate through the entire enumeration. For large enumerations, this may be expensive.<br/>⚠️ Memory note: This operation buffers all unique elements in memory. The memory usage depends on the number of unique elements. |
 | [`ToSlice`](./pkg/enumerable/to_slice.go) | Converts an enumeration to a slice containing all elements. This operation is useful for materializing lazy enumerations into concrete collections.<br/><br/>⚠️ Performance note: This is a terminal operation that must iterate through the entire enumeration to collect all elements. For large enumerations, this may be expensive in both time and memory.<br/>⚠️ Memory note: This operation buffers all elements in memory. |
 
-## Sequence diagramm
+## 🧩 Sequence diagram
 ```mermaid
 sequenceDiagram
     participant ToSlice
