@@ -28,7 +28,7 @@ Use `go get` to add the library to your project:
 go get github.com/ahatornn/enumerable
 ```
 
-## ⚖️ Comparison: Vanilla Go vs Queryable
+## ⚖️ Comparison: Enumerable vs Vanilla Go
 
 Let’s say you want to: Merge two slices, keep numbers greater than 50, skip the first 3, and take the next 2.
 
