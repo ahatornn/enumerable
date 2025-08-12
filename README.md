@@ -1,17 +1,20 @@
-# enumerable: LINQ-style Iterators for Go
+# enumerable: Lazy, Generic Iterators for Go
+[![GoDoc](https://godoc.org/github.com/ahatornn/enumerable?status.svg)](https://godoc.org/github.com/ahatornn/enumerable)
+![GitHub release](https://img.shields.io/github/v/tag/ahatornn/enumerable)
+[![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/ahatornn/enumerable)](https://github.com/ahatornn/enumerable)
 [![Тесты](https://github.com/ahatornn/enumerable/actions/workflows/test.yml/badge.svg)](https://github.com/ahatornn/enumerable/actions/workflows/test.yml)
 
-`enumerable` is a Go library inspired by **C# LINQ** (Language Integrated Query) that enables functional-style data processing using **generics** and **lazy iterators**.
+`enumerable` is a Go library for functional-style data processing using **generics** and **lazy iterators**.
 
-With it, you can write clean, readable, and expressive code for filtering, transforming, and aggregating data — without `for` loops or temporary slices.
+It lets you filter, transform, and aggregate data in a clean, readable way — without `for` loops or intermediate slices. Operations are evaluated lazily, meaning no unnecessary allocations or eager processing, making it efficient even for large or streaming datasets.
 
-> Feels like LINQ, but in Go. Lazy evaluation. Generic. Type-safe.
+> Composable. Lazy. Generic. Type-safe.
 
 ---
 
 ## ✨ Features
 
-- ✅ **LINQ-like methods**: `Where`, `Select`, `Take`, `Skip`, `First`, `Any`, `All`, `Count`, and more.
+- ✅ **Functional pipeline operators**: Chainable methods like `Where`, `Select`, `Take`, `Skip`, `First`, `Any`, `All`, `Count`, and more - all evaluated lazily and fully type-safe.
 - ✅ **Lazy iterators** — data is processed on-demand.
 - ✅ **Generics (Go 1.18+)** — type safety without type casting.
 - ✅ **Method chaining** — fluent, readable APIs.
