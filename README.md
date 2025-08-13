@@ -1,7 +1,8 @@
 # enumerable: Lazy, Generic Iterators for Go
 [![GoDoc](https://godoc.org/github.com/ahatornn/enumerable?status.svg)](https://godoc.org/github.com/ahatornn/enumerable)
-![GitHub release](https://img.shields.io/github/v/tag/ahatornn/enumerable)
 [![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/ahatornn/enumerable)](https://github.com/ahatornn/enumerable)
+![GitHub release](https://img.shields.io/github/v/tag/ahatornn/enumerable)
+
 [![Тесты](https://github.com/ahatornn/enumerable/actions/workflows/test.yml/badge.svg)](https://github.com/ahatornn/enumerable/actions/workflows/test.yml)
 
 `enumerable` is a Go library for functional-style data processing using **generics** and **lazy iterators**.
