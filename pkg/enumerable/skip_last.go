@@ -90,22 +90,18 @@ func skipLastInternal[T any](enumerator func(func(T) bool), n int) func(func(T) 
 		index := 0
 
 		enumerator(func(item T) bool {
-			if n <= 0 {
-				return yield(item)
-			}
-
 			if count < n {
 				buffer[index] = item
-				index = (index + 1) % n
 				count++
+				index++
 				return true
 			}
 
-			oldestIndex := index
+			oldestIndex := index % n
 			oldest := buffer[oldestIndex]
 
 			buffer[oldestIndex] = item
-			index = (index + 1) % n
+			index++
 
 			return yield(oldest)
 		})
