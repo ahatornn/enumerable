@@ -16,7 +16,7 @@ func TestFirstOrDefault(t *testing.T) {
 		}
 	})
 
-	t.Run("first element from non-empty non-comparable slice", func(t *testing.T) {
+	t.Run("first element from non-empty for non-comparable slice", func(t *testing.T) {
 		t.Parallel()
 
 		defaultSlice := []int{-1, -2}
