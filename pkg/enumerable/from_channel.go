@@ -21,7 +21,16 @@ package enumerable
 // - Channel receive operations occur during enumeration (not beforehand)
 // - The channel should only be read through the enumerator
 func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
-	return fromChannelInternal(ch)
+	return func(yield func(T) bool) {
+		if ch == nil {
+			return
+		}
+		for item := range ch {
+			if !yield(item) {
+				return
+			}
+		}
+	}
 }
 
 // FromChannelAny creates an AnyEnumerator[T] that yields values received from a channel.
@@ -45,10 +54,6 @@ func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 // - Channel receive operations occur during enumeration (not beforehand)
 // - The channel should only be read through the enumerator
 func FromChannelAny[T any](ch <-chan T) AnyEnumerator[T] {
-	return fromChannelInternal(ch)
-}
-
-func fromChannelInternal[T any](ch <-chan T) func(func(T) bool) {
 	return func(yield func(T) bool) {
 		if ch == nil {
 			return
