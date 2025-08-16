@@ -20,7 +20,7 @@ func TestFirstOrNil(t *testing.T) {
 		}
 	})
 
-	t.Run("first element from non-empty non-comparable slice", func(t *testing.T) {
+	t.Run("first element from non-empty for non-comparable slice", func(t *testing.T) {
 		t.Parallel()
 
 		enumerator := FromSliceAny([][]int{
