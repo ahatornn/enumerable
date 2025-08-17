@@ -26,12 +26,12 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 
 ---
 
-## 🚀 Installation
+## 📦 Installation
 
 Use `go get` to add the library to your project:
 
 ```bash
-go get github.com/ahatornn/enumerable
+go get github.com/ahatornn/enumerable@latest
 ```
 
 ## ⚖️ Comparison: Enumerable vs Vanilla Go
@@ -41,64 +41,66 @@ Let’s say you want to: Merge two slices, keep numbers greater than 50, skip th
 ### ✅ Using enumerable
 
 ```go
-nums1 := []int{10, 20, 60, 70}
-nums2 := []int{30, 40, 80, 90, 100}
+nums1 := []int{19, 63, 25, 19, 47, 91, 58}
+nums2 := []int{80, 25, 91, 36, 19, 52, 74, 36}
 
 result := enumerable.FromSlice(nums1).
-    Union(enumerable.FromSlice(nums2)).
-    Where(func(x int) bool { return x > 50 }).
-    Skip(3).
-    Take(2).
-    ToSlice()
+	Union(enumerable.FromSlice(nums2)).
+	Where(func(x int) bool { return x > 50 }).
+	Skip(3).
+	Take(2).
+	ToSlice()
 
-fmt.Println(result) // Result: [90 100]
+fmt.Println(result) // Result: [80 52]
 ```
 
-### 🛠 Without the library (manual)
+### 🛠 Manual
 
 ```go
-nums1 := []int{10, 20, 60, 70}
-nums2 := []int{30, 40, 80, 90, 100}
-
 seen := make(map[int]bool)
-var union []int
-
-for _, x := range nums1 {
-    if !seen[x] {
-        seen[x] = true
-        union = append(union, x)
-    }
-}
-for _, x := range nums2 {
-    if !seen[x] {
-        seen[x] = true
-        union = append(union, x)
-    }
-}
-
 var filtered []int
-for _, x := range union {
-    if x > 50 {
-        filtered = append(filtered, x)
-    }
+for _, x := range a {
+	if x > 50 && !seen[x] {
+		seen[x] = true
+		filtered = append(filtered, x)
+	}
 }
-
-var result []int
-countSkipped := 0
-countTaken := 0
-for _, x := range filtered {
-    if countSkipped < 3 {
-        countSkipped++
-        continue
-    }
-    if countTaken < 2 {
-        result = append(result, x)
-        countTaken++
-    } else {
-        break
-    }
+for _, x := range b {
+	if x > 50 && !seen[x] {
+		seen[x] = true
+		filtered = append(filtered, x)
+	}
 }
+skip := 3
+if skip >= len(filtered) {
+	return nil
+}
+afterSkip := filtered[skip:]
+take := 2
+if take > len(afterSkip) {
+	take = len(afterSkip)
+}
+return afterSkip[:take]
 ```
+### 🚀 Performance Benchmarks
+
+Comparison between the library and manual implementation across different dataset sizes (go 1.24.1, cpu: 12th Gen Intel(R) Core(TM) i7-12700F, goos: windows, goarch: amd64):
+| Records | Library (ns/op) | Manual (ns/op) | Speed Ratio | Memory (Lib → Manual) | Allocs (Lib → Manual) |
+|-|-:|-:|-:|-:|-:|
+| 10 | 809 | 382 | 0.47x | 1.2KB → 0.6KB | 12 → 8 |
+| 50 | 2,104 | 1,893 | 0.9x  | 2.4KB → 3.1KB | 14 → 14 |
+| 100 | 2,945 | 6,611 | 2.24x | 4.7KB → 13.4KB | 16 → 20 |
+| 1,000 | 3,023 | 93,675 | 31x | 4.7KB → 208KB | 16 → 43 |
+| 5,000 | 3,092 | 389,795 | 126x | 4.7KB → 817KB | 16 → 93 |
+#### Key Insights
+1. **Small datasets (≤50 records)**:
+   - Minimal difference (manual 0.9-2x faster)
+   - Library uses less memory (-23% at 50 records)
+
+2. **Medium/large datasets (≥100 records)**:
+   - Library is **2-126x faster**
+   - Saves **up to 99% memory** (at 5,000 records)
+   - Consistent execution time (~3 ns) regardless of size
 
 ## ⚙️ Methods
 ### 🌱 Creation Methods
