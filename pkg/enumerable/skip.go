@@ -43,7 +43,7 @@ func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 //   n - the number of elements to skip (must be non-negative)
 //
 // Returns:
-//   An AnyEnumerator[T] that yields elements after skipping the first n elements
+//   An EnumeratorAny[T] that yields elements after skipping the first n elements
 //
 // Notes:
 // - If n <= 0, returns the original enumerator unchanged
@@ -53,7 +53,7 @@ func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 // - No elements are buffered - memory efficient
 // - Negative values of n are treated as 0
 // - The enumeration is consumed sequentially, so skipped elements are still processed
-func (q AnyEnumerator[T]) Skip(n int) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) Skip(n int) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()
 	}

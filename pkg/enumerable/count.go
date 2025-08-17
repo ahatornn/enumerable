@@ -54,7 +54,7 @@ func (q Enumerator[T]) Count() int {
 // - Time complexity: O(n) where n is the number of elements
 // - Space complexity: O(1) - constant space usage
 // - All elements are processed, even if consumer wants to stop early
-func (q AnyEnumerator[T]) Count() int {
+func (q EnumeratorAny[T]) Count() int {
 	return countInternal(q)
 }
 

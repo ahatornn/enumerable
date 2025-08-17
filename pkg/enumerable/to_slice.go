@@ -58,7 +58,7 @@ func (q Enumerator[T]) ToSlice() []T {
 // - The enumeration stops only when exhausted or if upstream operations stop it
 // - Returned slice preserves the order of elements from the enumeration
 // - Use with caution for infinite or very large enumerations
-func (q AnyEnumerator[T]) ToSlice() []T {
+func (q EnumeratorAny[T]) ToSlice() []T {
 	return toSliceInternal(q)
 }
 

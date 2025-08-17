@@ -53,7 +53,7 @@ func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 //   n - the number of elements to take from the end (must be non-negative)
 //
 // Returns:
-//   An AnyEnumerator[T] that yields the last n elements
+//   An EnumeratorAny[T] that yields the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // to track which elements should be yielded. For large values of n,
@@ -70,7 +70,7 @@ func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 // - If the original enumerator is nil, returns an empty enumerator
 // - Negative values of n are treated as 0
 // - The enumeration stops as soon as the consumer returns false
-func (q AnyEnumerator[T]) TakeLast(n int) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) TakeLast(n int) EnumeratorAny[T] {
 	if q == nil || n <= 0 {
 		return EmptyAny[T]()
 	}

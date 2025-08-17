@@ -58,7 +58,7 @@ func (q Enumerator[T]) ForEach(action func(T)) {
 // - Space complexity: O(1) - constant space usage
 // - The enumeration stops only when exhausted or if upstream operations stop it
 // - Action function should handle all possible values including zero values
-func (q AnyEnumerator[T]) ForEach(action func(T)) {
+func (q EnumeratorAny[T]) ForEach(action func(T)) {
 	forEachInternal(q, action)
 }
 

@@ -72,7 +72,7 @@ func (q Enumerator[T]) ToChannel(bufferSize int) <-chan T {
 // - Time complexity: O(n) where n is the number of elements
 // - Space complexity: O(bufferSize) plus any upstream buffering
 // - The enumeration runs in a separate goroutine, enabling concurrent processing
-func (q AnyEnumerator[T]) ToChannel(bufferSize int) <-chan T {
+func (q EnumeratorAny[T]) ToChannel(bufferSize int) <-chan T {
 	return toChannelInternal(q, bufferSize)
 }
 

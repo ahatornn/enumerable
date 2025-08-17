@@ -55,7 +55,7 @@ func (q Enumerator[T]) SkipLast(n int) Enumerator[T] {
 //   n - the number of elements to skip from the end (must be non-negative)
 //
 // Returns:
-//   An AnyEnumerator[T] that yields elements except the last n elements
+//   An EnumeratorAny[T] that yields elements except the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // using a circular buffer for efficient memory usage. For large values of n,
@@ -72,7 +72,7 @@ func (q Enumerator[T]) SkipLast(n int) Enumerator[T] {
 // - If the original enumerator is nil, returns an empty enumerator
 // - Elements are yielded in order of their appearance in the original enumeration
 // - Negative values of n are treated as 0
-func (q AnyEnumerator[T]) SkipLast(n int) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) SkipLast(n int) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()
 	}

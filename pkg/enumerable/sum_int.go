@@ -64,7 +64,7 @@ func (q Enumerator[T]) SumInt(selector func(T) int) int {
 // - Space complexity: O(1) - constant space usage
 // - The enumeration stops only when exhausted or if upstream operations stop it
 // - Selector function should handle all possible input values safely
-func (q AnyEnumerator[T]) SumInt(selector func(T) int) int {
+func (q EnumeratorAny[T]) SumInt(selector func(T) int) int {
 	return sumIntInternal(q, selector)
 }
 

@@ -57,7 +57,7 @@ func (q Enumerator[T]) FirstOrDefault(defaultValue T) T {
 // - Unlike FirstOrNil(), this method returns the value directly, not a pointer
 // - Safe for all types including those with zero values like 0, "", false, etc.
 // - When using zero value as default, consider using FirstOrNil() for distinction
-func (q AnyEnumerator[T]) FirstOrDefault(defaultValue T) T {
+func (q EnumeratorAny[T]) FirstOrDefault(defaultValue T) T {
 	if first := q.FirstOrNil(); first != nil {
 		return *first
 	}

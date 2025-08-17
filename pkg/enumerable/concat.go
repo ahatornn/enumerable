@@ -41,7 +41,7 @@ func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 //   second - the enumerator to concatenate after the current one
 //
 // Returns:
-//   A new AnyEnumerator[T] that yields elements from both enumerations in sequence
+//   A new EnumeratorAny[T] that yields elements from both enumerations in sequence
 //
 // Notes:
 // - Nil enumerators are treated as empty (no elements yielded)
@@ -50,7 +50,7 @@ func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 // - Lazy evaluation - elements are produced on-demand during iteration
 // - No elements are buffered - memory efficient
 // - Safe for use with any combination of nil and non-nil enumerators
-func (q AnyEnumerator[T]) Concat(second AnyEnumerator[T]) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) Concat(second EnumeratorAny[T]) EnumeratorAny[T] {
 	return concatInternal(q, second)
 }
 

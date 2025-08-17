@@ -21,7 +21,7 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 - ✅ **Method chaining** — fluent, readable APIs.
 - ✅ **Efficiency** — minimal allocations, suitable for large datasets.
 - ✅ **Nil-safe operations** — methods safely handle `nil` sequences without panics.
-- ✅ **Two enumerator types** — `AnyEnumerator[T any]` for any type and `Enumerator[T comparable]` for comparable types with enhanced functionality.
+- ✅ **Two enumerator types** — `EnumeratorAny[T any]` for any type and `Enumerator[T comparable]` for comparable types with enhanced functionality.
 - ✅ **Set operations for comparable types** — additional methods like `Distinct`, `Except`, `Intersect`, and `Union` available when working with comparable data.
 
 ---
@@ -109,15 +109,15 @@ Initialize new sequences from scratch.
 | Method | Description |
 |--|--|
 | [`Empty`](./pkg/enumerable/empty.go) | Returns an empty [`Enumerator[T]`](./pkg/enumerable/enumerator.go) of type T that yields no values with comparable types only. |
-| [`EmptyAny`](./pkg/enumerable/empty.go) | Returns an empty [`AnyEnumerator[T]`](./pkg/enumerable/enumerator.go) of type T that yields no values with any types. |
+| [`EmptyAny`](./pkg/enumerable/empty.go) | Returns an empty [`EnumeratorAny[T]`](./pkg/enumerable/enumerator.go) of type T that yields no values with any types. |
 | [`FromChannel`](./pkg/enumerable/from_channel.go) | Creates an [`Enumerator[T]`](./pkg/enumerable/enumerator.go) that yields values received from a channel.<br>The enumeration continues until the channel is closed or the consumer stops iteration with comparable types only. |
-| [`FromChannelAny`](./pkg/enumerable/from_channel.go) | Creates an [`AnyEnumerator[T]`](./pkg/enumerable/enumerator.go) that yields values received from a channel.<br>The enumeration continues until the channel is closed or the consumer stops iteration with any types. |
+| [`FromChannelAny`](./pkg/enumerable/from_channel.go) | Creates an [`EnumeratorAny[T]`](./pkg/enumerable/enumerator.go) that yields values received from a channel.<br>The enumeration continues until the channel is closed or the consumer stops iteration with any types. |
 | [`FromSlice`](./pkg/enumerable/from_slice.go) | Creates an [`Enumerator[T]`](./pkg/enumerable/enumerator.go) that yields all elements from the input slice in order with comparable types only. |
-| [`FromSliceAny`](./pkg/enumerable/from_slice.go) | Creates an [`AnyEnumerator[T]`](./pkg/enumerable/enumerator.go) that yields all elements from the input slice in order with any types. |
+| [`FromSliceAny`](./pkg/enumerable/from_slice.go) | Creates an [`EnumeratorAny[T]`](./pkg/enumerable/enumerator.go) that yields all elements from the input slice in order with any types. |
 | [`Range`](./pkg/enumerable/range.go) | Generates a sequence of consecutive integers starting at 'start', producing exactly 'count' values in ascending order (with step +1) with comparable types only. |
-| [`RangeAny`](./pkg/enumerable/range.go) | Generates an [`AnyEnumerator[T]`](./pkg/enumerable/enumerator.go) of consecutive integers starting at 'start', producing exactly 'count' values in ascending order (with step +1) with any types. |
+| [`RangeAny`](./pkg/enumerable/range.go) | Generates an [`EnumeratorAny[T]`](./pkg/enumerable/enumerator.go) of consecutive integers starting at 'start', producing exactly 'count' values in ascending order (with step +1) with any types. |
 | [`Repeat`](./pkg/enumerable/repeat.go) | Generates a sequence containing the same item repeated 'count' times with comparable types only. |
-| [`RepeatAny`](./pkg/enumerable/repeat.go) | Generates an [`AnyEnumerator[T]`](./pkg/enumerable/enumerator.go) containing the same item repeated 'count' times with any types. |
+| [`RepeatAny`](./pkg/enumerable/repeat.go) | Generates an [`EnumeratorAny[T]`](./pkg/enumerable/enumerator.go) containing the same item repeated 'count' times with any types. |
 
 ## ⏳ Lazy Methods
 Perform deferred computations, evaluating only when needed

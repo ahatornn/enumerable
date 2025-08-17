@@ -44,7 +44,7 @@ func (q Enumerator[T]) Where(predicate func(T) bool) Enumerator[T] {
 //   predicate - a function that determines whether to include an element
 //
 // Returns:
-//   An AnyEnumerator[T] that yields elements satisfying the predicate
+//   An EnumeratorAny[T] that yields elements satisfying the predicate
 //
 // Notes:
 // - If the original enumerator is nil, returns an empty enumerator
@@ -53,7 +53,7 @@ func (q Enumerator[T]) Where(predicate func(T) bool) Enumerator[T] {
 // - The enumeration stops when the source is exhausted or consumer returns false
 // - Predicate function should be pure (no side effects) for predictable behavior
 // - Elements for which predicate returns false are simply skipped
-func (q AnyEnumerator[T]) Where(predicate func(T) bool) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) Where(predicate func(T) bool) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()
 	}

@@ -44,7 +44,7 @@ func (q Enumerator[T]) Take(n int) Enumerator[T] {
 //   n - the number of elements to take (must be non-negative)
 //
 // Returns:
-//   An AnyEnumerator[T] that yields at most n elements from the start
+//   An EnumeratorAny[T] that yields at most n elements from the start
 //
 // Notes:
 // - If n <= 0, returns an empty enumerator
@@ -55,7 +55,7 @@ func (q Enumerator[T]) Take(n int) Enumerator[T] {
 // - Negative values of n are treated as 0
 // - Early termination by the consumer stops further enumeration
 // - The enumeration stops as soon as n elements are yielded or the source is exhausted
-func (q AnyEnumerator[T]) Take(n int) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) Take(n int) EnumeratorAny[T] {
 	if q == nil || n <= 0 {
 		return EmptyAny[T]()
 	}

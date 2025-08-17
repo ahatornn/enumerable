@@ -69,7 +69,7 @@ func (q Enumerator[T]) LastOrDefault(defaultValue T) T {
 // - Unlike LastOrNil(), this method returns the value directly, not a pointer
 // - Safe for all types including those with zero values like 0, "", false, etc.
 // - When using zero value as default, consider using LastOrNil() for distinction
-func (q AnyEnumerator[T]) LastOrDefault(defaultValue T) T {
+func (q EnumeratorAny[T]) LastOrDefault(defaultValue T) T {
 	if last := q.LastOrNil(); last != nil {
 		return *last
 	}

@@ -48,7 +48,7 @@ func (q Enumerator[T]) FirstOrNil() *T {
 // - No elements are buffered - memory efficient
 // - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
 // - Safe for all types including those with zero values like 0, "", false, etc.
-func (q AnyEnumerator[T]) FirstOrNil() *T {
+func (q EnumeratorAny[T]) FirstOrNil() *T {
 	return firstOrNilInternal(q)
 }
 

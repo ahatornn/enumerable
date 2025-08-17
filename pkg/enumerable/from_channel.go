@@ -33,7 +33,7 @@ func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 	}
 }
 
-// FromChannelAny creates an AnyEnumerator[T] that yields values received from a channel.
+// FromChannelAny creates an EnumeratorAny[T] that yields values received from a channel.
 // The enumeration continues until the channel is closed or the consumer stops iteration.
 //
 // The enumerator will:
@@ -45,7 +45,7 @@ func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 //   ch - the source channel to enumerate (read-only)
 //
 // Returns:
-//   An AnyEnumerator[T] that iterates over channel values
+//   An EnumeratorAny[T] that iterates over channel values
 //
 // Notes:
 // - The enumerator will block waiting for new values when channel is empty
@@ -53,7 +53,7 @@ func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 // - Safe for nil channels (will act like closed channels, producing no values)
 // - Channel receive operations occur during enumeration (not beforehand)
 // - The channel should only be read through the enumerator
-func FromChannelAny[T any](ch <-chan T) AnyEnumerator[T] {
+func FromChannelAny[T any](ch <-chan T) EnumeratorAny[T] {
 	return func(yield func(T) bool) {
 		if ch == nil {
 			return

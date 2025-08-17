@@ -68,7 +68,7 @@ func (q Enumerator[T]) SumFloat(selector func(T) float32) float32 {
 // - The enumeration stops only when exhausted or if upstream operations stop it
 // - Selector function should handle all possible input values safely
 // - For double precision, consider implementing or using SumFloat64
-func (q AnyEnumerator[T]) SumFloat(selector func(T) float32) float32 {
+func (q EnumeratorAny[T]) SumFloat(selector func(T) float32) float32 {
 	return sumFloatInternal(q, selector)
 }
 

@@ -48,7 +48,7 @@ func (q Enumerator[T]) All(predicate func(T) bool) bool {
 // - Uses short-circuit evaluation for performance
 // - The predicate function should be pure (no side effects)
 // - Stops enumeration as soon as a non-matching element is found
-func (q AnyEnumerator[T]) All(predicate func(T) bool) bool {
+func (q EnumeratorAny[T]) All(predicate func(T) bool) bool {
 	return allInternal(q, predicate)
 }
 

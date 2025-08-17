@@ -43,7 +43,7 @@ func (q Enumerator[T]) SkipWhile(predicate func(T) bool) Enumerator[T] {
 //   predicate - a function that determines whether to skip an element
 //
 // Returns:
-//   An AnyEnumerator[T] that yields elements after skipping initial elements that match the condition
+//   An EnumeratorAny[T] that yields elements after skipping initial elements that match the condition
 //
 // Notes:
 // - If the predicate never returns false, returns an empty enumerator
@@ -53,7 +53,7 @@ func (q Enumerator[T]) SkipWhile(predicate func(T) bool) Enumerator[T] {
 // - No elements are buffered - memory efficient
 // - The enumeration stops skipping as soon as the first non-matching element is found
 // - Once skipping stops, all remaining elements are yielded (even if they would match the predicate)
-func (q AnyEnumerator[T]) SkipWhile(predicate func(T) bool) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) SkipWhile(predicate func(T) bool) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()
 	}

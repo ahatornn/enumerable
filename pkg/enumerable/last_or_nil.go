@@ -58,7 +58,7 @@ func (q Enumerator[T]) LastOrNil() *T {
 // - Space complexity: O(1) - constant space usage
 // - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
 // - Safe for all types including those with zero values like 0, "", false, etc.
-func (q AnyEnumerator[T]) LastOrNil() *T {
+func (q EnumeratorAny[T]) LastOrNil() *T {
 	return lastOrNilInternal(q)
 }
 

@@ -58,7 +58,7 @@ func (q Enumerator[T]) LongCount() int64 {
 // - Space complexity: O(1) - constant space usage
 // - In Go, int is platform-dependent (32-bit on 32-bit systems, 64-bit on 64-bit systems)
 // - Use LongCount when you expect very large collections that might overflow int
-func (q AnyEnumerator[T]) LongCount() int64 {
+func (q EnumeratorAny[T]) LongCount() int64 {
 	return longCountInternal(q)
 }
 

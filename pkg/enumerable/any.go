@@ -42,7 +42,7 @@ func (q Enumerator[T]) Any() bool {
 // - This is a terminal operation that materializes the enumeration
 // - Very efficient - O(1) time complexity for non-empty enumerations
 // - No elements are buffered - memory efficient
-func (q AnyEnumerator[T]) Any() bool {
+func (q EnumeratorAny[T]) Any() bool {
 	return anyInternal(q)
 }
 

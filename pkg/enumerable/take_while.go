@@ -45,7 +45,7 @@ func (q Enumerator[T]) TakeWhile(predicate func(T) bool) Enumerator[T] {
 //   predicate - a function that determines whether to take an element
 //
 // Returns:
-//   An AnyEnumerator[T] that yields elements while the condition is true
+//   An EnumeratorAny[T] that yields elements while the condition is true
 //
 // Notes:
 // - If the predicate immediately returns false for the first element, returns empty enumerator
@@ -55,7 +55,7 @@ func (q Enumerator[T]) TakeWhile(predicate func(T) bool) Enumerator[T] {
 // - No elements are buffered - memory efficient
 // - The enumeration stops as soon as the predicate returns false or consumer returns false
 // - Once the predicate returns false for any element, no subsequent elements are evaluated
-func (q AnyEnumerator[T]) TakeWhile(predicate func(T) bool) AnyEnumerator[T] {
+func (q EnumeratorAny[T]) TakeWhile(predicate func(T) bool) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()
 	}
