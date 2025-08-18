@@ -5,6 +5,7 @@
 
 [![Tests](https://github.com/ahatornn/enumerable/actions/workflows/test.yml/badge.svg)](https://github.com/ahatornn/enumerable/actions/workflows/test.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ahatornn/enumerable)](https://goreportcard.com/report/github.com/ahatornn/enumerable)
+[![codecov](https://codecov.io/github/ahatornn/enumerable/graph/badge.svg?token=UADCDVFYP3)](https://codecov.io/github/ahatornn/enumerable)
 
 `enumerable` is a Go library for functional-style data processing using **generics** and **lazy iterators**.
 
