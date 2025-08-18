@@ -43,5 +43,8 @@ jobs:
       - name: Запуск тестов
         run: go test -v ./...
 
-      - name: Покрытие кода (опционально)
-        run: go test -coverprofile=coverage.txt -covermode=atomic ./...
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ahatornn/enumerable
