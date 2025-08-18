@@ -12,10 +12,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   selector - a function that extracts a float32 value from each element
+//
+//	selector - a function that extracts a float32 value from each element
 //
 // Returns:
-//   The sum of all float32 values extracted from the elements
+//
+//	The sum of all float32 values extracted from the elements
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to sum all values. For large
@@ -48,10 +50,12 @@ func (q Enumerator[T]) SumFloat(selector func(T) float32) float32 {
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   selector - a function that extracts a float32 value from each element
+//
+//	selector - a function that extracts a float32 value from each element
 //
 // Returns:
-//   The sum of all float32 values extracted from the elements
+//
+//	The sum of all float32 values extracted from the elements
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to sum all values. For large

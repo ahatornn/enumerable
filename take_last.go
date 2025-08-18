@@ -11,10 +11,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to take from the end (must be non-negative)
+//
+//	n - the number of elements to take from the end (must be non-negative)
 //
 // Returns:
-//   An Enumerator[T] that yields the last n elements
+//
+//	An Enumerator[T] that yields the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // to track which elements should be yielded. For large values of n,
@@ -50,10 +52,12 @@ func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to take from the end (must be non-negative)
+//
+//	n - the number of elements to take from the end (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[T] that yields the last n elements
+//
+//	An EnumeratorAny[T] that yields the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // to track which elements should be yielded. For large values of n,

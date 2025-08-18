@@ -11,10 +11,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   second - the enumerator containing elements to exclude
+//
+//	second - the enumerator containing elements to exclude
 //
 // Returns:
-//   An Enumerator[T] that yields elements from first enumeration not in second
+//
+//	An Enumerator[T] that yields elements from first enumeration not in second
 //
 // ⚠️ Performance note: This operation completely buffers the `second` enumerator
 // into memory (creates a map for fast lookup). For large second enumerations,

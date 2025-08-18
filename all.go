@@ -10,11 +10,13 @@ package enumerable
 // - Short-circuit evaluation (stops at first false result)
 //
 // Parameters:
-//   predicate - a function that takes an element and returns true/false
+//
+//	predicate - a function that takes an element and returns true/false
 //
 // Returns:
-//   true if all elements satisfy the predicate or enumeration is empty
-//   false if at least one element does not satisfy the predicate
+//
+//	true if all elements satisfy the predicate or enumeration is empty
+//	false if at least one element does not satisfy the predicate
 //
 // Notes:
 // - For empty enumerations, returns true (vacuous truth)
@@ -36,11 +38,13 @@ func (q Enumerator[T]) All(predicate func(T) bool) bool {
 // - Short-circuit evaluation (stops at first false result)
 //
 // Parameters:
-//   predicate - a function that takes an element and returns true/false
+//
+//	predicate - a function that takes an element and returns true/false
 //
 // Returns:
-//   true if all elements satisfy the predicate or enumeration is empty
-//   false if at least one element does not satisfy the predicate
+//
+//	true if all elements satisfy the predicate or enumeration is empty
+//	false if at least one element does not satisfy the predicate
 //
 // Notes:
 // - For empty enumerations, returns true (vacuous truth)

@@ -11,7 +11,8 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A pointer to the last element, or nil if enumeration is empty or nil
+//
+//	A pointer to the last element, or nil if enumeration is empty or nil
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to find the last element. For large
@@ -42,7 +43,8 @@ func (q Enumerator[T]) LastOrNil() *T {
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A pointer to the last element, or nil if enumeration is empty or nil
+//
+//	A pointer to the last element, or nil if enumeration is empty or nil
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to find the last element. For large

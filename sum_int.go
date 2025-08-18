@@ -11,10 +11,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   selector - a function that extracts an integer value from each element
+//
+//	selector - a function that extracts an integer value from each element
 //
 // Returns:
-//   The sum of all integer values extracted from the elements
+//
+//	The sum of all integer values extracted from the elements
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to sum all values. For large
@@ -45,10 +47,12 @@ func (q Enumerator[T]) SumInt(selector func(T) int) int {
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   selector - a function that extracts an integer value from each element
+//
+//	selector - a function that extracts an integer value from each element
 //
 // Returns:
-//   The sum of all integer values extracted from the elements
+//
+//	The sum of all integer values extracted from the elements
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to sum all values. For large

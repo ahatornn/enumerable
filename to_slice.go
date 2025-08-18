@@ -10,7 +10,8 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A slice containing all elements from the enumeration, or empty slice if enumerator is nil
+//
+//	A slice containing all elements from the enumeration, or empty slice if enumerator is nil
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to collect all elements. For large
@@ -41,7 +42,8 @@ func (q Enumerator[T]) ToSlice() []T {
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A slice containing all elements from the enumeration, or empty slice if enumerator is nil
+//
+//	A slice containing all elements from the enumeration, or empty slice if enumerator is nil
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to collect all elements. For large

@@ -11,7 +11,8 @@ package enumerable
 // - Not return any value (void operation)
 //
 // Parameters:
-//   action - the action to execute for each element
+//
+//	action - the action to execute for each element
 //
 // ⚠️ Performance note: This operation must iterate through the entire
 // enumeration, which may be expensive for large enumerations.
@@ -42,7 +43,8 @@ func (q Enumerator[T]) ForEach(action func(T)) {
 // - Not return any value (void operation)
 //
 // Parameters:
-//   action - the action to execute for each element
+//
+//	action - the action to execute for each element
 //
 // ⚠️ Performance note: This operation must iterate through the entire
 // enumeration, which may be expensive for large enumerations.

@@ -12,8 +12,9 @@ package enumerable
 // - Handle nil enumerators gracefully by returning an empty map
 //
 // Returns:
-//   A map[T]struct{} containing all unique elements as keys,
-//   or an empty map if enumerator is nil or enumeration is empty
+//
+//	A map[T]struct{} containing all unique elements as keys,
+//	or an empty map if enumerator is nil or enumeration is empty
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration. For large enumerations, this may be expensive.

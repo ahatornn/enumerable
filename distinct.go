@@ -10,7 +10,8 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Returns:
-//   An Enumerator[T] that yields unique elements in order of first appearance
+//
+//	An Enumerator[T] that yields unique elements in order of first appearance
 //
 // ⚠️ Performance note: This operation buffers all unique elements encountered
 // so far in memory. For enumerations with many unique elements, memory usage

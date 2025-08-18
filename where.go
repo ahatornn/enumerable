@@ -11,10 +11,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to include an element
+//
+//	predicate - a function that determines whether to include an element
 //
 // Returns:
-//   An Enumerator[T] that yields elements satisfying the predicate
+//
+//	An Enumerator[T] that yields elements satisfying the predicate
 //
 // Notes:
 // - If the original enumerator is nil, returns an empty enumerator
@@ -41,10 +43,12 @@ func (q Enumerator[T]) Where(predicate func(T) bool) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to include an element
+//
+//	predicate - a function that determines whether to include an element
 //
 // Returns:
-//   An EnumeratorAny[T] that yields elements satisfying the predicate
+//
+//	An EnumeratorAny[T] that yields elements satisfying the predicate
 //
 // Notes:
 // - If the original enumerator is nil, returns an empty enumerator

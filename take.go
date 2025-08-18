@@ -10,10 +10,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to take (must be non-negative)
+//
+//	n - the number of elements to take (must be non-negative)
 //
 // Returns:
-//   An Enumerator[T] that yields at most n elements from the start
+//
+//	An Enumerator[T] that yields at most n elements from the start
 //
 // Notes:
 // - If n <= 0, returns an empty enumerator
@@ -41,10 +43,12 @@ func (q Enumerator[T]) Take(n int) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to take (must be non-negative)
+//
+//	n - the number of elements to take (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[T] that yields at most n elements from the start
+//
+//	An EnumeratorAny[T] that yields at most n elements from the start
 //
 // Notes:
 // - If n <= 0, returns an empty enumerator

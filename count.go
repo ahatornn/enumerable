@@ -10,7 +10,8 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   The number of elements in the enumeration (0 for empty or nil enumerations)
+//
+//	The number of elements in the enumeration (0 for empty or nil enumerations)
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to count all elements. For large
@@ -39,7 +40,8 @@ func (q Enumerator[T]) Count() int {
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   The number of elements in the enumeration (0 for empty or nil enumerations)
+//
+//	The number of elements in the enumeration (0 for empty or nil enumerations)
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to count all elements. For large

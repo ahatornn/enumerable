@@ -3,11 +3,13 @@ package enumerable
 // Repeat generates a sequence containing the same item repeated 'count' times.
 //
 // Parameters:
-//   item  - value to repeat (any comparable type)
-//   count - number of repetitions (must be non-negative)
+//
+//	item  - value to repeat (any comparable type)
+//	count - number of repetitions (must be non-negative)
 //
 // Returns:
-//   An Enumerator[T] that can be used in range loops.
+//
+//	An Enumerator[T] that can be used in range loops.
 //
 // Notes:
 // - For count = 0, produces an empty sequence (no iterations)
@@ -26,11 +28,13 @@ func Repeat[T comparable](item T, count int) Enumerator[T] {
 // RepeatAny generates a sequence containing the same item repeated 'count' times.
 //
 // Parameters:
-//   item  - value to repeat (any type)
-//   count - number of repetitions (must be non-negative)
+//
+//	item  - value to repeat (any type)
+//	count - number of repetitions (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[T] that can be used in range loops.
+//
+//	An EnumeratorAny[T] that can be used in range loops.
 //
 // Notes:
 // - For count = 0, produces an empty sequence (no iterations)
