@@ -3,7 +3,8 @@
 [![GitHub go.mod Go version of a Go module](https://img.shields.io/github/go-mod/go-version/ahatornn/enumerable)](https://github.com/ahatornn/enumerable)
 ![GitHub release](https://img.shields.io/github/v/tag/ahatornn/enumerable)
 
-[![Тесты](https://github.com/ahatornn/enumerable/actions/workflows/test.yml/badge.svg)](https://github.com/ahatornn/enumerable/actions/workflows/test.yml)
+[![Tests](https://github.com/ahatornn/enumerable/actions/workflows/test.yml/badge.svg)](https://github.com/ahatornn/enumerable/actions/workflows/test.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ahatornn/enumerable)](https://goreportcard.com/report/github.com/ahatornn/enumerable)
 
 `enumerable` is a Go library for functional-style data processing using **generics** and **lazy iterators**.
 
@@ -28,7 +29,7 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 
 ## 📦 Installation
 
-Use `go get` to add the library to your project:
+Use `go get` to add the `enumerable` to your project:
 
 ```bash
 go get github.com/ahatornn/enumerable@latest
@@ -84,8 +85,8 @@ return afterSkip[:take]
 ```
 ### 🚀 Performance Benchmarks
 
-Comparison between the library and manual implementation across different dataset sizes (go 1.24.1, cpu: 12th Gen Intel(R) Core(TM) i7-12700F, goos: windows, goarch: amd64):
-| Records | Library (ns/op) | Manual (ns/op) | Speed Ratio | Memory (Lib → Manual) | Allocs (Lib → Manual) |
+Comparison between the `enumerable` and manual implementation across different dataset sizes (go 1.24.1, cpu: 12th Gen Intel(R) Core(TM) i7-12700F, goos: windows, goarch: amd64):
+| Records | `enumerable` (ns/op) | Manual (ns/op) | Speed Ratio | Memory (`enumerable` → Manual) | Allocs (`enumerable` → Manual) |
 |-|-:|-:|-:|-:|-:|
 | 10 | 809 | 382 | 0.47x | 1.2KB → 0.6KB | 12 → 8 |
 | 50 | 2,104 | 1,893 | 0.9x  | 2.4KB → 3.1KB | 14 → 14 |
@@ -95,10 +96,10 @@ Comparison between the library and manual implementation across different datase
 #### Key Insights
 1. **Small datasets (≤50 records)**:
    - Minimal difference (manual 0.9-2x faster)
-   - Library uses less memory (-23% at 50 records)
+   - `enumerable` uses less memory (-23% at 50 records)
 
 2. **Medium/large datasets (≥100 records)**:
-   - Library is **2-126x faster**
+   - `enumerable` is **2-126x faster**
    - Saves **up to 99% memory** (at 5,000 records)
    - Consistent execution time (~3 ns) regardless of size
 
