@@ -11,10 +11,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   defaultValue - the value to return if the enumeration is empty or nil
+//
+//	defaultValue - the value to return if the enumeration is empty or nil
 //
 // Returns:
-//   The last element of the enumeration, or the default value if enumeration is empty
+//
+//	The last element of the enumeration, or the default value if enumeration is empty
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to find the last element. For large
@@ -49,10 +51,12 @@ func (q Enumerator[T]) LastOrDefault(defaultValue T) T {
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   defaultValue - the value to return if the enumeration is empty or nil
+//
+//	defaultValue - the value to return if the enumeration is empty or nil
 //
 // Returns:
-//   The last element of the enumeration, or the default value if enumeration is empty
+//
+//	The last element of the enumeration, or the default value if enumeration is empty
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to find the last element. For large

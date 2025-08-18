@@ -9,10 +9,12 @@ package enumerable
 // - Support early termination when the consumer returns false
 //
 // Parameters:
-//   ch - the source channel to enumerate (read-only)
+//
+//	ch - the source channel to enumerate (read-only)
 //
 // Returns:
-//   An Enumerator[T] that iterates over channel values
+//
+//	An Enumerator[T] that iterates over channel values
 //
 // Notes:
 // - The enumerator will block waiting for new values when channel is empty
@@ -42,10 +44,12 @@ func FromChannel[T comparable](ch <-chan T) Enumerator[T] {
 // - Support early termination when the consumer returns false
 //
 // Parameters:
-//   ch - the source channel to enumerate (read-only)
+//
+//	ch - the source channel to enumerate (read-only)
 //
 // Returns:
-//   An EnumeratorAny[T] that iterates over channel values
+//
+//	An EnumeratorAny[T] that iterates over channel values
 //
 // Notes:
 // - The enumerator will block waiting for new values when channel is empty

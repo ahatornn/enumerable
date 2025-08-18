@@ -10,7 +10,8 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   true if the enumeration contains any elements, false otherwise
+//
+//	true if the enumeration contains any elements, false otherwise
 //
 // Notes:
 // - If the enumerator is nil, returns false
@@ -33,7 +34,8 @@ func (q Enumerator[T]) Any() bool {
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   true if the enumeration contains any elements, false otherwise
+//
+//	true if the enumeration contains any elements, false otherwise
 //
 // Notes:
 // - If the enumerator is nil, returns false

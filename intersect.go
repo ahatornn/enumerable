@@ -10,10 +10,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   second - the enumerator to intersect with
+//
+//	second - the enumerator to intersect with
 //
 // Returns:
-//   An Enumerator[T] that yields elements present in both enumerations
+//
+//	An Enumerator[T] that yields elements present in both enumerations
 //
 // ⚠️ Performance note: The second enumeration is completely loaded into memory
 // to enable fast lookups. Be cautious when using this with very large second

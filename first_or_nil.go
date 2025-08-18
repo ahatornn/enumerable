@@ -11,7 +11,8 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A pointer to the first element, or nil if enumeration is empty or nil
+//
+//	A pointer to the first element, or nil if enumeration is empty or nil
 //
 // Notes:
 // - If the enumerator is nil, returns nil
@@ -37,7 +38,8 @@ func (q Enumerator[T]) FirstOrNil() *T {
 // - Handle nil enumerators gracefully
 //
 // Returns:
-//   A pointer to the first element, or nil if enumeration is empty or nil
+//
+//	A pointer to the first element, or nil if enumeration is empty or nil
 //
 // Notes:
 // - If the enumerator is nil, returns nil

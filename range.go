@@ -4,11 +4,13 @@ package enumerable
 // producing exactly 'count' values in ascending order (with step +1).
 //
 // Parameters:
-//   start - initial value of the sequence (inclusive)
-//   count - number of values to generate (must be non-negative)
+//
+//	start - initial value of the sequence (inclusive)
+//	count - number of values to generate (must be non-negative)
 //
 // Returns:
-//   An Enumerator[int] that can be used in range loops.
+//
+//	An Enumerator[int] that can be used in range loops.
 //
 // Notes:
 // - For count = 0, produces an empty sequence (no iterations)
@@ -27,11 +29,13 @@ func Range(start, count int) Enumerator[int] {
 // producing exactly 'count' values in ascending order (with step +1).
 //
 // Parameters:
-//   start - initial value of the sequence (inclusive)
-//   count - number of values to generate (must be non-negative)
+//
+//	start - initial value of the sequence (inclusive)
+//	count - number of values to generate (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[int] that can be used in range loops.
+//
+//	An EnumeratorAny[int] that can be used in range loops.
 //
 // Notes:
 // - For count = 0, produces an empty sequence (no iterations)

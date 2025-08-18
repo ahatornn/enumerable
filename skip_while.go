@@ -10,10 +10,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to skip an element
+//
+//	predicate - a function that determines whether to skip an element
 //
 // Returns:
-//   An Enumerator[T] that yields elements after skipping initial elements that match the condition
+//
+//	An Enumerator[T] that yields elements after skipping initial elements that match the condition
 //
 // Notes:
 // - If the predicate never returns false, returns an empty enumerator
@@ -40,10 +42,12 @@ func (q Enumerator[T]) SkipWhile(predicate func(T) bool) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to skip an element
+//
+//	predicate - a function that determines whether to skip an element
 //
 // Returns:
-//   An EnumeratorAny[T] that yields elements after skipping initial elements that match the condition
+//
+//	An EnumeratorAny[T] that yields elements after skipping initial elements that match the condition
 //
 // Notes:
 // - If the predicate never returns false, returns an empty enumerator

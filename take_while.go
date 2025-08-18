@@ -11,10 +11,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to take an element
+//
+//	predicate - a function that determines whether to take an element
 //
 // Returns:
-//   An Enumerator[T] that yields elements while the condition is true
+//
+//	An Enumerator[T] that yields elements while the condition is true
 //
 // Notes:
 // - If the predicate immediately returns false for the first element, returns empty enumerator
@@ -42,10 +44,12 @@ func (q Enumerator[T]) TakeWhile(predicate func(T) bool) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   predicate - a function that determines whether to take an element
+//
+//	predicate - a function that determines whether to take an element
 //
 // Returns:
-//   An EnumeratorAny[T] that yields elements while the condition is true
+//
+//	An EnumeratorAny[T] that yields elements while the condition is true
 //
 // Notes:
 // - If the predicate immediately returns false for the first element, returns empty enumerator

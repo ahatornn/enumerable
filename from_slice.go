@@ -6,10 +6,12 @@ package enumerable
 // slice, preserving their original order. The iteration can be stopped early by the consumer.
 //
 // Parameters:
-//   items - slice of elements to enumerate (elements must be comparable)
+//
+//	items - slice of elements to enumerate (elements must be comparable)
 //
 // Returns:
-//   An Enumerator[T] that iterates over the slice elements
+//
+//	An Enumerator[T] that iterates over the slice elements
 //
 // Notes:
 // - The slice is captured by reference (modifications will affect iteration)
@@ -32,10 +34,12 @@ func FromSlice[T comparable](items []T) Enumerator[T] {
 // slice, preserving their original order. The iteration can be stopped early by the consumer.
 //
 // Parameters:
-//   items - slice of elements to enumerate (no type constraints)
+//
+//	items - slice of elements to enumerate (no type constraints)
 //
 // Returns:
-//   An EnumeratorAny[T] that iterates over the slice elements
+//
+//	An EnumeratorAny[T] that iterates over the slice elements
 //
 // Notes:
 // - The slice is captured by reference (modifications will affect iteration)

@@ -12,10 +12,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   bufferSize - the buffer size for the returned channel (0 for unbuffered)
+//
+//	bufferSize - the buffer size for the returned channel (0 for unbuffered)
 //
 // Returns:
-//   A read-only channel containing all elements from the enumeration
+//
+//	A read-only channel containing all elements from the enumeration
 //
 // ⚠️ Resource management: This operation starts a goroutine that runs
 // until the enumeration is complete. Always consume all elements or
@@ -50,10 +52,12 @@ func (q Enumerator[T]) ToChannel(bufferSize int) <-chan T {
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   bufferSize - the buffer size for the returned channel (0 for unbuffered)
+//
+//	bufferSize - the buffer size for the returned channel (0 for unbuffered)
 //
 // Returns:
-//   A read-only channel containing all elements from the enumeration
+//
+//	A read-only channel containing all elements from the enumeration
 //
 // ⚠️ Resource management: This operation starts a goroutine that runs
 // until the enumeration is complete. Always consume all elements or

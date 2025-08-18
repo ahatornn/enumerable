@@ -10,10 +10,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to skip (must be non-negative)
+//
+//	n - the number of elements to skip (must be non-negative)
 //
 // Returns:
-//   An Enumerator[T] that yields elements after skipping the first n elements
+//
+//	An Enumerator[T] that yields elements after skipping the first n elements
 //
 // Notes:
 // - If n <= 0, returns the original enumerator unchanged
@@ -40,10 +42,12 @@ func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to skip (must be non-negative)
+//
+//	n - the number of elements to skip (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[T] that yields elements after skipping the first n elements
+//
+//	An EnumeratorAny[T] that yields elements after skipping the first n elements
 //
 // Notes:
 // - If n <= 0, returns the original enumerator unchanged

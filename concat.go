@@ -11,10 +11,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   second - the enumerator to concatenate after the current one
+//
+//	second - the enumerator to concatenate after the current one
 //
 // Returns:
-//   A new Enumerator[T] that yields elements from both enumerations in sequence
+//
+//	A new Enumerator[T] that yields elements from both enumerations in sequence
 //
 // Notes:
 // - Nil enumerators are treated as empty (no elements yielded)
@@ -38,10 +40,12 @@ func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   second - the enumerator to concatenate after the current one
+//
+//	second - the enumerator to concatenate after the current one
 //
 // Returns:
-//   A new EnumeratorAny[T] that yields elements from both enumerations in sequence
+//
+//	A new EnumeratorAny[T] that yields elements from both enumerations in sequence
 //
 // Notes:
 // - Nil enumerators are treated as empty (no elements yielded)

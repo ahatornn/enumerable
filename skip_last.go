@@ -12,10 +12,12 @@ package enumerable
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to skip from the end (must be non-negative)
+//
+//	n - the number of elements to skip from the end (must be non-negative)
 //
 // Returns:
-//   An Enumerator[T] that yields elements except the last n elements
+//
+//	An Enumerator[T] that yields elements except the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // using a circular buffer for efficient memory usage. For large values of n,
@@ -52,10 +54,12 @@ func (q Enumerator[T]) SkipLast(n int) Enumerator[T] {
 // - Support early termination when consumer returns false
 //
 // Parameters:
-//   n - the number of elements to skip from the end (must be non-negative)
+//
+//	n - the number of elements to skip from the end (must be non-negative)
 //
 // Returns:
-//   An EnumeratorAny[T] that yields elements except the last n elements
+//
+//	An EnumeratorAny[T] that yields elements except the last n elements
 //
 // ⚠️ Performance note: This operation buffers up to n elements in memory
 // using a circular buffer for efficient memory usage. For large values of n,

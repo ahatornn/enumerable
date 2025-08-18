@@ -6,7 +6,8 @@ package enumerable
 // without executing the loop body, as there are no values to enumerate.
 //
 // Returns:
-//   An empty Enumerator[T] that can be used in range loops (Go 1.22+).
+//
+//	An empty Enumerator[T] that can be used in range loops (Go 1.22+).
 //
 // Notes:
 // - Can represent "no results" in a type-safe way
@@ -21,7 +22,8 @@ func Empty[T comparable]() Enumerator[T] {
 // without executing the loop body, as there are no values to enumerate.
 //
 // Returns:
-//   An empty EnumeratorAny[T] that can be used in range loops (Go 1.22+).
+//
+//	An empty EnumeratorAny[T] that can be used in range loops (Go 1.22+).
 //
 // Notes:
 // - Can represent "no results" in a type-safe way

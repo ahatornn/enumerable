@@ -10,10 +10,12 @@ package enumerable
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   defaultValue - the value to return if the enumeration is empty or nil
+//
+//	defaultValue - the value to return if the enumeration is empty or nil
 //
 // Returns:
-//   The first element of the enumeration, or the default value if enumeration is empty
+//
+//	The first element of the enumeration, or the default value if enumeration is empty
 //
 // Notes:
 // - If the enumerator is nil, returns the defaultValue
@@ -42,10 +44,12 @@ func (q Enumerator[T]) FirstOrDefault(defaultValue T) T {
 // - Handle nil enumerators gracefully
 //
 // Parameters:
-//   defaultValue - the value to return if the enumeration is empty or nil
+//
+//	defaultValue - the value to return if the enumeration is empty or nil
 //
 // Returns:
-//   The first element of the enumeration, or the default value if enumeration is empty
+//
+//	The first element of the enumeration, or the default value if enumeration is empty
 //
 // Notes:
 // - If the enumerator is nil, returns the defaultValue
