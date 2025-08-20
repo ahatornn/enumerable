@@ -4,10 +4,10 @@ package enumerable
 // Returns true if every element matches the predicate, or if the enumeration is empty.
 //
 // The method will:
-// - Apply the predicate to each element in the enumeration
-// - Return false immediately when the first non-matching element is found
-// - Return true if all elements match or if there are no elements
-// - Short-circuit evaluation (stops at first false result)
+//   - Apply the predicate to each element in the enumeration
+//   - Return false immediately when the first non-matching element is found
+//   - Return true if all elements match or if there are no elements
+//   - Short-circuit evaluation (stops at first false result)
 //
 // Parameters:
 //
@@ -19,11 +19,11 @@ package enumerable
 //	false if at least one element does not satisfy the predicate
 //
 // Notes:
-// - For empty enumerations, returns true (vacuous truth)
-// - For nil enumerators, returns true (consistent with empty behavior)
-// - Uses short-circuit evaluation for performance
-// - The predicate function should be pure (no side effects)
-// - Stops enumeration as soon as a non-matching element is found
+//   - For empty enumerations, returns true (vacuous truth)
+//   - For nil enumerators, returns true (consistent with empty behavior)
+//   - Uses short-circuit evaluation for performance
+//   - The predicate function should be pure (no side effects)
+//   - Stops enumeration as soon as a non-matching element is found
 func (q Enumerator[T]) All(predicate func(T) bool) bool {
 	return allInternal(q, predicate)
 }
@@ -32,10 +32,10 @@ func (q Enumerator[T]) All(predicate func(T) bool) bool {
 // Returns true if every element matches the predicate, or if the enumeration is empty.
 //
 // The method will:
-// - Apply the predicate to each element in the enumeration
-// - Return false immediately when the first non-matching element is found
-// - Return true if all elements match or if there are no elements
-// - Short-circuit evaluation (stops at first false result)
+//   - Apply the predicate to each element in the enumeration
+//   - Return false immediately when the first non-matching element is found
+//   - Return true if all elements match or if there are no elements
+//   - Short-circuit evaluation (stops at first false result)
 //
 // Parameters:
 //
@@ -47,11 +47,11 @@ func (q Enumerator[T]) All(predicate func(T) bool) bool {
 //	false if at least one element does not satisfy the predicate
 //
 // Notes:
-// - For empty enumerations, returns true (vacuous truth)
-// - For nil enumerators, returns true (consistent with empty behavior)
-// - Uses short-circuit evaluation for performance
-// - The predicate function should be pure (no side effects)
-// - Stops enumeration as soon as a non-matching element is found
+//   - For empty enumerations, returns true (vacuous truth)
+//   - For nil enumerators, returns true (consistent with empty behavior)
+//   - Uses short-circuit evaluation for performance
+//   - The predicate function should be pure (no side effects)
+//   - Stops enumeration as soon as a non-matching element is found
 func (q EnumeratorAny[T]) All(predicate func(T) bool) bool {
 	return allInternal(q, predicate)
 }

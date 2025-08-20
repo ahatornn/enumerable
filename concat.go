@@ -5,10 +5,10 @@ package enumerable
 // followed by all elements from the second enumeration.
 //
 // The concatenation will:
-// - Yield all elements from the first enumeration in order
-// - Then yield all elements from the second enumeration in order
-// - Handle nil enumerators gracefully (treated as empty)
-// - Support early termination when consumer returns false
+//   - Yield all elements from the first enumeration in order
+//   - Then yield all elements from the second enumeration in order
+//   - Handle nil enumerators gracefully (treated as empty)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -19,12 +19,12 @@ package enumerable
 //	A new Enumerator[T] that yields elements from both enumerations in sequence
 //
 // Notes:
-// - Nil enumerators are treated as empty (no elements yielded)
-// - Both enumerations are consumed in order during iteration
-// - If the first enumeration is infinite, second will never be reached
-// - Lazy evaluation - elements are produced on-demand during iteration
-// - No elements are buffered - memory efficient
-// - Safe for use with any combination of nil and non-nil enumerators
+//   - Nil enumerators are treated as empty (no elements yielded)
+//   - Both enumerations are consumed in order during iteration
+//   - If the first enumeration is infinite, second will never be reached
+//   - Lazy evaluation - elements are produced on-demand during iteration
+//   - No elements are buffered - memory efficient
+//   - Safe for use with any combination of nil and non-nil enumerators
 func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 	return concatInternal(q, second)
 }
@@ -34,10 +34,10 @@ func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 // followed by all elements from the second enumeration.
 //
 // The concatenation will:
-// - Yield all elements from the first enumeration in order
-// - Then yield all elements from the second enumeration in order
-// - Handle nil enumerators gracefully (treated as empty)
-// - Support early termination when consumer returns false
+//   - Yield all elements from the first enumeration in order
+//   - Then yield all elements from the second enumeration in order
+//   - Handle nil enumerators gracefully (treated as empty)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -48,12 +48,12 @@ func (q Enumerator[T]) Concat(second Enumerator[T]) Enumerator[T] {
 //	A new EnumeratorAny[T] that yields elements from both enumerations in sequence
 //
 // Notes:
-// - Nil enumerators are treated as empty (no elements yielded)
-// - Both enumerations are consumed in order during iteration
-// - If the first enumeration is infinite, second will never be reached
-// - Lazy evaluation - elements are produced on-demand during iteration
-// - No elements are buffered - memory efficient
-// - Safe for use with any combination of nil and non-nil enumerators
+//   - Nil enumerators are treated as empty (no elements yielded)
+//   - Both enumerations are consumed in order during iteration
+//   - If the first enumeration is infinite, second will never be reached
+//   - Lazy evaluation - elements are produced on-demand during iteration
+//   - No elements are buffered - memory efficient
+//   - Safe for use with any combination of nil and non-nil enumerators
 func (q EnumeratorAny[T]) Concat(second EnumeratorAny[T]) EnumeratorAny[T] {
 	return concatInternal(q, second)
 }

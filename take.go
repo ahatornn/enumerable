@@ -4,10 +4,10 @@ package enumerable
 // This operation is useful for pagination, limiting results, or taking samples from sequences.
 //
 // The take operation will:
-// - Yield the first n elements from the enumeration
-// - Stop enumeration once n elements have been yielded
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Yield the first n elements from the enumeration
+//   - Stop enumeration once n elements have been yielded
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -18,14 +18,14 @@ package enumerable
 //	An Enumerator[T] that yields at most n elements from the start
 //
 // Notes:
-// - If n <= 0, returns an empty enumerator
-// - If n >= total number of elements, returns all available elements
-// - If the original enumerator is nil, returns an empty enumerator
-// - Lazy evaluation - elements are processed and yielded during iteration
-// - No elements are buffered - memory efficient
-// - Negative values of n are treated as 0
-// - Early termination by the consumer stops further enumeration
-// - The enumeration stops as soon as n elements are yielded or the source is exhausted
+//   - If n <= 0, returns an empty enumerator
+//   - If n >= total number of elements, returns all available elements
+//   - If the original enumerator is nil, returns an empty enumerator
+//   - Lazy evaluation - elements are processed and yielded during iteration
+//   - No elements are buffered - memory efficient
+//   - Negative values of n are treated as 0
+//   - Early termination by the consumer stops further enumeration
+//   - The enumeration stops as soon as n elements are yielded or the source is exhausted
 func (q Enumerator[T]) Take(n int) Enumerator[T] {
 	if q == nil || n <= 0 {
 		return Empty[T]()
@@ -37,10 +37,10 @@ func (q Enumerator[T]) Take(n int) Enumerator[T] {
 // This operation is useful for pagination, limiting results, or taking samples from sequences.
 //
 // The take operation will:
-// - Yield the first n elements from the enumeration
-// - Stop enumeration once n elements have been yielded
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Yield the first n elements from the enumeration
+//   - Stop enumeration once n elements have been yielded
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -51,14 +51,14 @@ func (q Enumerator[T]) Take(n int) Enumerator[T] {
 //	An EnumeratorAny[T] that yields at most n elements from the start
 //
 // Notes:
-// - If n <= 0, returns an empty enumerator
-// - If n >= total number of elements, returns all available elements
-// - If the original enumerator is nil, returns an empty enumerator
-// - Lazy evaluation - elements are processed and yielded during iteration
-// - No elements are buffered - memory efficient
-// - Negative values of n are treated as 0
-// - Early termination by the consumer stops further enumeration
-// - The enumeration stops as soon as n elements are yielded or the source is exhausted
+//   - If n <= 0, returns an empty enumerator
+//   - If n >= total number of elements, returns all available elements
+//   - If the original enumerator is nil, returns an empty enumerator
+//   - Lazy evaluation - elements are processed and yielded during iteration
+//   - No elements are buffered - memory efficient
+//   - Negative values of n are treated as 0
+//   - Early termination by the consumer stops further enumeration
+//   - The enumeration stops as soon as n elements are yielded or the source is exhausted
 func (q EnumeratorAny[T]) Take(n int) EnumeratorAny[T] {
 	if q == nil || n <= 0 {
 		return EmptyAny[T]()

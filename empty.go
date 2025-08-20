@@ -10,8 +10,8 @@ package enumerable
 //	An empty Enumerator[T] that can be used in range loops (Go 1.22+).
 //
 // Notes:
-// - Can represent "no results" in a type-safe way
-// - Works with any comparable type T
+//   - Can represent "no results" in a type-safe way
+//   - Works with any comparable type T
 func Empty[T comparable]() Enumerator[T] {
 	return func(yield func(T) bool) {}
 }
@@ -26,8 +26,8 @@ func Empty[T comparable]() Enumerator[T] {
 //	An empty EnumeratorAny[T] that can be used in range loops (Go 1.22+).
 //
 // Notes:
-// - Can represent "no results" in a type-safe way
-// - Works with any type T (no constraints)
+//   - Can represent "no results" in a type-safe way
+//   - Works with any type T (no constraints)
 func EmptyAny[T any]() EnumeratorAny[T] {
 	return func(yield func(T) bool) {}
 }

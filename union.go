@@ -4,12 +4,12 @@ package enumerable
 // This operation returns unique elements that appear in either enumeration.
 //
 // The union operation will:
-// - Yield all unique elements from the first enumeration
-// - Then yield unique elements from the second enumeration that haven't been seen yet
-// - Remove duplicates both within each enumeration and between enumerations
-// - Preserve the order of first occurrence of each element
-// - Handle nil enumerators gracefully
-// - Support early termination when consumer returns false
+//   - Yield all unique elements from the first enumeration
+//   - Then yield unique elements from the second enumeration that haven't been seen yet
+//   - Remove duplicates both within each enumeration and between enumerations
+//   - Preserve the order of first occurrence of each element
+//   - Handle nil enumerators gracefully
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //

@@ -13,8 +13,8 @@ package enumerable
 //	An Enumerator[int] that can be used in range loops.
 //
 // Notes:
-// - For count = 0, produces an empty sequence (no iterations)
-// - For count < 0, behavior is undefined (should be avoided)
+//   - For count = 0, produces an empty sequence (no iterations)
+//   - For count < 0, behavior is undefined (should be avoided)
 func Range(start, count int) Enumerator[int] {
 	return func(yield func(int) bool) {
 		for i := 0; i < count; i++ {
@@ -38,8 +38,8 @@ func Range(start, count int) Enumerator[int] {
 //	An EnumeratorAny[int] that can be used in range loops.
 //
 // Notes:
-// - For count = 0, produces an empty sequence (no iterations)
-// - For count < 0, behavior is undefined (should be avoided)
+//   - For count = 0, produces an empty sequence (no iterations)
+//   - For count < 0, behavior is undefined (should be avoided)
 func RangeAny(start, count int) EnumeratorAny[int] {
 	return func(yield func(int) bool) {
 		for i := 0; i < count; i++ {

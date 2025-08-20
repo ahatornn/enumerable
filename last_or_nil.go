@@ -4,11 +4,11 @@ package enumerable
 // or nil if the enumeration is empty or nil.
 //
 // The last or nil operation will:
-// - Iterate through all elements in the enumeration
-// - Keep track of the most recent element encountered
-// - Return a pointer to the last element if enumeration contains elements
-// - Return nil if the enumeration is empty or nil
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Keep track of the most recent element encountered
+//   - Return a pointer to the last element if enumeration contains elements
+//   - Return nil if the enumeration is empty or nil
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -22,12 +22,12 @@ package enumerable
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns nil
-// - If the enumeration is empty, returns nil
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
-// - Safe for all types including those with zero values like 0, "", false, etc.
+//   - If the enumerator is nil, returns nil
+//   - If the enumeration is empty, returns nil
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
+//   - Safe for all types including those with zero values like 0, "", false, etc.
 func (q Enumerator[T]) LastOrNil() *T {
 	return lastOrNilInternal(q)
 }
@@ -36,11 +36,11 @@ func (q Enumerator[T]) LastOrNil() *T {
 // or nil if the enumeration is empty or nil.
 //
 // The last or nil operation will:
-// - Iterate through all elements in the enumeration
-// - Keep track of the most recent element encountered
-// - Return a pointer to the last element if enumeration contains elements
-// - Return nil if the enumeration is empty or nil
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Keep track of the most recent element encountered
+//   - Return a pointer to the last element if enumeration contains elements
+//   - Return nil if the enumeration is empty or nil
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -54,12 +54,12 @@ func (q Enumerator[T]) LastOrNil() *T {
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns nil
-// - If the enumeration is empty, returns nil
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
-// - Safe for all types including those with zero values like 0, "", false, etc.
+//   - If the enumerator is nil, returns nil
+//   - If the enumeration is empty, returns nil
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - Returns pointer to allow distinction between "no elements" (nil) and "zero value" element
+//   - Safe for all types including those with zero values like 0, "", false, etc.
 func (q EnumeratorAny[T]) LastOrNil() *T {
 	return lastOrNilInternal(q)
 }

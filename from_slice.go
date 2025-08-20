@@ -14,10 +14,10 @@ package enumerable
 //	An Enumerator[T] that iterates over the slice elements
 //
 // Notes:
-// - The slice is captured by reference (modifications will affect iteration)
-// - For empty slices, produces no values (like Empty())
-// - Safe for nil slices (treated as empty)
-// - Preserves the original element order
+//   - The slice is captured by reference (modifications will affect iteration)
+//   - For empty slices, produces no values (like Empty())
+//   - Safe for nil slices (treated as empty)
+//   - Preserves the original element order
 func FromSlice[T comparable](items []T) Enumerator[T] {
 	return func(yield func(T) bool) {
 		for _, item := range items {
@@ -42,10 +42,10 @@ func FromSlice[T comparable](items []T) Enumerator[T] {
 //	An EnumeratorAny[T] that iterates over the slice elements
 //
 // Notes:
-// - The slice is captured by reference (modifications will affect iteration)
-// - For empty slices, produces no values
-// - Safe for nil slices (treated as empty)
-// - Preserves the original element order
+//   - The slice is captured by reference (modifications will affect iteration)
+//   - For empty slices, produces no values
+//   - Safe for nil slices (treated as empty)
+//   - Preserves the original element order
 func FromSliceAny[T any](items []T) EnumeratorAny[T] {
 	return func(yield func(T) bool) {
 		for _, item := range items {

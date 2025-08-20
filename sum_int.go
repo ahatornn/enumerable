@@ -5,10 +5,10 @@ package enumerable
 // This operation is useful for calculating totals, aggregates, or numeric summaries.
 //
 // The sum int operation will:
-// - Apply the selector function to each element to extract an integer value
-// - Sum all the extracted integer values
-// - Return the total sum
-// - Handle nil enumerators gracefully
+//   - Apply the selector function to each element to extract an integer value
+//   - Sum all the extracted integer values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -26,12 +26,12 @@ package enumerable
 // Consider using SumInt64 for larger ranges.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Selector function should handle all possible input values safely
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
 func (q Enumerator[T]) SumInt(selector func(T) int) int {
 	return sumIntInternal(q, selector)
 }
@@ -41,10 +41,10 @@ func (q Enumerator[T]) SumInt(selector func(T) int) int {
 // This operation is useful for calculating totals, aggregates, or numeric summaries.
 //
 // The sum int operation will:
-// - Apply the selector function to each element to extract an integer value
-// - Sum all the extracted integer values
-// - Return the total sum
-// - Handle nil enumerators gracefully
+//   - Apply the selector function to each element to extract an integer value
+//   - Sum all the extracted integer values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -62,12 +62,12 @@ func (q Enumerator[T]) SumInt(selector func(T) int) int {
 // Consider using SumInt64 for larger ranges.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Selector function should handle all possible input values safely
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
 func (q EnumeratorAny[T]) SumInt(selector func(T) int) int {
 	return sumIntInternal(q, selector)
 }

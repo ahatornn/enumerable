@@ -4,10 +4,10 @@ package enumerable
 // This operation is useful for materializing lazy enumerations into concrete collections.
 //
 // The to slice operation will:
-// - Iterate through all elements in the enumeration
-// - Collect all elements into a new slice
-// - Return the slice containing all elements in order
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Collect all elements into a new slice
+//   - Return the slice containing all elements in order
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -20,14 +20,14 @@ package enumerable
 // ⚠️ Memory note: This operation buffers all elements in memory.
 //
 // Notes:
-// - If the enumerator is nil, returns an empty slice (not nil)
-// - If the enumeration is empty, returns an empty slice
-// - For very large enumerations, consider processing elements incrementally.
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(n) - allocates memory for all elements
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Returned slice preserves the order of elements from the enumeration
-// - Use with caution for infinite or very large enumerations
+//   - If the enumerator is nil, returns an empty slice (not nil)
+//   - If the enumeration is empty, returns an empty slice
+//   - For very large enumerations, consider processing elements incrementally.
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(n) - allocates memory for all elements
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Returned slice preserves the order of elements from the enumeration
+//   - Use with caution for infinite or very large enumerations
 func (q Enumerator[T]) ToSlice() []T {
 	return toSliceInternal(q)
 }
@@ -36,10 +36,10 @@ func (q Enumerator[T]) ToSlice() []T {
 // This operation is useful for materializing lazy enumerations into concrete collections.
 //
 // The to slice operation will:
-// - Iterate through all elements in the enumeration
-// - Collect all elements into a new slice
-// - Return the slice containing all elements in order
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Collect all elements into a new slice
+//   - Return the slice containing all elements in order
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -52,14 +52,14 @@ func (q Enumerator[T]) ToSlice() []T {
 // ⚠️ Memory note: This operation buffers all elements in memory.
 //
 // Notes:
-// - If the enumerator is nil, returns an empty slice (not nil)
-// - If the enumeration is empty, returns an empty slice
-// - For very large enumerations, consider processing elements incrementally.
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(n) - allocates memory for all elements
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Returned slice preserves the order of elements from the enumeration
-// - Use with caution for infinite or very large enumerations
+//   - If the enumerator is nil, returns an empty slice (not nil)
+//   - If the enumeration is empty, returns an empty slice
+//   - For very large enumerations, consider processing elements incrementally.
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(n) - allocates memory for all elements
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Returned slice preserves the order of elements from the enumeration
+//   - Use with caution for infinite or very large enumerations
 func (q EnumeratorAny[T]) ToSlice() []T {
 	return toSliceInternal(q)
 }

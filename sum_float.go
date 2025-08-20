@@ -6,10 +6,10 @@ package enumerable
 // with floating-point precision.
 //
 // The sum float operation will:
-// - Apply the selector function to each element to extract a float32 value
-// - Sum all the extracted float32 values
-// - Return the total sum
-// - Handle nil enumerators gracefully
+//   - Apply the selector function to each element to extract a float32 value
+//   - Sum all the extracted float32 values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -27,13 +27,13 @@ package enumerable
 // rounding errors. Consider using appropriate rounding for display.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Selector function should handle all possible input values safely
-// - For double precision, consider implementing or using SumFloat64
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
+//   - For double precision, consider implementing or using SumFloat64
 func (q Enumerator[T]) SumFloat(selector func(T) float32) float32 {
 	return sumFloatInternal(q, selector)
 }
@@ -44,10 +44,10 @@ func (q Enumerator[T]) SumFloat(selector func(T) float32) float32 {
 // with floating-point precision.
 //
 // The sum float operation will:
-// - Apply the selector function to each element to extract a float32 value
-// - Sum all the extracted float32 values
-// - Return the total sum
-// - Handle nil enumerators gracefully
+//   - Apply the selector function to each element to extract a float32 value
+//   - Sum all the extracted float32 values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -65,13 +65,13 @@ func (q Enumerator[T]) SumFloat(selector func(T) float32) float32 {
 // rounding errors. Consider using appropriate rounding for display.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Selector function should handle all possible input values safely
-// - For double precision, consider implementing or using SumFloat64
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
+//   - For double precision, consider implementing or using SumFloat64
 func (q EnumeratorAny[T]) SumFloat(selector func(T) float32) float32 {
 	return sumFloatInternal(q, selector)
 }

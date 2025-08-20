@@ -5,10 +5,10 @@ package enumerable
 // or modifying external state for each element.
 //
 // The for each operation will:
-// - Execute the action function for each element in the enumeration
-// - Process all elements in the enumeration
-// - Handle nil enumerators gracefully
-// - Not return any value (void operation)
+//   - Execute the action function for each element in the enumeration
+//   - Process all elements in the enumeration
+//   - Handle nil enumerators gracefully
+//   - Not return any value (void operation)
 //
 // Parameters:
 //
@@ -21,13 +21,13 @@ package enumerable
 // Use with caution in functional programming contexts.
 //
 // Notes:
-// - If the enumerator is nil, no action is executed
-// - This is a terminal operation that materializes the enumeration
-// - All elements are processed regardless of action behavior
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Action function should handle all possible values including zero values
+//   - If the enumerator is nil, no action is executed
+//   - This is a terminal operation that materializes the enumeration
+//   - All elements are processed regardless of action behavior
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Action function should handle all possible values including zero values
 func (q Enumerator[T]) ForEach(action func(T)) {
 	forEachInternal(q, action)
 }
@@ -37,10 +37,10 @@ func (q Enumerator[T]) ForEach(action func(T)) {
 // or modifying external state for each element.
 //
 // The for each operation will:
-// - Execute the action function for each element in the enumeration
-// - Process all elements in the enumeration
-// - Handle nil enumerators gracefully
-// - Not return any value (void operation)
+//   - Execute the action function for each element in the enumeration
+//   - Process all elements in the enumeration
+//   - Handle nil enumerators gracefully
+//   - Not return any value (void operation)
 //
 // Parameters:
 //
@@ -53,13 +53,13 @@ func (q Enumerator[T]) ForEach(action func(T)) {
 // Use with caution in functional programming contexts.
 //
 // Notes:
-// - If the enumerator is nil, no action is executed
-// - This is a terminal operation that materializes the enumeration
-// - All elements are processed regardless of action behavior
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - The enumeration stops only when exhausted or if upstream operations stop it
-// - Action function should handle all possible values including zero values
+//   - If the enumerator is nil, no action is executed
+//   - This is a terminal operation that materializes the enumeration
+//   - All elements are processed regardless of action behavior
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Action function should handle all possible values including zero values
 func (q EnumeratorAny[T]) ForEach(action func(T)) {
 	forEachInternal(q, action)
 }
