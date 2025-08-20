@@ -4,10 +4,10 @@ package enumerable
 // This operation is useful for determining the size of a sequence.
 //
 // The count operation will:
-// - Iterate through all elements in the enumeration
-// - Count each element encountered
-// - Return the total count
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Count each element encountered
+//   - Return the total count
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -21,11 +21,11 @@ package enumerable
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - All elements are processed, even if consumer wants to stop early
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - All elements are processed, even if consumer wants to stop early
 func (q Enumerator[T]) Count() int {
 	return countInternal(q)
 }
@@ -34,10 +34,10 @@ func (q Enumerator[T]) Count() int {
 // This operation is useful for determining the size of a sequence.
 //
 // The count operation will:
-// - Iterate through all elements in the enumeration
-// - Count each element encountered
-// - Return the total count
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Count each element encountered
+//   - Return the total count
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -51,11 +51,11 @@ func (q Enumerator[T]) Count() int {
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - All elements are processed, even if consumer wants to stop early
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - All elements are processed, even if consumer wants to stop early
 func (q EnumeratorAny[T]) Count() int {
 	return countInternal(q)
 }

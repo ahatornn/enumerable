@@ -5,10 +5,10 @@ package enumerable
 // where the count might exceed the range of int.
 //
 // The long count operation will:
-// - Iterate through all elements in the enumeration
-// - Count each element encountered using int64 to prevent overflow
-// - Return the total count as int64
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Count each element encountered using int64 to prevent overflow
+//   - Return the total count as int64
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -22,12 +22,12 @@ package enumerable
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - In Go, int is platform-dependent (32-bit on 32-bit systems, 64-bit on 64-bit systems)
-// - Use LongCount when you expect very large collections that might overflow int
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - In Go, int is platform-dependent (32-bit on 32-bit systems, 64-bit on 64-bit systems)
+//   - Use LongCount when you expect very large collections that might overflow int
 func (q Enumerator[T]) LongCount() int64 {
 	return longCountInternal(q)
 }
@@ -37,10 +37,10 @@ func (q Enumerator[T]) LongCount() int64 {
 // where the count might exceed the range of int.
 //
 // The long count operation will:
-// - Iterate through all elements in the enumeration
-// - Count each element encountered using int64 to prevent overflow
-// - Return the total count as int64
-// - Handle nil enumerators gracefully
+//   - Iterate through all elements in the enumeration
+//   - Count each element encountered using int64 to prevent overflow
+//   - Return the total count as int64
+//   - Handle nil enumerators gracefully
 //
 // Returns:
 //
@@ -54,12 +54,12 @@ func (q Enumerator[T]) LongCount() int64 {
 // process the entire enumeration, which may trigger upstream operations.
 //
 // Notes:
-// - If the enumerator is nil, returns 0
-// - If the enumeration is empty, returns 0
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(1) - constant space usage
-// - In Go, int is platform-dependent (32-bit on 32-bit systems, 64-bit on 64-bit systems)
-// - Use LongCount when you expect very large collections that might overflow int
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - In Go, int is platform-dependent (32-bit on 32-bit systems, 64-bit on 64-bit systems)
+//   - Use LongCount when you expect very large collections that might overflow int
 func (q EnumeratorAny[T]) LongCount() int64 {
 	return longCountInternal(q)
 }

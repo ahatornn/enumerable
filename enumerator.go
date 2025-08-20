@@ -10,8 +10,8 @@ package enumerable
 //	T - the type of values to enumerate (must be comparable)
 //
 // Notes:
-// - Thread safety depends on the implementation
-// - Designed to work with Go 1.22+ range-over-func feature
+//   - Thread safety depends on the implementation
+//   - Designed to work with Go 1.22+ range-over-func feature
 type Enumerator[T comparable] func(yield func(T) bool)
 
 // EnumeratorAny represents a sequence of values that can be iterated over
@@ -25,6 +25,6 @@ type Enumerator[T comparable] func(yield func(T) bool)
 //	T - the type of values to enumerate (no constraints)
 //
 // Notes:
-// - Thread safety depends on the implementation
-// - Designed to work with Go 1.22+ range-over-func feature
+//   - Thread safety depends on the implementation
+//   - Designed to work with Go 1.22+ range-over-func feature
 type EnumeratorAny[T any] func(yield func(T) bool)

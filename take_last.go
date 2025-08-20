@@ -5,10 +5,10 @@ package enumerable
 // trailing averages, or end-of-sequence markers.
 //
 // The take last operation will:
-// - Buffer elements to track the last n elements seen so far
-// - Yield the final n elements when enumeration completes
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Buffer elements to track the last n elements seen so far
+//   - Yield the final n elements when enumeration completes
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -28,11 +28,11 @@ package enumerable
 // Elements are yielded in order of their appearance in the original enumeration.
 //
 // Notes:
-// - If n <= 0, returns an empty enumerator
-// - If n >= total number of elements, returns all available elements
-// - If the original enumerator is nil, returns an empty enumerator
-// - Negative values of n are treated as 0
-// - The enumeration stops as soon as the consumer returns false
+//   - If n <= 0, returns an empty enumerator
+//   - If n >= total number of elements, returns all available elements
+//   - If the original enumerator is nil, returns an empty enumerator
+//   - Negative values of n are treated as 0
+//   - The enumeration stops as soon as the consumer returns false
 func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 	if q == nil || n <= 0 {
 		return Empty[T]()
@@ -46,10 +46,10 @@ func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 // trailing averages, or end-of-sequence markers.
 //
 // The take last operation will:
-// - Buffer elements to track the last n elements seen so far
-// - Yield the final n elements when enumeration completes
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Buffer elements to track the last n elements seen so far
+//   - Yield the final n elements when enumeration completes
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -69,11 +69,11 @@ func (q Enumerator[T]) TakeLast(n int) Enumerator[T] {
 // Elements are yielded in order of their appearance in the original enumeration.
 //
 // Notes:
-// - If n <= 0, returns an empty enumerator
-// - If n >= total number of elements, returns all available elements
-// - If the original enumerator is nil, returns an empty enumerator
-// - Negative values of n are treated as 0
-// - The enumeration stops as soon as the consumer returns false
+//   - If n <= 0, returns an empty enumerator
+//   - If n >= total number of elements, returns all available elements
+//   - If the original enumerator is nil, returns an empty enumerator
+//   - Negative values of n are treated as 0
+//   - The enumeration stops as soon as the consumer returns false
 func (q EnumeratorAny[T]) TakeLast(n int) EnumeratorAny[T] {
 	if q == nil || n <= 0 {
 		return EmptyAny[T]()

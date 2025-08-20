@@ -4,10 +4,10 @@ package enumerable
 // This is equivalent to set intersection operation (first ∩ second).
 //
 // The intersect operation will:
-// - Yield elements that exist in both the first and second enumerations
-// - Remove duplicates from the result (each element appears only once)
-// - Preserve the order of first occurrence from the first enumeration
-// - Handle nil enumerators gracefully
+//   - Yield elements that exist in both the first and second enumerations
+//   - Remove duplicates from the result (each element appears only once)
+//   - Preserve the order of first occurrence from the first enumeration
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -22,14 +22,14 @@ package enumerable
 // enumerations as it may cause high memory usage.
 //
 // Notes:
-// - Requires T to be comparable (supports == operator)
-// - Uses map[T]bool internally for efficient lookup
-// - Result contains only unique elements (duplicates removed)
-// - For nil first enumerator, returns empty enumeration
-// - For nil second enumerator, returns empty enumeration
-// - Lazy evaluation - elements processed during iteration
-// - Memory usage depends on size of second enumeration and unique elements in first
-// - Elements are yielded in order of their first appearance in the first enumeration
+//   - Requires T to be comparable (supports == operator)
+//   - Uses map[T]bool internally for efficient lookup
+//   - Result contains only unique elements (duplicates removed)
+//   - For nil first enumerator, returns empty enumeration
+//   - For nil second enumerator, returns empty enumeration
+//   - Lazy evaluation - elements processed during iteration
+//   - Memory usage depends on size of second enumeration and unique elements in first
+//   - Elements are yielded in order of their first appearance in the first enumeration
 func (q Enumerator[T]) Intersect(second Enumerator[T]) Enumerator[T] {
 	return func(yield func(T) bool) {
 		secondSet := make(map[T]bool)

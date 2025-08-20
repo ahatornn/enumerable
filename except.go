@@ -5,10 +5,10 @@ package enumerable
 // This is equivalent to set difference operation (first - second).
 //
 // The except operation will:
-// - Yield elements that exist in the first enumeration but not in the second
-// - Remove duplicates from the result (each element appears only once)
-// - Preserve the order of first occurrence from the first enumeration
-// - Handle nil enumerators gracefully
+//   - Yield elements that exist in the first enumeration but not in the second
+//   - Remove duplicates from the result (each element appears only once)
+//   - Preserve the order of first occurrence from the first enumeration
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -24,13 +24,13 @@ package enumerable
 // the number of unique elements in the second enumerator.
 //
 // Notes:
-// - Requires T to be comparable (supports == operator)
-// - Uses map[T]bool internally for efficient lookup
-// - Result contains only unique elements (duplicates removed)
-// - For nil first enumerator, returns empty enumeration
-// - For nil second enumerator, returns distinct elements from first
-// - Lazy evaluation - elements processed during iteration
-// - Memory usage depends on size of second enumeration and unique elements in first
+//   - Requires T to be comparable (supports == operator)
+//   - Uses map[T]bool internally for efficient lookup
+//   - Result contains only unique elements (duplicates removed)
+//   - For nil first enumerator, returns empty enumeration
+//   - For nil second enumerator, returns distinct elements from first
+//   - Lazy evaluation - elements processed during iteration
+//   - Memory usage depends on size of second enumeration and unique elements in first
 func (q Enumerator[T]) Except(second Enumerator[T]) Enumerator[T] {
 	return func(yield func(T) bool) {
 		excludeSet := make(map[T]bool)

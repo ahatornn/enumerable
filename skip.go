@@ -4,10 +4,10 @@ package enumerable
 // This operation is useful for pagination, skipping headers, or bypassing initial elements.
 //
 // The skip operation will:
-// - Bypass the first n elements from the enumeration
-// - Yield all remaining elements in order
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Bypass the first n elements from the enumeration
+//   - Yield all remaining elements in order
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -18,13 +18,13 @@ package enumerable
 //	An Enumerator[T] that yields elements after skipping the first n elements
 //
 // Notes:
-// - If n <= 0, returns the original enumerator unchanged
-// - If n >= total number of elements, returns an empty enumerator
-// - If the original enumerator is nil, returns an empty enumerator (not nil)
-// - Lazy evaluation - elements are processed and skipped during iteration
-// - No elements are buffered - memory efficient
-// - Negative values of n are treated as 0
-// - The enumeration is consumed sequentially, so skipped elements are still processed
+//   - If n <= 0, returns the original enumerator unchanged
+//   - If n >= total number of elements, returns an empty enumerator
+//   - If the original enumerator is nil, returns an empty enumerator (not nil)
+//   - Lazy evaluation - elements are processed and skipped during iteration
+//   - No elements are buffered - memory efficient
+//   - Negative values of n are treated as 0
+//   - The enumeration is consumed sequentially, so skipped elements are still processed
 func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 	if q == nil {
 		return Empty[T]()
@@ -36,10 +36,10 @@ func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 // This operation is useful for pagination, skipping headers, or bypassing initial elements.
 //
 // The skip operation will:
-// - Bypass the first n elements from the enumeration
-// - Yield all remaining elements in order
-// - Handle edge cases gracefully (n <= 0, n >= count)
-// - Support early termination when consumer returns false
+//   - Bypass the first n elements from the enumeration
+//   - Yield all remaining elements in order
+//   - Handle edge cases gracefully (n <= 0, n >= count)
+//   - Support early termination when consumer returns false
 //
 // Parameters:
 //
@@ -50,13 +50,13 @@ func (q Enumerator[T]) Skip(n int) Enumerator[T] {
 //	An EnumeratorAny[T] that yields elements after skipping the first n elements
 //
 // Notes:
-// - If n <= 0, returns the original enumerator unchanged
-// - If n >= total number of elements, returns an empty enumerator
-// - If the original enumerator is nil, returns an empty enumerator (not nil)
-// - Lazy evaluation - elements are processed and skipped during iteration
-// - No elements are buffered - memory efficient
-// - Negative values of n are treated as 0
-// - The enumeration is consumed sequentially, so skipped elements are still processed
+//   - If n <= 0, returns the original enumerator unchanged
+//   - If n >= total number of elements, returns an empty enumerator
+//   - If the original enumerator is nil, returns an empty enumerator (not nil)
+//   - Lazy evaluation - elements are processed and skipped during iteration
+//   - No elements are buffered - memory efficient
+//   - Negative values of n are treated as 0
+//   - The enumeration is consumed sequentially, so skipped elements are still processed
 func (q EnumeratorAny[T]) Skip(n int) EnumeratorAny[T] {
 	if q == nil {
 		return EmptyAny[T]()

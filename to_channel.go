@@ -5,11 +5,11 @@ package enumerable
 // processing pipelines or for interoperability with goroutines.
 //
 // The to channel operation will:
-// - Create a new channel with specified buffer size
-// - Start a goroutine that iterates through the enumeration
-// - Send each element to the channel
-// - Close the channel when enumeration is complete
-// - Handle nil enumerators gracefully
+//   - Create a new channel with specified buffer size
+//   - Start a goroutine that iterates through the enumeration
+//   - Send each element to the channel
+//   - Close the channel when enumeration is complete
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -30,12 +30,12 @@ package enumerable
 // may leak. Always range over the entire channel or ensure proper cleanup.
 //
 // Notes:
-// - If the enumerator is nil, returns a closed channel
-// - If the enumeration is empty, returns an empty but closed channel
-// - The goroutine automatically closes the channel when done
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(bufferSize) plus any upstream buffering
-// - The enumeration runs in a separate goroutine, enabling concurrent processing
+//   - If the enumerator is nil, returns a closed channel
+//   - If the enumeration is empty, returns an empty but closed channel
+//   - The goroutine automatically closes the channel when done
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(bufferSize) plus any upstream buffering
+//   - The enumeration runs in a separate goroutine, enabling concurrent processing
 func (q Enumerator[T]) ToChannel(bufferSize int) <-chan T {
 	return toChannelInternal(q, bufferSize)
 }
@@ -45,11 +45,11 @@ func (q Enumerator[T]) ToChannel(bufferSize int) <-chan T {
 // processing pipelines or for interoperability with goroutines.
 //
 // The to channel operation will:
-// - Create a new channel with specified buffer size
-// - Start a goroutine that iterates through the enumeration
-// - Send each element to the channel
-// - Close the channel when enumeration is complete
-// - Handle nil enumerators gracefully
+//   - Create a new channel with specified buffer size
+//   - Start a goroutine that iterates through the enumeration
+//   - Send each element to the channel
+//   - Close the channel when enumeration is complete
+//   - Handle nil enumerators gracefully
 //
 // Parameters:
 //
@@ -70,12 +70,12 @@ func (q Enumerator[T]) ToChannel(bufferSize int) <-chan T {
 // may leak. Always range over the entire channel or ensure proper cleanup.
 //
 // Notes:
-// - If the enumerator is nil, returns a closed channel
-// - If the enumeration is empty, returns an empty but closed channel
-// - The goroutine automatically closes the channel when done
-// - Time complexity: O(n) where n is the number of elements
-// - Space complexity: O(bufferSize) plus any upstream buffering
-// - The enumeration runs in a separate goroutine, enabling concurrent processing
+//   - If the enumerator is nil, returns a closed channel
+//   - If the enumeration is empty, returns an empty but closed channel
+//   - The goroutine automatically closes the channel when done
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(bufferSize) plus any upstream buffering
+//   - The enumeration runs in a separate goroutine, enabling concurrent processing
 func (q EnumeratorAny[T]) ToChannel(bufferSize int) <-chan T {
 	return toChannelInternal(q, bufferSize)
 }
