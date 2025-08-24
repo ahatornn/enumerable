@@ -3,9 +3,9 @@ package comparer
 // ComparerBool is a predefined ComparerFunc for comparing two bool values.
 // It performs a logical comparison where false is considered less than true and returns:
 //
-//   -1 if the first boolean is false and the second is true
-//    0 if both booleans are equal
-//   +1 if the first boolean is true and the second is false
+//	-1 if the first boolean is false and the second is true
+//	 0 if both booleans are equal
+//	+1 if the first boolean is true and the second is false
 //
 // This comparer adheres to the required mathematical properties of consistency,
 // antisymmetry, transitivity, and equality as defined by the ComparerFunc type.

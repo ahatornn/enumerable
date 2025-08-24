@@ -3,9 +3,9 @@ package comparer
 // ComparerFloat64 is a predefined ComparerFunc for comparing two float64 values.
 // It performs a numerical comparison between two float64 values and returns:
 //
-//   -1 if the first value is less than the second
-//    0 if both values are equal
-//   +1 if the first value is greater than the second
+//	-1 if the first value is less than the second
+//	 0 if both values are equal
+//	+1 if the first value is greater than the second
 //
 // This comparer adheres to the required mathematical properties of consistency,
 // antisymmetry, transitivity, and equality as defined by the ComparerFunc type.
