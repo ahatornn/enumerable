@@ -334,7 +334,6 @@ func TestMaxByCustomComparer(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]int{5, 2, 8, 1, 9})
 
-		// Reverse comparer - finds minimum instead of maximum
 		reverseComparer := func(a, b int) int {
 			return comparer.ComparerInt(b, a)
 		}
@@ -353,7 +352,6 @@ func TestMaxByCustomComparer(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]int{15, 7, 23, 4, 11})
 
-		// Compare by modulus 10
 		modulusComparer := func(a, b int) int {
 			return comparer.ComparerInt(a%10, b%10)
 		}
@@ -363,8 +361,8 @@ func TestMaxByCustomComparer(t *testing.T) {
 		if !ok {
 			t.Error("Expected ok to be true")
 		}
-		if max != 15 { // 15 % 10 = 5, which is maximum among 5,7,3,4,1
-			t.Errorf("Expected max 15 (modulus 5), got %d", max)
+		if max != 7 { // 7 % 10 = 7, which is maximum among 5,7,3,4,1
+			t.Errorf("Expected max 7 (modulus 7), got %d", max)
 		}
 	})
 }
