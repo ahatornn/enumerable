@@ -85,24 +85,31 @@ func minBoolInternal[T any](
 	}
 
 	found := false
-	minKey := false
+	resultKey := false
+
+	var extremeValue bool
+	if cmp(false, true) < 0 {
+		extremeValue = false
+	} else {
+		extremeValue = true
+	}
 
 	enumerator(func(item T) bool {
 		key := keySelector(item)
 
-		if !key {
-			minKey = false
+		if !found {
+			resultKey = key
 			found = true
-			return false
+		} else if cmp(key, resultKey) < 0 {
+			resultKey = key
 		}
 
-		if !found {
-			minKey = true
-			found = true
+		if key == extremeValue {
+			return false
 		}
 
 		return true
 	})
 
-	return minKey, found
+	return resultKey, found
 }
