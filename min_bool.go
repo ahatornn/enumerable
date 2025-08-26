@@ -39,7 +39,7 @@ import "github.com/ahatornn/enumerable/comparer"
 //   - For large enumerations without false values, all elements may be processed
 //   - To get the original element associated with the minimum key, use MinBy instead
 func (e Enumerator[T]) MinBool(keySelector func(T) bool) (bool, bool) {
-	return minBoolInternal(e, keySelector, comparer.ComparerBool)
+	return extremumBoolInternal(e, keySelector, comparer.ComparerBool)
 }
 
 // MinBool returns the smallest boolean value extracted from elements of the enumeration
@@ -72,10 +72,10 @@ func (e Enumerator[T]) MinBool(keySelector func(T) bool) (bool, bool) {
 //   - For large enumerations without false values, all elements may be processed
 //   - To get the original element associated with the minimum key, use MinBy instead
 func (e EnumeratorAny[T]) MinBool(keySelector func(T) bool) (bool, bool) {
-	return minBoolInternal(e, keySelector, comparer.ComparerBool)
+	return extremumBoolInternal(e, keySelector, comparer.ComparerBool)
 }
 
-func minBoolInternal[T any](
+func extremumBoolInternal[T any](
 	enumerator func(yield func(T) bool),
 	keySelector func(T) bool,
 	cmp comparer.ComparerFunc[bool],

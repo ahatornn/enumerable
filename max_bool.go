@@ -40,7 +40,7 @@ import "github.com/ahatornn/enumerable/comparer"
 //   - To use custom ordering, use MaxBoolBy with a custom comparer
 //   - To get the original element associated with the maximum key, use MaxBy instead
 func (e Enumerator[T]) MaxBool(keySelector func(T) bool) (bool, bool) {
-	return minBoolInternal(e, keySelector, reverseBoolComparer)
+	return extremumBoolInternal(e, keySelector, reverseBoolComparer)
 }
 
 // MaxBool returns the largest boolean value extracted from elements of the enumeration
@@ -81,7 +81,7 @@ func (e Enumerator[T]) MaxBool(keySelector func(T) bool) (bool, bool) {
 //   - To use custom ordering, use MaxBoolBy with a custom comparer
 //   - To get the original element associated with the maximum key, use MaxBy instead
 func (e EnumeratorAny[T]) MaxBool(keySelector func(T) bool) (bool, bool) {
-	return minBoolInternal(e, keySelector, reverseBoolComparer)
+	return extremumBoolInternal(e, keySelector, reverseBoolComparer)
 }
 
 var reverseBoolComparer = comparer.ComparerFunc[bool](func(a, b bool) int {
