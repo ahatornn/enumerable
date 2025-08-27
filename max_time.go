@@ -28,6 +28,13 @@ import (
 //	The maximum time.Time key value extracted from elements and true if found,
 //	zero time (time.Time{}) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (time.Time{}, false)
 //   - If keySelector is nil, returns (time.Time{}, false)
@@ -65,6 +72,13 @@ func (e Enumerator[T]) MaxTime(keySelector func(T) time.Time) (time.Time, bool) 
 //
 //	The maximum time.Time key value extracted from elements and true if found,
 //	zero time (time.Time{}) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (time.Time{}, false)

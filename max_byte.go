@@ -25,6 +25,14 @@ import "github.com/ahatornn/enumerable/comparer"
 //	The maximum byte key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the maximum element.
+// Performance is optimized with early termination when 255 is
+// found, but worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
 //   - If keySelector is nil, returns (0, false)
@@ -64,6 +72,14 @@ func (e Enumerator[T]) MaxByte(keySelector func(T) byte) (byte, bool) {
 //
 //	The maximum byte key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the maximum element.
+// Performance is optimized with early termination when 255 is
+// found, but worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (0, false)

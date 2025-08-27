@@ -29,6 +29,14 @@ import (
 //	The minimum time.Time key value extracted from elements and true if found,
 //	zero time (time.Time{}) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the minimum element. Performance is
+// optimized with early termination when zero time is found, but
+// worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (time.Time{}, false)
 //   - If keySelector is nil, returns (time.Time{}, false)
@@ -68,6 +76,14 @@ func (e Enumerator[T]) MinTime(keySelector func(T) time.Time) (time.Time, bool) 
 //
 //	The minimum time.Time key value extracted from elements and true if found,
 //	zero time (time.Time{}) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the minimum element. Performance is
+// optimized with early termination when zero time is found, but
+// worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (time.Time{}, false)

@@ -29,6 +29,13 @@ import (
 //	The minimum float32 key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
 //   - If keySelector is nil, returns (0, false)
@@ -68,6 +75,13 @@ func (e Enumerator[T]) MinFloat(keySelector func(T) float32) (float32, bool) {
 //
 //	The minimum float32 key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
@@ -109,6 +123,13 @@ func (e EnumeratorAny[T]) MinFloat(keySelector func(T) float32) (float32, bool) 
 //	The minimum float64 key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
 //   - If keySelector is nil, returns (0, false)
@@ -148,6 +169,13 @@ func (e Enumerator[T]) MinFloat64(keySelector func(T) float64) (float64, bool) {
 //
 //	The minimum float64 key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (0, false)

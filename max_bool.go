@@ -25,6 +25,13 @@ import "github.com/ahatornn/enumerable/comparer"
 //	The maximum bool key value extracted from elements and true if found,
 //	false and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (false, false)
 //   - If keySelector is nil, returns (false, false)
@@ -65,6 +72,13 @@ func (e Enumerator[T]) MaxBool(keySelector func(T) bool) (bool, bool) {
 //
 //	The maximum bool key value extracted from elements and true if found,
 //	false and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (false, false)

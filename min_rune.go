@@ -25,6 +25,14 @@ import "github.com/ahatornn/enumerable/comparer"
 //	The minimum rune key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the minimum element. Performance is
+// optimized with early termination when 0 is found (since 0 is the minimum Unicode code point), but
+// worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
 //   - If keySelector is nil, returns (0, false)
@@ -64,6 +72,14 @@ func (e Enumerator[T]) MinRune(keySelector func(T) rune) (rune, bool) {
 //
 //	The minimum rune key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that iterates
+// through the enumeration to find the minimum element. Performance is
+// optimized with early termination when 0 is found (since 0 is the minimum Unicode code point), but
+// worst-case scenario processes all elements.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (0, false)

@@ -22,6 +22,13 @@ import "github.com/ahatornn/enumerable/comparer"
 //	The minimum element according to the comparer function and true if found,
 //	zero value of T and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns zero value and false
 //   - If the enumeration is empty, returns zero value and false
@@ -56,6 +63,13 @@ func (e Enumerator[T]) MinBy(cmp comparer.ComparerFunc[T]) (T, bool) {
 //
 //	The minimum element according to the comparer function and true if found,
 //	zero value of T and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the minimum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns zero value and false

@@ -25,6 +25,13 @@ import "github.com/ahatornn/enumerable/comparer"
 //	The maximum rune key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
 //
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
+//
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
 //   - If keySelector is nil, returns (0, false)
@@ -64,6 +71,13 @@ func (e Enumerator[T]) MaxRune(keySelector func(T) rune) (rune, bool) {
 //
 //	The maximum rune key value extracted from elements and true if found,
 //	zero value (0) and false otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to find the maximum element.
+// For large enumerations, this may be expensive.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// trigger upstream operations during enumeration.
 //
 // Notes:
 //   - If the enumerator is nil, returns (0, false)
