@@ -202,9 +202,37 @@ func TestMinFloat64(t *testing.T) {
 		}
 	})
 
+	t.Run("min float64 for any from positive numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float64{5.5, 2.2, 8.8, 1.1, 9.9})
+
+		min, ok := enumerator.MinFloat64(selector.Float64)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if min != 1.1 {
+			t.Errorf("Expected min 1.1, got %f", min)
+		}
+	})
+
 	t.Run("min float64 from negative numbers", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]float64{-5.5, -2.2, -8.8, -1.1, -9.9})
+
+		min, ok := enumerator.MinFloat64(selector.Float64)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if min != -9.9 {
+			t.Errorf("Expected min -9.9, got %f", min)
+		}
+	})
+
+	t.Run("min float64 for any from negative numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float64{-5.5, -2.2, -8.8, -1.1, -9.9})
 
 		min, ok := enumerator.MinFloat64(selector.Float64)
 

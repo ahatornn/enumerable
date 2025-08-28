@@ -252,9 +252,37 @@ func TestMaxFloat64(t *testing.T) {
 		}
 	})
 
+	t.Run("max float64 for any from positive numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float64{5.5, 2.2, 8.8, 1.1, 9.9})
+
+		max, ok := enumerator.MaxFloat64(selector.Float64)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if max != 9.9 {
+			t.Errorf("Expected max 9.9, got %f", max)
+		}
+	})
+
 	t.Run("max float64 from negative numbers", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]float64{-5.5, -2.2, -8.8, -1.1, -9.9})
+
+		max, ok := enumerator.MaxFloat64(selector.Float64)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if max != -1.1 {
+			t.Errorf("Expected max -1.1, got %f", max)
+		}
+	})
+
+	t.Run("max float64 for any from negative numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float64{-5.5, -2.2, -8.8, -1.1, -9.9})
 
 		max, ok := enumerator.MaxFloat64(selector.Float64)
 

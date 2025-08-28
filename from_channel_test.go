@@ -88,11 +88,46 @@ func TestFromChannel(t *testing.T) {
 		}
 	})
 
+	t.Run("empty channel for any", func(t *testing.T) {
+		t.Parallel()
+		ch := make(chan string)
+		close(ch)
+
+		enumerator := FromChannelAny(ch)
+
+		count := 0
+		enumerator(func(item string) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items from empty channel, got %d", count)
+		}
+	})
+
 	t.Run("nil channel", func(t *testing.T) {
 		t.Parallel()
 		var ch chan int // nil channel
 
 		enumerator := FromChannel(ch)
+
+		count := 0
+		enumerator(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items from nil channel, got %d", count)
+		}
+	})
+
+	t.Run("nil channel for any", func(t *testing.T) {
+		t.Parallel()
+		var ch chan int // nil channel
+
+		enumerator := FromChannelAny(ch)
 
 		count := 0
 		enumerator(func(item int) bool {

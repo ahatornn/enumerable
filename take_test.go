@@ -195,6 +195,23 @@ func TestTake(t *testing.T) {
 			t.Errorf("Expected 0 items from nil enumerator, got %d", count)
 		}
 	})
+
+	t.Run("nil enumerator any", func(t *testing.T) {
+		t.Parallel()
+		var enumerator EnumeratorAny[int] = nil
+
+		taken := enumerator.Take(3)
+
+		count := 0
+		taken(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items from nil enumerator any, got %d", count)
+		}
+	})
 }
 
 func TestTakeString(t *testing.T) {
@@ -360,6 +377,23 @@ func TestTakeEdgeCases(t *testing.T) {
 
 		if count != 0 {
 			t.Errorf("Expected 0 items when taking zero elements, got %d", count)
+		}
+	})
+
+	t.Run("single element take zero for any", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]int{42})
+
+		taken := enumerator.Take(0)
+
+		count := 0
+		taken(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items when taking zero elements for any, got %d", count)
 		}
 	})
 
