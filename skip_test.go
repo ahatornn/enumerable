@@ -300,6 +300,23 @@ func TestSkipEdgeCases(t *testing.T) {
 		}
 	})
 
+	t.Run("nil enumerator any", func(t *testing.T) {
+		t.Parallel()
+		var enumerator EnumeratorAny[int] = nil
+
+		skipped := enumerator.Skip(3)
+
+		count := 0
+		skipped(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items from nil enumerator any, got %d", count)
+		}
+	})
+
 	t.Run("single element skip zero", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]int{42})

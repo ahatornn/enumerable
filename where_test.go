@@ -180,6 +180,21 @@ func TestWhere(t *testing.T) {
 			t.Errorf("Expected 0 elements from Where on nil enumerator, got %d", count)
 		}
 	})
+
+	t.Run("nil enumerator any", func(t *testing.T) {
+		t.Parallel()
+		var enumerator EnumeratorAny[int] = nil
+		filtered := enumerator.Where(func(n int) bool { return n > 0 })
+		count := 0
+		filtered(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 elements from Where on nil enumerator any, got %d", count)
+		}
+	})
 }
 
 func TestWhereString(t *testing.T) {

@@ -470,6 +470,202 @@ func TestUnionEdgeCases(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("union stops when yield returns false", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{1, 2, 3, 4, 5})
+		second := FromSlice([]int{6, 7, 8, 9, 10})
+
+		union := first.Union(second)
+
+		count := 0
+		union(func(item int) bool {
+			count++
+			return false
+		})
+
+		if count != 1 {
+			t.Errorf("Expected exactly 1 item, got %d", count)
+		}
+	})
+
+	t.Run("union stops when yield returns false during first enumeration", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{1, 2, 3, 4, 5})
+		second := FromSlice([]int{6, 7, 8, 9, 10})
+
+		union := first.Union(second)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			if len(items) == 3 {
+				return false
+			}
+			return true
+		})
+
+		if len(items) != 3 {
+			t.Errorf("Expected exactly 3 items, got %d", len(items))
+		}
+		expected := []int{1, 2, 3}
+		for i, v := range expected {
+			if items[i] != v {
+				t.Errorf("Expected item %d to be %d, got %d", i, v, items[i])
+			}
+		}
+	})
+
+	t.Run("union with overlapping sets stops early", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{1, 2, 3})
+		second := FromSlice([]int{2, 3, 4, 5})
+
+		union := first.Union(second)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			if len(items) == 2 {
+				return false
+			}
+			return true
+		})
+
+		if len(items) != 2 {
+			t.Errorf("Expected exactly 2 items, got %d", len(items))
+		}
+	})
+
+	t.Run("union stops when second enumerator yield returns false", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{1})
+		second := FromSlice([]int{2, 3, 4, 5})
+
+		union := first.Union(second)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			if len(items) == 3 {
+				return false
+			}
+			return true
+		})
+
+		if len(items) != 3 {
+			t.Errorf("Expected exactly 3 items, got %d", len(items))
+		}
+		expected := []int{1, 2, 3}
+		for i, v := range expected {
+			if items[i] != v {
+				t.Errorf("Expected item %d to be %d, got %d", i, v, items[i])
+			}
+		}
+	})
+
+	t.Run("union with nil first enumerator", func(t *testing.T) {
+		t.Parallel()
+		var first Enumerator[int] = nil
+		second := FromSlice([]int{1, 2, 3})
+
+		union := first.Union(second)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			if len(items) == 2 {
+				return false
+			}
+			return true
+		})
+
+		if len(items) != 2 {
+			t.Errorf("Expected exactly 2 items, got %d", len(items))
+		}
+		expected := []int{1, 2}
+		for i, v := range expected {
+			if items[i] != v {
+				t.Errorf("Expected item %d to be %d, got %d", i, v, items[i])
+			}
+		}
+	})
+
+	t.Run("union with nil second enumerator", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{1, 2, 3})
+		var second Enumerator[int] = nil
+
+		union := first.Union(second)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			if len(items) == 2 {
+				return false
+			}
+			return true
+		})
+
+		if len(items) != 2 {
+			t.Errorf("Expected exactly 2 items, got %d", len(items))
+		}
+		expected := []int{1, 2}
+		for i, v := range expected {
+			if items[i] != v {
+				t.Errorf("Expected item %d to be %d, got %d", i, v, items[i])
+			}
+		}
+	})
+
+	t.Run("union stops immediately when both enumerators are empty", func(t *testing.T) {
+		t.Parallel()
+		first := FromSlice([]int{})
+		second := FromSlice([]int{})
+
+		union := first.Union(second)
+
+		count := 0
+		union(func(item int) bool {
+			count++
+			return false
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items, got %d", count)
+		}
+	})
+
+	t.Run("union with early stop prevents processing remaining items", func(t *testing.T) {
+		t.Parallel()
+		// Создаем большие коллекции
+		first := make([]int, 1000)
+		for i := range first {
+			first[i] = i
+		}
+		firstEnum := FromSlice(first)
+
+		second := make([]int, 1000)
+		for i := range second {
+			second[i] = i + 1000
+		}
+		secondEnum := FromSlice(second)
+
+		union := firstEnum.Union(secondEnum)
+
+		items := []int{}
+		union(func(item int) bool {
+			items = append(items, item)
+			return false
+		})
+
+		if len(items) != 1 {
+			t.Errorf("Expected exactly 1 item, got %d", len(items))
+		}
+		if items[0] != 0 {
+			t.Errorf("Expected first item to be 0, got %d", items[0])
+		}
+	})
 }
 
 func TestUnionBoolean(t *testing.T) {

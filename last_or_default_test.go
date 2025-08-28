@@ -71,6 +71,17 @@ func TestLastOrDefault(t *testing.T) {
 		}
 	})
 
+	t.Run("last element from nil enumerator any", func(t *testing.T) {
+		t.Parallel()
+		var enumerator EnumeratorAny[int] = nil
+
+		result := enumerator.LastOrDefault(-1)
+
+		if result != -1 {
+			t.Errorf("Expected default value -1 for nil enumerator any, got %d", result)
+		}
+	})
+
 	t.Run("last string element", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]string{"hello", "world", "go"})

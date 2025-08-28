@@ -28,6 +28,29 @@ func TestRange(t *testing.T) {
 		}
 	})
 
+	t.Run("basic range any", func(t *testing.T) {
+		t.Parallel()
+		enumerator := RangeAny(1, 5)
+
+		expected := []int{1, 2, 3, 4, 5}
+		actual := []int{}
+
+		enumerator(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
 	t.Run("basic range for non-comparable slice", func(t *testing.T) {
 		t.Parallel()
 		enumerator := RangeAny(1, 5)

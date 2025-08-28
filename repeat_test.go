@@ -28,6 +28,29 @@ func TestRepeat(t *testing.T) {
 		}
 	})
 
+	t.Run("repeat any", func(t *testing.T) {
+		t.Parallel()
+		enumerator := RepeatAny(42, 3)
+
+		expected := []int{42, 42, 42}
+		actual := []int{}
+
+		enumerator(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
 	t.Run("repeat map", func(t *testing.T) {
 		t.Parallel()
 		item := map[string]int{"key": 42}
