@@ -241,9 +241,37 @@ func TestAverageFloat(t *testing.T) {
 		}
 	})
 
+	t.Run("average float32 for any from positive numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float32{1.5, 2.5, 3.5, 4.5, 5.5})
+
+		avg, ok := enumerator.AverageFloat(selector.Float32)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if avg != 3.5 {
+			t.Errorf("Expected average 3.5, got %f", avg)
+		}
+	})
+
 	t.Run("average float32 from negative numbers", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSlice([]float32{-1.5, -2.5, -3.5, -4.5, -5.5})
+
+		avg, ok := enumerator.AverageFloat(selector.Float32)
+
+		if !ok {
+			t.Error("Expected ok to be true")
+		}
+		if avg != -3.5 {
+			t.Errorf("Expected average -3.5, got %f", avg)
+		}
+	})
+
+	t.Run("average float32 for any from negative numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]float32{-1.5, -2.5, -3.5, -4.5, -5.5})
 
 		avg, ok := enumerator.AverageFloat(selector.Float32)
 
