@@ -137,7 +137,7 @@ func (e EnumeratorAny[T]) MinInt(keySelector func(T) int) (int, bool) {
 //   - For large enumerations, consider the performance cost of key extraction
 //   - To get the original element associated with the minimum key, use MinBy instead
 func (e Enumerator[T]) MinInt64(keySelector func(T) int64) (int64, bool) {
-	return minInt64Internal(e, keySelector, comparer.ComparerInt64)
+	return minIntInternal(e, keySelector, comparer.ComparerInt64)
 }
 
 // MinInt64 returns the smallest int64 value extracted from elements of the enumeration
@@ -183,35 +183,11 @@ func (e Enumerator[T]) MinInt64(keySelector func(T) int64) (int64, bool) {
 //   - For large enumerations, consider the performance cost of key extraction
 //   - To get the original element associated with the minimum key, use MinBy instead
 func (e EnumeratorAny[T]) MinInt64(keySelector func(T) int64) (int64, bool) {
-	return minInt64Internal(e, keySelector, comparer.ComparerInt64)
+	return minIntInternal(e, keySelector, comparer.ComparerInt64)
 }
 
-func minIntInternal[T any](enumerator func(yield func(T) bool), keySelector func(T) int, cmp comparer.ComparerFunc[int]) (int, bool) {
-	var minKey int
-	found := false
-
-	if enumerator == nil || keySelector == nil || cmp == nil {
-		return 0, false
-	}
-
-	enumerator(func(item T) bool {
-		key := keySelector(item)
-
-		if !found {
-			minKey = key
-			found = true
-		} else if cmp(key, minKey) < 0 {
-			minKey = key
-		}
-
-		return true
-	})
-
-	return minKey, found
-}
-
-func minInt64Internal[T any](enumerator func(yield func(T) bool), keySelector func(T) int64, cmp comparer.ComparerFunc[int64]) (int64, bool) {
-	var minKey int64
+func minIntInternal[T any, N signedIntegersNumbers](enumerator func(yield func(T) bool), keySelector func(T) N, cmp comparer.ComparerFunc[N]) (N, bool) {
+	var minKey N
 	found := false
 
 	if enumerator == nil || keySelector == nil || cmp == nil {

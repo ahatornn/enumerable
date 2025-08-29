@@ -137,7 +137,7 @@ func (e EnumeratorAny[T]) MaxInt(keySelector func(T) int) (int, bool) {
 //   - For large enumerations, consider the performance cost of key extraction
 //   - To get the original element associated with the maximum key, use MaxBy instead
 func (e Enumerator[T]) MaxInt64(keySelector func(T) int64) (int64, bool) {
-	return minInt64Internal(e, keySelector, reverseInt64Comparer)
+	return minIntInternal(e, keySelector, reverseInt64Comparer)
 }
 
 // MaxInt64 returns the largest int64 value extracted from elements of the enumeration
@@ -183,7 +183,7 @@ func (e Enumerator[T]) MaxInt64(keySelector func(T) int64) (int64, bool) {
 //   - For large enumerations, consider the performance cost of key extraction
 //   - To get the original element associated with the maximum key, use MaxBy instead
 func (e EnumeratorAny[T]) MaxInt64(keySelector func(T) int64) (int64, bool) {
-	return minInt64Internal(e, keySelector, reverseInt64Comparer)
+	return minIntInternal(e, keySelector, reverseInt64Comparer)
 }
 
 var reverseIntComparer = comparer.ComparerFunc[int](func(a, b int) int {

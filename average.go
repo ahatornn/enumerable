@@ -370,18 +370,7 @@ func (e EnumeratorAny[T]) AverageFloat64(keySelector func(T) float64) (float64, 
 	return averageInternal(e, keySelector)
 }
 
-type averageNumber interface {
-	// Signed integers
-	int | int8 | int16 | int32 | int64 |
-
-		// Unsigned integers
-		uint | uint8 | uint16 | uint32 | uint64 | uintptr |
-
-		// Floating point numbers
-		float32 | float64
-}
-
-func averageInternal[T any, N averageNumber](
+func averageInternal[T any, N allNumber](
 	enumerator func(yield func(T) bool),
 	keySelector func(T) N,
 ) (float64, bool) {
