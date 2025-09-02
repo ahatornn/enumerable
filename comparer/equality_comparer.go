@@ -4,11 +4,13 @@ package comparer
 // This is useful for comparing non-comparable types such as structs containing slices or maps.
 //
 // Type Parameters:
-//   T - the type of values to compare (can be any type including non-comparable ones)
+//
+//	T - the type of values to compare (can be any type including non-comparable ones)
 //
 // The function should return:
-//   true if the values are considered equal
-//   false if the values are considered different
+//
+//	true if the values are considered equal
+//	false if the values are considered different
 //
 // Notes:
 //   - For comparable types, simple equality (==) can be used

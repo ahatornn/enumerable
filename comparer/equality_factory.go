@@ -14,14 +14,17 @@ package comparer
 //   - Return true if field values are equal, false otherwise
 //
 // Type Parameters:
-//   T - the type of values to compare (can contain non-comparable fields)
-//   F - the type of the field to compare (must be comparable)
+//
+//	T - the type of values to compare (can contain non-comparable fields)
+//	F - the type of the field to compare (must be comparable)
 //
 // Parameters:
-//   fieldSelector - a function that extracts the comparable field from type T
+//
+//	fieldSelector - a function that extracts the comparable field from type T
 //
 // Returns:
-//   An EqualityComparer[T] that compares values by the selected field
+//
+//	An EqualityComparer[T] that compares values by the selected field
 //
 // ⚠️ Important: The field type F must be comparable (no slices, maps, functions)
 // If F is non-comparable, the == operation will cause a compile-time error
@@ -64,13 +67,16 @@ func ByField[T any, F comparable](fieldSelector func(T) F) EqualityComparer[T] {
 //   - Handle empty comparer slice (returns true for any inputs)
 //
 // Type Parameters:
-//   T - the type of values to compare
+//
+//	T - the type of values to compare
 //
 // Parameters:
-//   comparers - variadic list of EqualityComparer[T] to combine
+//
+//	comparers - variadic list of EqualityComparer[T] to combine
 //
 // Returns:
-//   An EqualityComparer[T] that combines all provided comparers with AND logic
+//
+//	An EqualityComparer[T] that combines all provided comparers with AND logic
 //
 // ⚠️ Performance note: Comparers are evaluated in order until one returns false
 // Place the most selective or fastest comparers first for better performance
@@ -117,13 +123,16 @@ func Composite[T any](comparers ...EqualityComparer[T]) EqualityComparer[T] {
 //   - Preserve the behavior and performance characteristics of equalFunc
 //
 // Type Parameters:
-//   T - the type of values to compare
+//
+//	T - the type of values to compare
 //
 // Parameters:
-//   equalFunc - a function that determines equality between two values of type T
+//
+//	equalFunc - a function that determines equality between two values of type T
 //
 // Returns:
-//   An EqualityComparer[T] that uses the provided function for equality comparison
+//
+//	An EqualityComparer[T] that uses the provided function for equality comparison
 //
 // ⚠️ Important: The equalFunc must be:
 //   - Deterministic (same inputs always produce same output)
