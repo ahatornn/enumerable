@@ -10,9 +10,6 @@ type NoElementsError struct {
 // This method returns a string representation of the error that describes
 // why the operation failed due to an empty sequence.
 func (e *NoElementsError) Error() string {
-	if e.message == "" {
-		return "sequence contains no elements"
-	}
 	return e.message
 }
 
@@ -26,35 +23,22 @@ type MultipleElementsError struct {
 // This method returns a string representation of the error that describes
 // why the operation failed due to multiple elements in a sequence.
 func (e *MultipleElementsError) Error() string {
-	if e.message == "" {
-		return "sequence contains more than one element"
-	}
 	return e.message
 }
 
 var (
 	// ErrNoElements is the predefined error instance returned when a sequence contains
 	//  no elements.
-	ErrNoElements = &NoElementsError{}
+	ErrNoElements = &NoElementsError{
+		message: "sequence contains no elements",
+	}
 
 	// ErrMultipleElements is the predefined error instance returned when a sequence
 	// contains more than one element, but exactly one was expected.
-	ErrMultipleElements = &MultipleElementsError{}
+	ErrMultipleElements = &MultipleElementsError{
+		message: "sequence contains more than one element",
+	}
 )
-
-// NewNoElementsError creates a new NoElementsError with a custom message.
-// This function is useful when you need to provide additional context
-// about why no elements were found in a sequence.
-func NewNoElementsError(message string) error {
-	return &NoElementsError{message: message}
-}
-
-// NewMultipleElementsError creates a new MultipleElementsError with a custom message.
-// This function is useful when you need to provide additional context about
-// why multiple elements were found when exactly one was expected.
-func NewMultipleElementsError(message string) error {
-	return &MultipleElementsError{message: message}
-}
 
 type signedIntegersNumbers interface {
 	int | int8 | int16 | int32 | int64

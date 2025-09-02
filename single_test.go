@@ -167,6 +167,178 @@ func TestSingle(t *testing.T) {
 	})
 }
 
+func TestSingleOrDefault(t *testing.T) {
+	t.Run("single element from slice", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{42})
+		defaultValue := -1
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != 42 {
+			t.Errorf("Expected result 42, got %d", result)
+		}
+	})
+
+	t.Run("empty slice returns default value", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{})
+		defaultValue := -1
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("nil enumerator returns default value", func(t *testing.T) {
+		t.Parallel()
+		var enumerator Enumerator[int] = nil
+		defaultValue := -1
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("multiple elements return default value", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3})
+		defaultValue := -1
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("two identical elements return default value", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{42, 42})
+		defaultValue := -1
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("empty slice with zero default value", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{})
+		defaultValue := 0
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("multiple elements with zero default value", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2})
+		defaultValue := 0
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("struct with default value on empty", func(t *testing.T) {
+		t.Parallel()
+		type User struct {
+			ID   int
+			Name string
+		}
+
+		enumerator := FromSlice([]User{})
+		defaultValue := User{ID: -1, Name: "default"}
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %+v, got %+v", defaultValue, result)
+		}
+	})
+
+	t.Run("struct with default value on multiple elements", func(t *testing.T) {
+		t.Parallel()
+		type User struct {
+			ID   int
+			Name string
+		}
+
+		users := []User{
+			{ID: 1, Name: "Alice"},
+			{ID: 2, Name: "Bob"},
+		}
+		enumerator := FromSlice(users)
+		defaultValue := User{ID: -1, Name: "default"}
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %+v, got %+v", defaultValue, result)
+		}
+	})
+
+	t.Run("string slice empty returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]string{})
+		defaultValue := "not found"
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %s, got %s", defaultValue, result)
+		}
+	})
+
+	t.Run("string slice multiple returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]string{"hello", "world"})
+		defaultValue := "not found"
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %s, got %s", defaultValue, result)
+		}
+	})
+
+	t.Run("boolean slice empty returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]bool{})
+		defaultValue := true
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %v, got %v", defaultValue, result)
+		}
+	})
+
+	t.Run("boolean slice multiple returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]bool{true, false, true})
+		defaultValue := false
+
+		result := enumerator.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %v, got %v", defaultValue, result)
+		}
+	})
+}
+
 func TestSingleStruct(t *testing.T) {
 	t.Run("single element from struct field", func(t *testing.T) {
 		t.Parallel()
@@ -354,6 +526,47 @@ func TestSingleWithOperations(t *testing.T) {
 		if err != nil {
 			t.Errorf("Expected no error, got %v", err)
 		}
+		if result != 3 {
+			t.Errorf("Expected result 3, got %d", result)
+		}
+	})
+}
+
+func TestSingleOrDefaultWithOperations(t *testing.T) {
+	t.Run("empty filtered sequence returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3, 4, 5})
+		filtered := enumerator.Where(func(n int) bool { return n > 10 })
+		defaultValue := -1
+
+		result := filtered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("multiple filtered elements return default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3, 2, 5})
+		filtered := enumerator.Where(func(n int) bool { return n == 2 })
+		defaultValue := -1
+
+		result := filtered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("successful filter returns single element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3, 4, 5})
+		filtered := enumerator.Where(func(n int) bool { return n == 3 })
+		defaultValue := -1
+
+		result := filtered.SingleOrDefault(defaultValue)
+
 		if result != 3 {
 			t.Errorf("Expected result 3, got %d", result)
 		}
@@ -574,6 +787,63 @@ func BenchmarkSingle(b *testing.B) {
 			result, err := enumerator.Single()
 			if err == nil || result != 0 {
 				b.Fatalf("Expected error and 0, got %d, err: %v", result, err)
+			}
+		}
+	})
+}
+
+func BenchmarkSingleOrDefault(b *testing.B) {
+	b.Run("single element success", func(b *testing.B) {
+		items := []int{42}
+		defaultValue := -1
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			enumerator := FromSlice(items)
+			result := enumerator.SingleOrDefault(defaultValue)
+			if result != 42 {
+				b.Fatalf("Expected 42, got %d", result)
+			}
+		}
+	})
+
+	b.Run("empty slice with default", func(b *testing.B) {
+		defaultValue := -1
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			enumerator := FromSlice([]int{})
+			result := enumerator.SingleOrDefault(defaultValue)
+			if result != defaultValue {
+				b.Fatalf("Expected %d, got %d", defaultValue, result)
+			}
+		}
+	})
+
+	b.Run("multiple elements with default", func(b *testing.B) {
+		items := []int{1, 2, 3, 4, 5}
+		defaultValue := -1
+
+		b.ResetTimer()
+		b.ReportAllocs()
+		for i := 0; i < b.N; i++ {
+			enumerator := FromSlice(items)
+			result := enumerator.SingleOrDefault(defaultValue)
+			if result != defaultValue {
+				b.Fatalf("Expected %d, got %d", defaultValue, result)
+			}
+		}
+	})
+
+	b.Run("nil enumerator with default", func(b *testing.B) {
+		defaultValue := -1
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			var enumerator Enumerator[int] = nil
+			result := enumerator.SingleOrDefault(defaultValue)
+			if result != defaultValue {
+				b.Fatalf("Expected %d, got %d", defaultValue, result)
 			}
 		}
 	})

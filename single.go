@@ -35,11 +35,61 @@ package enumerable
 //   - This method should be used when you are certain the sequence contains exactly one element
 //   - Common use cases include lookup by unique identifier or configuration validation
 func (e Enumerator[T]) Single() (T, error) {
+	return singleInternal(e)
+}
+
+// SingleOrDefault returns the single element of a sequence using default equality comparison,
+// or a specified default value if the sequence is empty.
+//
+// The SingleOrDefault operation will:
+//   - Return the single element if the sequence contains exactly one element
+//   - Return the specified default value if the sequence is empty (including nil enumerator)
+//   - Return the specified default value if the sequence contains more than one element
+//   - Process elements sequentially until completion or second element found
+//   - Handle nil enumerators gracefully (treated as empty)
+//
+// Returns:
+//
+//	The single element of the sequence if successful,
+//	or the specified default value otherwise
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the sequence until completion or second element found.
+// For large sequences with multiple elements, this may process more elements than necessary.
+//
+// ⚠️ Memory note: This operation does not buffer elements, but it may
+// process multiple elements to ensure uniqueness, which may trigger upstream operations.
+//
+// Notes:
+//   - If the enumerator is nil, returns the specified default value
+//   - If the enumeration is empty, returns the specified default value
+//   - If the enumeration contains more than one element, returns the specified default value
+//   - Processes elements in the enumeration - O(n) time complexity in worst case
+//   - No elements are buffered - memory efficient
+//   - This is a terminal operation that materializes the enumeration
+//   - Works only with comparable types (no slices, maps, functions in struct fields)
+//   - The type T must be comparable for equality comparison to work
+//   - For large enumerations, elements may be processed to detect multiple items
+//   - This method should be used when you expect zero or one element, with fallback for other cases
+//   - Common use cases include optional lookup by unique identifier or configuration with defaults
+//
+// ⚠️ Important: Unlike Single(), this method never returns an error.
+// All error conditions (empty sequence, multiple elements) result in returning the default value.
+// If you need to distinguish between these cases, use Single() instead.
+func (e Enumerator[T]) SingleOrDefault(defaultValue T) T {
+	result, err := singleInternal(e)
+	if err != nil {
+		return defaultValue
+	}
+	return result
+}
+
+func singleInternal[T any](enumerator func(func(T) bool)) (T, error) {
 	var result T
 	count := 0
 
-	if e != nil {
-		e(func(item T) bool {
+	if enumerator != nil {
+		enumerator(func(item T) bool {
 			if count == 0 {
 				result = item
 			}
