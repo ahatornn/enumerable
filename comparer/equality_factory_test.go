@@ -463,6 +463,448 @@ func TestEqualityComparerCombinations(t *testing.T) {
 	})
 }
 
+func TestDefault(t *testing.T) {
+	t.Run("default comparer for int", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[int]()
+
+		if !comparer.Equals(42, 42) {
+			t.Error("Expected same integers to be equal")
+		}
+
+		if comparer.Equals(42, 43) {
+			t.Error("Expected different integers to be unequal")
+		}
+
+		if comparer.GetHashCode(42) != comparer.GetHashCode(42) {
+			t.Error("Expected same hash codes for equal integers")
+		}
+	})
+
+	t.Run("default comparer for string", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[string]()
+
+		if !comparer.Equals("hello", "hello") {
+			t.Error("Expected same strings to be equal")
+		}
+
+		if comparer.Equals("hello", "world") {
+			t.Error("Expected different strings to be unequal")
+		}
+
+		if comparer.GetHashCode("hello") != comparer.GetHashCode("hello") {
+			t.Error("Expected same hash codes for equal strings")
+		}
+	})
+
+	t.Run("default comparer for bool", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[bool]()
+
+		if !comparer.Equals(true, true) {
+			t.Error("Expected same booleans to be equal")
+		}
+
+		if comparer.Equals(true, false) {
+			t.Error("Expected different booleans to be unequal")
+		}
+
+		if comparer.GetHashCode(true) != comparer.GetHashCode(true) {
+			t.Error("Expected same hash codes for equal booleans")
+		}
+
+		if comparer.GetHashCode(true) == comparer.GetHashCode(false) {
+			t.Log("Warning: true and false have same hash code (possible but not ideal)")
+		}
+	})
+
+	t.Run("default comparer for float", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[float64]()
+
+		if !comparer.Equals(1.5, 1.5) {
+			t.Error("Expected same floats to be equal")
+		}
+
+		if comparer.Equals(1.5, 2.5) {
+			t.Error("Expected different floats to be unequal")
+		}
+
+		if comparer.GetHashCode(1.5) != comparer.GetHashCode(1.5) {
+			t.Error("Expected same hash codes for equal floats")
+		}
+	})
+
+	t.Run("default comparer for struct", func(t *testing.T) {
+		t.Parallel()
+		type SimpleStruct struct {
+			A int
+			B string
+		}
+
+		comparer := Default[SimpleStruct]()
+
+		s1 := SimpleStruct{A: 1, B: "test"}
+		s2 := SimpleStruct{A: 1, B: "test"}
+		s3 := SimpleStruct{A: 2, B: "test"}
+
+		if !comparer.Equals(s1, s2) {
+			t.Error("Expected identical structs to be equal")
+		}
+
+		if comparer.Equals(s1, s3) {
+			t.Error("Expected different structs to be unequal")
+		}
+
+		if comparer.GetHashCode(s1) != comparer.GetHashCode(s2) {
+			t.Error("Expected same hash codes for equal structs")
+		}
+	})
+
+	t.Run("default comparer for pointer", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[*int]()
+
+		value1, value2 := 42, 42
+		ptr1 := &value1
+		ptr2 := &value2
+		var nilPtr *int
+
+		if !comparer.Equals(ptr1, ptr1) {
+			t.Error("Expected same pointer to be equal")
+		}
+
+		if comparer.Equals(ptr1, ptr2) {
+			t.Error("Expected different pointers to be unequal")
+		}
+
+		if comparer.Equals(ptr1, nilPtr) {
+			t.Error("Expected pointer and nil to be unequal")
+		}
+
+		if comparer.GetHashCode(ptr1) != comparer.GetHashCode(ptr1) {
+			t.Error("Expected same hash codes for equal pointers")
+		}
+	})
+
+	t.Run("default comparer for array", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[[3]int]()
+
+		arr1 := [3]int{1, 2, 3}
+		arr2 := [3]int{1, 2, 3}
+		arr3 := [3]int{1, 2, 4}
+
+		if !comparer.Equals(arr1, arr2) {
+			t.Error("Expected identical arrays to be equal")
+		}
+
+		if comparer.Equals(arr1, arr3) {
+			t.Error("Expected different arrays to be unequal")
+		}
+
+		if comparer.GetHashCode(arr1) != comparer.GetHashCode(arr2) {
+			t.Error("Expected same hash codes for equal arrays")
+		}
+	})
+
+	t.Run("default comparer for complex number", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[complex128]()
+
+		c1 := complex(1.5, 2.5)
+		c2 := complex(1.5, 2.5)
+		c3 := complex(1.5, 3.5)
+
+		if !comparer.Equals(c1, c2) {
+			t.Error("Expected same complex numbers to be equal")
+		}
+
+		if comparer.Equals(c1, c3) {
+			t.Error("Expected different complex numbers to be unequal")
+		}
+
+		if comparer.GetHashCode(c1) != comparer.GetHashCode(c2) {
+			t.Error("Expected same hash codes for equal complex numbers")
+		}
+	})
+
+	t.Run("default comparer hash consistency", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[int]()
+
+		value := 12345
+		hash1 := comparer.GetHashCode(value)
+		hash2 := comparer.GetHashCode(value)
+		hash3 := comparer.GetHashCode(value)
+
+		if hash1 != hash2 || hash2 != hash3 {
+			t.Error("Hash codes should be consistent for same value")
+		}
+	})
+
+	t.Run("default comparer reflexive property", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[string]()
+
+		value := "test value"
+		if !comparer.Equals(value, value) {
+			t.Error("Equals should be reflexive")
+		}
+	})
+
+	t.Run("default comparer symmetric property", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[int]()
+
+		a, b := 42, 42
+		if comparer.Equals(a, b) != comparer.Equals(b, a) {
+			t.Error("Equals should be symmetric")
+		}
+
+		a, b = 42, 43
+		if comparer.Equals(a, b) != comparer.Equals(b, a) {
+			t.Error("Equals should be symmetric for unequal values")
+		}
+	})
+
+	t.Run("default comparer transitive property", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[string]()
+
+		a := "same"
+		b := "same"
+		c := "same"
+
+		if comparer.Equals(a, b) && comparer.Equals(b, c) {
+			if !comparer.Equals(a, c) {
+				t.Error("Equals should be transitive")
+			}
+		}
+	})
+
+	t.Run("default comparer hash-equals contract", func(t *testing.T) {
+		t.Parallel()
+		comparer := Default[complex128]()
+
+		val1 := complex(1.5, 2.5)
+		val2 := complex(1.5, 2.5)
+
+		if comparer.Equals(val1, val2) {
+			if comparer.GetHashCode(val1) != comparer.GetHashCode(val2) {
+				t.Error("Equal values must have equal hash codes")
+			}
+		}
+	})
+
+	t.Run("default comparer with zero values", func(t *testing.T) {
+		t.Parallel()
+
+		intComparer := Default[int]()
+		if !intComparer.Equals(0, 0) {
+			t.Error("Expected zero integers to be equal")
+		}
+
+		stringComparer := Default[string]()
+		if !stringComparer.Equals("", "") {
+			t.Error("Expected empty strings to be equal")
+		}
+
+		boolComparer := Default[bool]()
+		if !boolComparer.Equals(false, false) {
+			t.Error("Expected false booleans to be equal")
+		}
+
+		type TestStruct struct {
+			A int
+			B string
+		}
+		structComparer := Default[TestStruct]()
+		var zeroStruct TestStruct
+		if !structComparer.Equals(zeroStruct, zeroStruct) {
+			t.Error("Expected zero structs to be equal")
+		}
+	})
+
+	t.Run("default comparer different types consistency", func(t *testing.T) {
+		t.Parallel()
+
+		intComparer := Default[int]()
+		stringComparer := Default[string]()
+		boolComparer := Default[bool]()
+
+		if !intComparer.Equals(1, 1) || intComparer.Equals(1, 2) {
+			t.Error("Int comparer not working correctly")
+		}
+
+		if !stringComparer.Equals("a", "a") || stringComparer.Equals("a", "b") {
+			t.Error("String comparer not working correctly")
+		}
+
+		if !boolComparer.Equals(true, true) || boolComparer.Equals(true, false) {
+			t.Error("Bool comparer not working correctly")
+		}
+	})
+
+	t.Run("default comparer array of structs", func(t *testing.T) {
+		t.Parallel()
+
+		type Point struct {
+			X, Y int
+		}
+
+		comparer := Default[[2]Point]()
+
+		arr1 := [2]Point{{1, 2}, {3, 4}}
+		arr2 := [2]Point{{1, 2}, {3, 4}}
+		arr3 := [2]Point{{1, 2}, {3, 5}}
+
+		if !comparer.Equals(arr1, arr2) {
+			t.Error("Expected identical arrays of structs to be equal")
+		}
+
+		if comparer.Equals(arr1, arr3) {
+			t.Error("Expected different arrays of structs to be unequal")
+		}
+	})
+
+	t.Run("default comparer channel types", func(t *testing.T) {
+		t.Parallel()
+
+		comparer := Default[chan int]()
+
+		ch1 := make(chan int)
+		ch2 := make(chan int)
+		var nilCh chan int
+
+		if !comparer.Equals(ch1, ch1) {
+			t.Error("Expected same channel to be equal")
+		}
+
+		if comparer.Equals(ch1, ch2) {
+			t.Error("Expected different channels to be unequal")
+		}
+
+		if comparer.Equals(ch1, nilCh) {
+			t.Error("Expected channel and nil to be unequal")
+		}
+	})
+}
+
+func BenchmarkDefault(b *testing.B) {
+	b.Run("Default int comparer Equals", func(b *testing.B) {
+		comparer := Default[int]()
+		a, bVal := 42, 42
+
+		result := false
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result = comparer.Equals(a, bVal)
+		}
+		b.StopTimer()
+		if !result {
+			b.Fatal("Expected true")
+		}
+	})
+
+	b.Run("Default string comparer Equals", func(b *testing.B) {
+		comparer := Default[string]()
+		a, bVal := "test", "test"
+
+		result := false
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result = comparer.Equals(a, bVal)
+		}
+		b.StopTimer()
+		if !result {
+			b.Fatal("Expected true")
+		}
+	})
+
+	b.Run("Default int comparer GetHashCode", func(b *testing.B) {
+		comparer := Default[int]()
+		value := 12345
+
+		var hash uint64
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			hash = comparer.GetHashCode(value)
+		}
+		b.StopTimer()
+		_ = hash // Prevent optimization
+	})
+
+	b.Run("Default string comparer GetHashCode", func(b *testing.B) {
+		comparer := Default[string]()
+		value := "benchmark test string"
+
+		var hash uint64
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			hash = comparer.GetHashCode(value)
+		}
+		b.StopTimer()
+		_ = hash // Prevent optimization
+	})
+
+	b.Run("Default struct comparer Equals", func(b *testing.B) {
+		type SimpleStruct struct {
+			A int
+			B string
+		}
+
+		comparer := Default[SimpleStruct]()
+		s1 := SimpleStruct{A: 1, B: "test"}
+		s2 := SimpleStruct{A: 1, B: "test"}
+
+		result := false
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result = comparer.Equals(s1, s2)
+		}
+		b.StopTimer()
+		if !result {
+			b.Fatal("Expected true")
+		}
+	})
+
+	b.Run("Default struct comparer GetHashCode", func(b *testing.B) {
+		type SimpleStruct struct {
+			A int
+			B string
+		}
+
+		comparer := Default[SimpleStruct]()
+		s := SimpleStruct{A: 1, B: "test"}
+
+		var hash uint64
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			hash = comparer.GetHashCode(s)
+		}
+		b.StopTimer()
+		_ = hash // Prevent optimization
+	})
+
+	b.Run("Default array comparer", func(b *testing.B) {
+		comparer := Default[[5]int]()
+		arr1 := [5]int{1, 2, 3, 4, 5}
+		arr2 := [5]int{1, 2, 3, 4, 5}
+
+		result := false
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result = comparer.Equals(arr1, arr2)
+		}
+		b.StopTimer()
+		if !result {
+			b.Fatal("Expected true")
+		}
+	})
+}
+
 func BenchmarkComparers(b *testing.B) {
 	b.Run("ByField comparer", func(b *testing.B) {
 		type User struct {
