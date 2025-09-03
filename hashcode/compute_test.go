@@ -363,6 +363,157 @@ func TestCompute(t *testing.T) {
 			t.Error("Expected identical complex structures to produce same hash")
 		}
 	})
+
+	t.Run("compute uint8 values", func(t *testing.T) {
+		t.Parallel()
+
+		hash1 := Compute(uint8(42))
+		hash2 := Compute(uint8(42))
+		hash3 := Compute(uint8(43))
+
+		if hash1 != hash2 {
+			t.Error("Expected same uint8 values to produce same hash")
+		}
+
+		if hash1 == hash3 {
+			t.Error("Expected different uint8 values to produce different hash")
+		}
+	})
+
+	t.Run("compute uint16 values", func(t *testing.T) {
+		t.Parallel()
+
+		hash1 := Compute(uint16(1000))
+		hash2 := Compute(uint16(1000))
+		hash3 := Compute(uint16(1001))
+
+		if hash1 != hash2 {
+			t.Error("Expected same uint16 values to produce same hash")
+		}
+
+		if hash1 == hash3 {
+			t.Error("Expected different uint16 values to produce different hash")
+		}
+	})
+
+	t.Run("compute uint32 values", func(t *testing.T) {
+		t.Parallel()
+
+		hash1 := Compute(uint32(1000000))
+		hash2 := Compute(uint32(1000000))
+		hash3 := Compute(uint32(1000001))
+
+		if hash1 != hash2 {
+			t.Error("Expected same uint32 values to produce same hash")
+		}
+
+		if hash1 == hash3 {
+			t.Error("Expected different uint32 values to produce different hash")
+		}
+	})
+
+	t.Run("compute different unsigned integer types with same value", func(t *testing.T) {
+		t.Parallel()
+
+		hash8 := Compute(uint8(42))
+		hash16 := Compute(uint16(42))
+		hash32 := Compute(uint32(42))
+		hash64 := Compute(uint64(42))
+		hashUint := Compute(uint(42))
+
+		hashes := []uint64{hash8, hash16, hash32, hash64, hashUint}
+		uniqueHashes := make(map[uint64]bool)
+		for _, h := range hashes {
+			uniqueHashes[h] = true
+		}
+
+		_ = uniqueHashes
+	})
+
+	t.Run("compute unsigned integer zero values", func(t *testing.T) {
+		t.Parallel()
+
+		hash8 := Compute(uint8(0))
+		hash16 := Compute(uint16(0))
+		hash32 := Compute(uint32(0))
+		hash64 := Compute(uint64(0))
+		hashUint := Compute(uint(0))
+
+		if hash8 != Compute(uint8(0)) {
+			t.Error("Expected consistency for uint8 zero")
+		}
+
+		if hash16 != Compute(uint16(0)) {
+			t.Error("Expected consistency for uint16 zero")
+		}
+
+		if hash32 != Compute(uint32(0)) {
+			t.Error("Expected consistency for uint32 zero")
+		}
+
+		if hash64 != Compute(uint64(0)) {
+			t.Error("Expected consistency for uint64 zero")
+		}
+
+		if hashUint != Compute(uint(0)) {
+			t.Error("Expected consistency for uint zero")
+		}
+	})
+
+	t.Run("compute maximum values for unsigned integer types", func(t *testing.T) {
+		t.Parallel()
+
+		hash8 := Compute(uint8(math.MaxUint8))
+		hash16 := Compute(uint16(math.MaxUint16))
+		hash32 := Compute(uint32(math.MaxUint32))
+		hash64 := Compute(uint64(math.MaxUint64))
+
+		if hash8 != Compute(uint8(math.MaxUint8)) {
+			t.Error("Expected consistency for uint8 max")
+		}
+
+		if hash16 != Compute(uint16(math.MaxUint16)) {
+			t.Error("Expected consistency for uint16 max")
+		}
+
+		if hash32 != Compute(uint32(math.MaxUint32)) {
+			t.Error("Expected consistency for uint32 max")
+		}
+
+		if hash64 != Compute(uint64(math.MaxUint64)) {
+			t.Error("Expected consistency for uint64 max")
+		}
+	})
+
+	t.Run("compute unsigned integer edge cases", func(t *testing.T) {
+		t.Parallel()
+
+		testCases := []struct {
+			name  string
+			value interface{}
+		}{
+			{"uint8 max", uint8(math.MaxUint8)},
+			{"uint16 max", uint16(math.MaxUint16)},
+			{"uint32 max", uint32(math.MaxUint32)},
+			{"uint64 max", uint64(math.MaxUint64)},
+			{"uint8 mid", uint8(128)},
+			{"uint16 mid", uint16(32768)},
+			{"uint32 mid", uint32(2147483648)},
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				t.Parallel()
+
+				hash1 := Compute(tc.value)
+				hash2 := Compute(tc.value)
+
+				if hash1 != hash2 {
+					t.Errorf("Expected consistency for %s", tc.name)
+				}
+			})
+		}
+	})
 }
 
 func BenchmarkCompute(b *testing.B) {
