@@ -88,15 +88,18 @@ func singleInternal[T any](enumerator func(func(T) bool)) (T, error) {
 	var result T
 	count := 0
 
-	if enumerator != nil {
-		enumerator(func(item T) bool {
-			if count == 0 {
-				result = item
-			}
-			count++
-			return count <= 1
-		})
+	if enumerator == nil {
+		var zero T
+		return zero, ErrNoElements
 	}
+
+	enumerator(func(item T) bool {
+		if count == 0 {
+			result = item
+		}
+		count++
+		return count <= 1
+	})
 
 	switch count {
 	case 0:
