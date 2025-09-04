@@ -42,7 +42,7 @@ Let’s say you want to: Merge two slices, keep numbers greater than 50, skip th
 
 ### ✅ Using enumerable
 
-go
+```go
 nums1 := []int{19, 63, 25, 19, 47, 91, 58}
 nums2 := []int{80, 25, 91, 36, 19, 52, 74, 36}
 
@@ -54,11 +54,11 @@ result := enumerable.FromSlice(nums1).
 	ToSlice()
 
 fmt.Println(result) // Result: [80 52]
-
+```
 
 ### 🛠 Manual
 
-go
+```go
 seen := make(map[int]bool)
 var filtered []int
 for _, x := range a {
@@ -83,6 +83,7 @@ if take > len(afterSkip) {
 	take = len(afterSkip)
 }
 return afterSkip[:take]
+```
 
 ### 🚀 Performance Benchmarks
 
