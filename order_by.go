@@ -13,14 +13,16 @@ import "github.com/ahatornn/enumerable/comparer"
 //   - Works with comparable types using direct comparison
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
+//
+//	comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
 //
 // Returns:
-//   An OrderEnumerator[T] that contains the sorted elements and supports further sorting operations
+//
+//	An OrderEnumerator[T] that contains the sorted elements and supports further sorting operations
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -48,15 +50,17 @@ func (e Enumerator[T]) OrderBy(comparer comparer.ComparerFunc[T]) OrderEnumerato
 //   - Works with comparable types using direct comparison
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
-//              Note: The final order will be reversed (descending)
+//
+//	comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
+//	           Note: The final order will be reversed (descending)
 //
 // Returns:
-//   An OrderEnumerator[T] that contains the sorted elements and supports further sorting operations
+//
+//	An OrderEnumerator[T] that contains the sorted elements and supports further sorting operations
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -84,14 +88,16 @@ func (e Enumerator[T]) OrderByDescending(comparer comparer.ComparerFunc[T]) Orde
 //   - Works with any type T, including non-comparable types
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
+//
+//	comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
 //
 // Returns:
-//   An OrderEnumeratorAny[T] that contains the sorted elements and supports further sorting operations
+//
+//	An OrderEnumeratorAny[T] that contains the sorted elements and supports further sorting operations
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -119,15 +125,17 @@ func (e EnumeratorAny[T]) OrderBy(comparer comparer.ComparerFunc[T]) OrderEnumer
 //   - Works with any type T, including non-comparable types
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
-//              Note: The final order will be reversed (descending)
+//
+//	comparer - a ComparerFunc that defines the sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
+//	           Note: The final order will be reversed (descending)
 //
 // Returns:
-//   An OrderEnumeratorAny[T] that contains the sorted elements and supports further sorting operations
+//
+//	An OrderEnumeratorAny[T] that contains the sorted elements and supports further sorting operations
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule

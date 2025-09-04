@@ -18,7 +18,8 @@ import "github.com/ahatornn/enumerable/comparer"
 //   - Zero memory allocation during rule accumulation
 //
 // Type Parameters:
-//   T - the comparable type of elements in the sequence (must satisfy comparable constraint)
+//
+//	T - the comparable type of elements in the sequence (must satisfy comparable constraint)
 //
 // ⚠️ Performance characteristics:
 //   - Rule accumulation: O(1) time, O(1) memory per operation
@@ -96,7 +97,8 @@ func (o OrderEnumerator[T]) addSortLevel(comparer comparer.ComparerFunc[T], desc
 //   - Full compatibility with non-comparable types (structs with slices, maps, functions)
 //
 // Type Parameters:
-//   T - any type of elements in the sequence (including non-comparable types)
+//
+//	T - any type of elements in the sequence (including non-comparable types)
 //
 // ⚠️ Performance characteristics:
 //   - Rule accumulation: O(1) time, O(1) memory per operation

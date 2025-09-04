@@ -13,14 +13,16 @@ import "github.com/ahatornn/enumerable/comparer"
 //   - Works with comparable types using direct comparison
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
+//
+//	comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
 //
 // Returns:
-//   An OrderEnumerator[T] that contains elements sorted by both primary and secondary criteria
+//
+//	An OrderEnumerator[T] that contains elements sorted by both primary and secondary criteria
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -48,15 +50,17 @@ func (o OrderEnumerator[T]) ThenBy(comparer comparer.ComparerFunc[T]) OrderEnume
 //   - Works with comparable types using direct comparison
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
-//              Note: The final order for this level will be reversed (descending)
+//
+//	comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
+//	           Note: The final order for this level will be reversed (descending)
 //
 // Returns:
-//   An OrderEnumerator[T] that contains elements sorted by both primary and secondary criteria
+//
+//	An OrderEnumerator[T] that contains elements sorted by both primary and secondary criteria
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -84,14 +88,16 @@ func (o OrderEnumerator[T]) ThenByDescending(comparer comparer.ComparerFunc[T]) 
 //   - Works with any type T, including non-comparable types
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
+//
+//	comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
 //
 // Returns:
-//   An OrderEnumeratorAny[T] that contains elements sorted by both primary and secondary criteria
+//
+//	An OrderEnumeratorAny[T] that contains elements sorted by both primary and secondary criteria
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
@@ -120,15 +126,17 @@ func (o OrderEnumeratorAny[T]) ThenBy(comparer comparer.ComparerFunc[T]) OrderEn
 //   - Works with any type T, including non-comparable types
 //
 // Parameters:
-//   comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
-//              The function should return:
-//                < 0 if first element is less than second
-//                = 0 if elements are equal
-//                > 0 if first element is greater than second
-//              Note: The final order for this level will be reversed (descending)
+//
+//	comparer - a ComparerFunc that defines the secondary sort order by comparing two elements of type T
+//	           The function should return:
+//	             < 0 if first element is less than second
+//	             = 0 if elements are equal
+//	             > 0 if first element is greater than second
+//	           Note: The final order for this level will be reversed (descending)
 //
 // Returns:
-//   An OrderEnumeratorAny[T] that contains elements sorted by both primary and secondary criteria
+//
+//	An OrderEnumeratorAny[T] that contains elements sorted by both primary and secondary criteria
 //
 // ⚠️ Performance note: This is a deferred execution operation that accumulates sorting rules.
 // Actual sorting computation occurs during first enumeration. Time complexity: O(1) for rule
