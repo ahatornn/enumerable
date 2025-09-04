@@ -4,7 +4,7 @@ import (
 	"github.com/ahatornn/enumerable/comparer"
 )
 
-// Contains determines whether a sequence contains a specified element using the default equality comparer.
+// Contains determines whether a sequence contains a specified element using direct equality comparison.
 // This operation is useful when you need to check for the existence of a specific value in the sequence.
 //
 // The Contains operation will:
@@ -12,7 +12,7 @@ import (
 //   - Return false if the sequence does not contain the specified value
 //   - Return false if the enumerator is nil
 //   - Process elements sequentially until the element is found or sequence ends
-//   - Use default equality comparison (==) for comparable types
+//   - Use direct equality comparison (==) for optimal performance
 //
 // Parameters:
 //
@@ -25,14 +25,16 @@ import (
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the sequence until the element is found or sequence ends.
 //
-// ⚠️ Memory note: This operation does not buffer elements.
+// ⚠️ Memory note: This operation does not buffer elements and requires zero memory allocations.
 //
 // Notes:
-//   - Uses default equality comparer for type T
-//   - If enumerator is nil, returns false
-//   - Processes elements sequentially - early termination when element is found
+//   - Uses direct equality comparison (==) for maximum performance
+//   - If enumerator is nil, returns false immediately
+//   - Processes elements sequentially with early termination when element is found
 //   - No elements are buffered - memory efficient
 //   - This is a terminal operation that materializes the enumeration
+//   - Zero allocations for all operations
+//   - Common use cases include membership testing, validation, conditional logic
 func (e Enumerator[T]) Contains(value T) bool {
 	if e == nil {
 		return false
