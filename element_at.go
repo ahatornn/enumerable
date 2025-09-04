@@ -12,11 +12,13 @@ package enumerable
 //   - Process elements sequentially until the specified index is reached
 //
 // Parameters:
-//   index - the zero-based index of the element to retrieve
+//
+//	index - the zero-based index of the element to retrieve
 //
 // Returns:
-//   The element at the specified index and true if found,
-//   zero value of T and false otherwise
+//
+//	The element at the specified index and true if found,
+//	zero value of T and false otherwise
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the sequence until the specified index is reached.
@@ -47,11 +49,13 @@ func (e Enumerator[T]) ElementAt(index int) (T, bool) {
 //   - Process elements sequentially until the specified index is reached
 //
 // Parameters:
-//   index - the zero-based index of the element to retrieve
+//
+//	index - the zero-based index of the element to retrieve
 //
 // Returns:
-//   The element at the specified index and true if found,
-//   zero value of T and false otherwise
+//
+//	The element at the specified index and true if found,
+//	zero value of T and false otherwise
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the sequence until the specified index is reached.
