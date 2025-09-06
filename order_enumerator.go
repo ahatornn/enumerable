@@ -1,6 +1,10 @@
 package enumerable
 
-import "github.com/ahatornn/enumerable/comparer"
+import (
+	"sort"
+
+	"github.com/ahatornn/enumerable/comparer"
+)
 
 // OrderEnumerator represents an ordered sequence of elements that supports lazy sorting
 // with multiple sorting levels. This type enables fluent chaining of sorting operations.
@@ -76,6 +80,44 @@ func (o OrderEnumerator[T]) addSortLevel(comparer comparer.ComparerFunc[T], desc
 	return OrderEnumerator[T]{
 		source:     o.source,
 		sortLevels: newSortLevels,
+	}
+}
+
+func (o OrderEnumerator[T]) getSortedEnumerator() func(func(T) bool) {
+	return func(yield func(T) bool) {
+		if o.source == nil {
+			return
+		}
+
+		var items []T
+		o.source(func(item T) bool {
+			items = append(items, item)
+			return true
+		})
+
+		if len(items) == 0 {
+			return
+		}
+
+		sort.SliceStable(items, func(i, j int) bool {
+			for _, level := range o.sortLevels {
+				result := level.comparer(items[i], items[j])
+
+				if result != 0 {
+					if level.descending {
+						return result > 0
+					}
+					return result < 0
+				}
+			}
+			return false
+		})
+
+		for _, item := range items {
+			if !yield(item) {
+				return
+			}
+		}
 	}
 }
 
@@ -164,4 +206,42 @@ func (o OrderEnumeratorAny[T]) addSortLevel(comparer comparer.ComparerFunc[T], d
 type sortLevel[T any] struct {
 	comparer   comparer.ComparerFunc[T]
 	descending bool
+}
+
+func (o OrderEnumeratorAny[T]) getSortedEnumerator() func(func(T) bool) {
+	return func(yield func(T) bool) {
+		if o.source == nil {
+			return
+		}
+
+		var items []T
+		o.source(func(item T) bool {
+			items = append(items, item)
+			return true
+		})
+
+		if len(items) == 0 {
+			return
+		}
+
+		sort.SliceStable(items, func(i, j int) bool {
+			for _, level := range o.sortLevels {
+				result := level.comparer(items[i], items[j])
+
+				if result != 0 {
+					if level.descending {
+						return result > 0
+					}
+					return result < 0
+				}
+			}
+			return false
+		})
+
+		for _, item := range items {
+			if !yield(item) {
+				return
+			}
+		}
+	}
 }
