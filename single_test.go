@@ -3,6 +3,8 @@ package enumerable
 import (
 	"errors"
 	"testing"
+
+	"github.com/ahatornn/enumerable/comparer"
 )
 
 func TestSingle(t *testing.T) {
@@ -788,6 +790,250 @@ func BenchmarkSingle(b *testing.B) {
 			if err == nil || result != 0 {
 				b.Fatalf("Expected error and 0, got %d, err: %v", result, err)
 			}
+		}
+	})
+}
+
+func TestOrderEnumeratorSingle(t *testing.T) {
+	t.Run("order enumerator single with one element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{42})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.Single()
+
+		if err != nil {
+			t.Errorf("Expected no error, got %v", err)
+		}
+		if result != 42 {
+			t.Errorf("Expected result 42, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator single with multiple elements returns error", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.Single()
+
+		if err == nil {
+			t.Error("Expected error for multiple elements")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		if result != 0 {
+			t.Errorf("Expected zero value 0, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator single with empty slice returns error", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.Single()
+
+		if err == nil {
+			t.Error("Expected error for empty slice")
+		}
+		if err != nil && err.Error() != "sequence contains no elements" {
+			t.Errorf("Expected 'sequence contains no elements' error, got %v", err)
+		}
+		if result != 0 {
+			t.Errorf("Expected zero value 0, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator single with struct and sorting", func(t *testing.T) {
+		t.Parallel()
+		type Person struct {
+			Name string
+			Age  int
+		}
+
+		people := []Person{{Name: "Alice", Age: 25}}
+		enumerator := FromSlice(people)
+
+		ordered := enumerator.OrderBy(func(a, b Person) int { return a.Age - b.Age })
+
+		result, err := ordered.Single()
+
+		if err != nil {
+			t.Errorf("Expected no error, got %v", err)
+		}
+		expected := Person{Name: "Alice", Age: 25}
+		if result != expected {
+			t.Errorf("Expected result %+v, got %+v", expected, result)
+		}
+	})
+
+	t.Run("order enumerator single with multiple elements after sorting", func(t *testing.T) {
+		t.Parallel()
+		type Item struct {
+			Value int
+		}
+
+		items := []Item{{Value: 1}, {Value: 2}, {Value: 3}}
+		enumerator := FromSlice(items)
+
+		ordered := enumerator.OrderBy(func(a, b Item) int { return a.Value - b.Value })
+
+		result, err := ordered.Single()
+
+		if err == nil {
+			t.Error("Expected error for multiple elements")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		var zero Item
+		if result != zero {
+			t.Errorf("Expected zero value %+v, got %+v", zero, result)
+		}
+	})
+
+	t.Run("order enumerator single with duplicate elements after sorting", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{5, 5, 5})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.Single()
+
+		if err == nil {
+			t.Error("Expected error for multiple elements")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		if result != 0 {
+			t.Errorf("Expected zero value 0, got %d", result)
+		}
+	})
+}
+
+func TestOrderEnumeratorSingleOrDefault(t *testing.T) {
+	t.Run("order enumerator single or default with one element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{42})
+		defaultValue := -1
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		if result != 42 {
+			t.Errorf("Expected result 42, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator single or default with multiple elements returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3})
+		defaultValue := -1
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("order enumerator single or default with empty slice returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{})
+		defaultValue := -1
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("order enumerator single or default with struct and sorting", func(t *testing.T) {
+		t.Parallel()
+		type Person struct {
+			Name string
+			Age  int
+		}
+
+		people := []Person{{Name: "Alice", Age: 25}}
+		enumerator := FromSlice(people)
+		defaultValue := Person{Name: "Default", Age: 0}
+
+		ordered := enumerator.OrderBy(func(a, b Person) int { return a.Age - b.Age })
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		expected := Person{Name: "Alice", Age: 25}
+		if result != expected {
+			t.Errorf("Expected result %+v, got %+v", expected, result)
+		}
+	})
+
+	t.Run("order enumerator single or default with multiple elements after sorting returns default", func(t *testing.T) {
+		t.Parallel()
+		type Item struct {
+			Value int
+		}
+
+		items := []Item{{Value: 1}, {Value: 2}, {Value: 3}}
+		enumerator := FromSlice(items)
+		defaultValue := Item{Value: -1}
+
+		ordered := enumerator.OrderBy(func(a, b Item) int { return a.Value - b.Value })
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %+v, got %+v", defaultValue, result)
+		}
+	})
+
+	t.Run("order enumerator single or default with duplicate elements returns default", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{5, 5, 5})
+		defaultValue := -1
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result := ordered.SingleOrDefault(defaultValue)
+
+		if result != defaultValue {
+			t.Errorf("Expected default value %d, got %d", defaultValue, result)
+		}
+	})
+
+	t.Run("order enumerator single or default with zero default value", func(t *testing.T) {
+		t.Parallel()
+		emptyEnumerator := FromSlice([]int{})
+		zeroDefault := 0
+
+		orderedEmpty := emptyEnumerator.OrderBy(comparer.ComparerInt)
+
+		resultEmpty := orderedEmpty.SingleOrDefault(zeroDefault)
+
+		if resultEmpty != 0 {
+			t.Errorf("Expected zero default value, got %d", resultEmpty)
+		}
+
+		multipleEnumerator := FromSlice([]int{1, 2})
+		orderedMultiple := multipleEnumerator.OrderBy(comparer.ComparerInt)
+
+		resultMultiple := orderedMultiple.SingleOrDefault(zeroDefault)
+
+		if resultMultiple != 0 {
+			t.Errorf("Expected zero default value, got %d", resultMultiple)
 		}
 	})
 }

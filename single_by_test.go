@@ -382,6 +382,228 @@ func TestSingleBy(t *testing.T) {
 	})
 }
 
+func TestOrderEnumeratorSingleBy(t *testing.T) {
+	t.Run("order enumerator single by with one element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{42})
+		eqComparer := comparer.Default[int]()
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.SingleBy(eqComparer)
+
+		if err != nil {
+			t.Errorf("Expected no error, got %v", err)
+		}
+		if result != 42 {
+			t.Errorf("Expected result 42, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator any single by with one element", func(t *testing.T) {
+		t.Parallel()
+		type Config struct {
+			Name    string
+			Options []string
+		}
+
+		configs := []Config{{Name: "TestConfig", Options: []string{"opt1"}}}
+		var enumerator = FromSliceAny(configs)
+		nameComparer := comparer.ByField(func(c Config) string { return c.Name })
+
+		ordered := enumerator.OrderBy(func(a, b Config) int { return compareStrings(a.Name, b.Name) })
+
+		result, err := ordered.SingleBy(nameComparer)
+
+		if err != nil {
+			t.Errorf("Expected no error, got %v", err)
+		}
+		expected := Config{Name: "TestConfig", Options: []string{"opt1"}}
+		if result.Name != expected.Name {
+			t.Errorf("Expected result %+v, got %+v", expected, result)
+		}
+	})
+
+	t.Run("order enumerator single by with multiple distinct elements returns error", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 2, 3})
+		eqComparer := comparer.Default[int]()
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.SingleBy(eqComparer)
+
+		if err == nil {
+			t.Error("Expected error for multiple distinct elements")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		if result != 0 {
+			t.Errorf("Expected zero value 0, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator any single by with multiple distinct elements returns error", func(t *testing.T) {
+		t.Parallel()
+		type User struct {
+			ID   int
+			Name string
+			Tags []string
+		}
+
+		users := []User{
+			{ID: 1, Name: "Alice", Tags: []string{"dev"}},
+			{ID: 2, Name: "Bob", Tags: []string{"qa"}},
+			{ID: 3, Name: "Charlie", Tags: []string{"ops"}},
+		}
+		var enumerator = FromSliceAny(users)
+		idComparer := comparer.ByField(func(u User) int { return u.ID })
+
+		ordered := enumerator.OrderBy(func(a, b User) int { return a.ID - b.ID })
+
+		_, err := ordered.SingleBy(idComparer)
+
+		if err == nil {
+			t.Error("Expected error for multiple distinct elements")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+	})
+
+	t.Run("order enumerator single by with duplicate elements according to comparer", func(t *testing.T) {
+		t.Parallel()
+		type Item struct {
+			Category string
+			Name     string
+		}
+
+		items := []Item{
+			{Category: "A", Name: "Item1"},
+			{Category: "A", Name: "Item2"},
+			{Category: "B", Name: "Item3"},
+		}
+		enumerator := FromSlice(items)
+		categoryComparer := comparer.ByField(func(i Item) string { return i.Category })
+
+		ordered := enumerator.OrderBy(func(a, b Item) int { return compareStrings(a.Category, b.Category) })
+
+		result, err := ordered.SingleBy(categoryComparer)
+
+		if err == nil {
+			t.Error("Expected error for multiple distinct elements by category")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		var zero Item
+		if result != zero {
+			t.Errorf("Expected zero value %+v, got %+v", zero, result)
+		}
+	})
+
+	t.Run("order enumerator single by with empty slice returns error", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{})
+		eqComparer := comparer.Default[int]()
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+
+		result, err := ordered.SingleBy(eqComparer)
+
+		if err == nil {
+			t.Error("Expected error for empty slice")
+		}
+		if err != nil && err.Error() != "sequence contains no elements" {
+			t.Errorf("Expected 'sequence contains no elements' error, got %v", err)
+		}
+		if result != 0 {
+			t.Errorf("Expected zero value 0, got %d", result)
+		}
+	})
+
+	t.Run("order enumerator single by with custom comparer and sorting", func(t *testing.T) {
+		t.Parallel()
+		type Product struct {
+			Name  string
+			Price float64
+		}
+
+		products := []Product{
+			{Name: "Laptop", Price: 1200.0},
+			{Name: "Phone", Price: 800.0},
+		}
+		enumerator := FromSlice(products)
+
+		priceRangeComparer := comparer.Custom(
+			func(a, b Product) bool {
+				rangeA := int(a.Price/100) * 100
+				rangeB := int(b.Price/100) * 100
+				return rangeA == rangeB
+			},
+			func(p Product) uint64 {
+				rangeVal := int(p.Price/100) * 100
+				return hashcode.Compute(rangeVal)
+			},
+		)
+
+		ordered := enumerator.OrderBy(func(a, b Product) int {
+			if a.Price < b.Price {
+				return -1
+			}
+			if a.Price > b.Price {
+				return 1
+			}
+			return 0
+		})
+
+		result, err := ordered.SingleBy(priceRangeComparer)
+
+		if err == nil {
+			t.Error("Expected error for products in same price range")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		var zero Product
+		if result != zero {
+			t.Errorf("Expected zero value %+v, got %+v", zero, result)
+		}
+	})
+
+	t.Run("order enumerator single by preserves sorting order in error case", func(t *testing.T) {
+		t.Parallel()
+		type Record struct {
+			Priority int
+			Name     string
+		}
+
+		records := []Record{
+			{Priority: 1, Name: "High1"},
+			{Priority: 1, Name: "High2"},
+			{Priority: 2, Name: "Low1"},
+		}
+		enumerator := FromSlice(records)
+		priorityComparer := comparer.ByField(func(r Record) int { return r.Priority })
+
+		ordered := enumerator.OrderBy(func(a, b Record) int { return a.Priority - b.Priority })
+
+		result, err := ordered.SingleBy(priorityComparer)
+
+		if err == nil {
+			t.Error("Expected error for records with same priority")
+		}
+		if err != nil && err.Error() != "sequence contains more than one element" {
+			t.Errorf("Expected 'sequence contains more than one element' error, got %v", err)
+		}
+		var zero Record
+		if result != zero {
+			t.Errorf("Expected zero value %+v, got %+v", zero, result)
+		}
+	})
+}
+
 func BenchmarkSingleBy(b *testing.B) {
 	b.Run("Enumerator[int] single element success", func(b *testing.B) {
 		items := []int{42}
