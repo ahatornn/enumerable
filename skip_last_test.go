@@ -2,6 +2,8 @@ package enumerable
 
 import (
 	"testing"
+
+	"github.com/ahatornn/enumerable/comparer"
 )
 
 func TestSkipLast(t *testing.T) {
@@ -403,7 +405,230 @@ func TestSkipLastBoolean(t *testing.T) {
 	})
 }
 
-// Benchmark для проверки производительности
+func TestOrderEnumeratorSkipLast(t *testing.T) {
+	t.Run("order enumerator skip last with sorting", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{5, 2, 8, 1, 9, 3})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+		skipped := ordered.SkipLast(2)
+
+		expected := []int{1, 2, 3, 5}
+		actual := skipped.ToSlice()
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("order enumerator any skip last with complex sorting", func(t *testing.T) {
+		t.Parallel()
+		type Person struct {
+			Name string
+			Age  int
+		}
+
+		people := []Person{
+			{Name: "Charlie", Age: 30},
+			{Name: "Alice", Age: 25},
+			{Name: "Bob", Age: 35},
+			{Name: "Diana", Age: 28},
+		}
+		var enumerator = FromSliceAny(people)
+
+		ordered := enumerator.OrderBy(func(a, b Person) int { return a.Age - b.Age })
+		skipped := ordered.SkipLast(1)
+
+		actual := skipped.ToSlice()
+		expectedAges := []int{25, 28, 30}
+
+		if len(actual) != len(expectedAges) {
+			t.Fatalf("Expected length %d, got %d", len(expectedAges), len(actual))
+		}
+
+		for i, expectedAge := range expectedAges {
+			if actual[i].Age != expectedAge {
+				t.Errorf("Expected age %d at index %d, got %d", expectedAge, i, actual[i].Age)
+			}
+		}
+
+		expectedNames := []string{"Alice", "Diana", "Charlie"}
+		for i, expectedName := range expectedNames {
+			if actual[i].Name != expectedName {
+				t.Errorf("Expected name %s at index %d, got %s", expectedName, i, actual[i].Name)
+			}
+		}
+	})
+
+	t.Run("order enumerator skip last with multiple sorting levels", func(t *testing.T) {
+		t.Parallel()
+		type Record struct {
+			Category string
+			Value    int
+			Name     string
+		}
+
+		records := []Record{
+			{Category: "B", Value: 10, Name: "Second"},
+			{Category: "A", Value: 20, Name: "First"},
+			{Category: "B", Value: 30, Name: "Fourth"},
+			{Category: "A", Value: 15, Name: "Third"},
+		}
+		enumerator := FromSlice(records)
+
+		ordered := enumerator.OrderBy(func(a, b Record) int {
+			return compareStrings(a.Category, b.Category)
+		}).ThenBy(func(a, b Record) int {
+			return a.Value - b.Value
+		})
+		skipped := ordered.SkipLast(1)
+
+		actual := skipped.ToSlice()
+
+		if len(actual) != 3 {
+			t.Fatalf("Expected length 3, got %d", len(actual))
+		}
+
+		if actual[0].Category != "A" || actual[0].Value != 15 || actual[0].Name != "Third" {
+			t.Errorf("Expected first record {A,15,Third}, got %+v", actual[0])
+		}
+
+		if actual[1].Category != "A" || actual[1].Value != 20 || actual[1].Name != "First" {
+			t.Errorf("Expected second record {A,20,First}, got %+v", actual[1])
+		}
+
+		if actual[2].Category != "B" || actual[2].Value != 10 || actual[2].Name != "Second" {
+			t.Errorf("Expected third record {B,10,Second}, got %+v", actual[2])
+		}
+	})
+
+	t.Run("order enumerator skip last with duplicate values", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{3, 1, 3, 2, 1, 2})
+
+		ordered := enumerator.OrderBy(comparer.ComparerInt)
+		skipped := ordered.SkipLast(2)
+
+		actual := skipped.ToSlice()
+		expected := []int{1, 1, 2, 2}
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("order enumerator skip last preserves stability", func(t *testing.T) {
+		t.Parallel()
+		type Item struct {
+			Value int
+			Index int
+		}
+
+		items := []Item{
+			{Value: 2, Index: 1},
+			{Value: 1, Index: 2},
+			{Value: 2, Index: 3},
+			{Value: 1, Index: 4},
+		}
+		enumerator := FromSlice(items)
+
+		ordered := enumerator.OrderBy(func(a, b Item) int { return a.Value - b.Value })
+		skipped := ordered.SkipLast(1)
+
+		actual := skipped.ToSlice()
+
+		if len(actual) != 3 {
+			t.Fatalf("Expected length 3, got %d", len(actual))
+		}
+
+		// Check stability for Value=1
+		if actual[0].Value != 1 || actual[0].Index != 2 {
+			t.Errorf("Expected {1,2} at index 0, got %+v", actual[0])
+		}
+		if actual[1].Value != 1 || actual[1].Index != 4 {
+			t.Errorf("Expected {1,4} at index 1, got %+v", actual[1])
+		}
+
+		// Check first element of Value=2
+		if actual[2].Value != 2 || actual[2].Index != 1 {
+			t.Errorf("Expected {2,1} at index 2, got %+v", actual[2])
+		}
+	})
+
+	t.Run("order enumerator skip last with descending order", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 5, 3, 9, 2, 8})
+
+		ordered := enumerator.OrderByDescending(comparer.ComparerInt)
+		skipped := ordered.SkipLast(2)
+
+		actual := skipped.ToSlice()
+		expected := []int{9, 8, 5, 3}
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("order enumerator any skip last with complex struct and custom sorting", func(t *testing.T) {
+		t.Parallel()
+		type Config struct {
+			Name     string
+			Priority int
+			Options  []string
+		}
+
+		configs := []Config{
+			{Name: "High", Priority: 1, Options: []string{"opt1", "opt2"}},
+			{Name: "Low", Priority: 3, Options: []string{"opt3"}},
+			{Name: "Medium", Priority: 2, Options: []string{"opt4", "opt5"}},
+			{Name: "VeryLow", Priority: 4, Options: []string{"opt6"}},
+		}
+		var enumerator = FromSliceAny(configs)
+
+		ordered := enumerator.OrderBy(func(a, b Config) int { return a.Priority - b.Priority })
+		skipped := ordered.SkipLast(1)
+
+		actual := skipped.ToSlice()
+		expectedPriorities := []int{1, 2, 3}
+
+		if len(actual) != len(expectedPriorities) {
+			t.Fatalf("Expected length %d, got %d", len(expectedPriorities), len(actual))
+		}
+
+		for i, expectedPriority := range expectedPriorities {
+			if actual[i].Priority != expectedPriority {
+				t.Errorf("Expected priority %d at index %d, got %d", expectedPriority, i, actual[i].Priority)
+			}
+		}
+
+		expectedNames := []string{"High", "Medium", "Low"}
+		for i, expectedName := range expectedNames {
+			if actual[i].Name != expectedName {
+				t.Errorf("Expected name %s at index %d, got %s", expectedName, i, actual[i].Name)
+			}
+		}
+	})
+}
+
 func BenchmarkSkipLast(b *testing.B) {
 	b.Run("small skip last", func(b *testing.B) {
 		items := make([]int, 1000)
