@@ -32,9 +32,9 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 
 Use go get to add the enumerable to your project:
 
-bash
+```bash
 go get github.com/ahatornn/enumerable@latest
-
+```
 
 ## ⚖️ Comparison: Enumerable vs Vanilla Go
 
