@@ -11,10 +11,12 @@ package enumerable
 //   - Materialize the entire enumeration (terminal operation)
 //
 // Parameters:
-//   batchSize - the maximum number of elements per batch (must be positive)
+//
+//	batchSize - the maximum number of elements per batch (must be positive)
 //
 // Returns:
-//   A slice containing batches of elements, or empty slice if no batches
+//
+//	A slice containing batches of elements, or empty slice if no batches
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to create all batches.
@@ -44,10 +46,12 @@ func (e Enumerator[T]) ToBatch(batchSize int) [][]T {
 //   - Materialize the entire enumeration (terminal operation)
 //
 // Parameters:
-//   batchSize - the maximum number of elements per batch (must be positive)
+//
+//	batchSize - the maximum number of elements per batch (must be positive)
 //
 // Returns:
-//   A slice containing batches of elements, or empty slice if no batches
+//
+//	A slice containing batches of elements, or empty slice if no batches
 //
 // ⚠️ Performance note: This is a terminal operation that must iterate
 // through the entire enumeration to create all batches.
@@ -79,10 +83,12 @@ func (e EnumeratorAny[T]) ToBatch(batchSize int) [][]T {
 //   - Materialize the entire sorted enumeration (terminal operation)
 //
 // Parameters:
-//   batchSize - the maximum number of elements per batch (must be positive)
+//
+//	batchSize - the maximum number of elements per batch (must be positive)
 //
 // Returns:
-//   A slice containing batches of elements in sorted order, or empty slice if no batches
+//
+//	A slice containing batches of elements in sorted order, or empty slice if no batches
 //
 // ⚠️ Performance note: This is a terminal operation that triggers actual sorting computation
 // and must iterate through the entire sorted enumeration to create all batches.
@@ -126,10 +132,12 @@ func (e OrderEnumerator[T]) ToBatch(batchSize int) [][]T {
 //   - Materialize the entire sorted enumeration (terminal operation)
 //
 // Parameters:
-//   batchSize - the maximum number of elements per batch (must be positive)
+//
+//	batchSize - the maximum number of elements per batch (must be positive)
 //
 // Returns:
-//   A slice containing batches of elements in sorted order, or empty slice if no batches
+//
+//	A slice containing batches of elements in sorted order, or empty slice if no batches
 //
 // ⚠️ Performance note: This is a terminal operation that triggers actual sorting computation
 // and must iterate through the entire sorted enumeration to create all batches.
