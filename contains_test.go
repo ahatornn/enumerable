@@ -436,6 +436,188 @@ func TestContains(t *testing.T) {
 	})
 }
 
+func TestOrderEnumeratorContains(t *testing.T) {
+	t.Run("OrderEnumerator[int] contains existing element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{3, 1, 4, 1, 5, 9, 2, 6}).OrderBy(comparer.ComparerInt)
+
+		result := enumerator.Contains(4)
+
+		if !result {
+			t.Error("Expected to find element 4")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[string] contains existing element", func(t *testing.T) {
+		t.Parallel()
+		var enumerator OrderEnumeratorAny[string] = FromSliceAny([]string{"zebra", "apple", "monkey", "banana"}).
+			OrderBy(comparer.ComparerString)
+
+		result := enumerator.Contains("banana", comparer.Default[string]())
+
+		if !result {
+			t.Error("Expected to find element 'banana'")
+		}
+	})
+
+	t.Run("OrderEnumerator[int] does not contain element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{1, 3, 5, 7, 9}).OrderBy(comparer.ComparerInt)
+
+		result := enumerator.Contains(4)
+
+		if result {
+			t.Error("Expected not to find element 4")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[string] does not contain element", func(t *testing.T) {
+		t.Parallel()
+		var enumerator OrderEnumeratorAny[string] = FromSliceAny([]string{"alpha", "beta", "gamma"}).
+			OrderBy(comparer.ComparerString)
+
+		result := enumerator.Contains("delta", comparer.Default[string]())
+
+		if result {
+			t.Error("Expected not to find element 'delta'")
+		}
+	})
+
+	t.Run("OrderEnumerator[int] contains first element after sorting", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{5, 3, 8, 1, 9}).OrderBy(comparer.ComparerInt)
+
+		result := enumerator.Contains(1)
+
+		if !result {
+			t.Error("Expected to find first element 1 after sorting")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[string] contains last element after sorting", func(t *testing.T) {
+		t.Parallel()
+		var enumerator OrderEnumeratorAny[string] = FromSliceAny([]string{"alpha", "gamma", "beta", "omega"}).
+			OrderBy(comparer.ComparerString)
+
+		result := enumerator.Contains("omega", comparer.Default[string]())
+
+		if !result {
+			t.Error("Expected to find last element 'omega' after sorting")
+		}
+	})
+
+	t.Run("OrderEnumerator[int] empty slice", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int{}).OrderBy(comparer.ComparerInt)
+
+		result := enumerator.Contains(1)
+
+		if result {
+			t.Error("Expected false for empty slice")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[string] empty slice", func(t *testing.T) {
+		t.Parallel()
+		var enumerator OrderEnumeratorAny[string] = FromSliceAny([]string{}).
+			OrderBy(comparer.ComparerString)
+
+		result := enumerator.Contains("test", comparer.Default[string]())
+
+		if result {
+			t.Error("Expected false for empty slice")
+		}
+	})
+
+	t.Run("OrderEnumerator[int] nil enumerator", func(t *testing.T) {
+		t.Parallel()
+		var nilEnum Enumerator[int] = nil
+		order := nilEnum.OrderBy(comparer.ComparerInt)
+
+		result := order.Contains(1)
+
+		if result {
+			t.Error("Expected false for nil enumerator")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[int] nil enumerator", func(t *testing.T) {
+		t.Parallel()
+		var nilEnum EnumeratorAny[int] = nil
+		order := nilEnum.OrderBy(comparer.ComparerInt)
+
+		result := order.Contains(1, comparer.Default[int]())
+
+		if result {
+			t.Error("Expected false for nil enumerator")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[int] nil comparer", func(t *testing.T) {
+		t.Parallel()
+		var enumerator OrderEnumeratorAny[int] = FromSliceAny([]int{1, 2, 3}).
+			OrderBy(comparer.ComparerInt)
+		var nilComparer comparer.EqualityComparer[int] = nil
+
+		result := enumerator.Contains(2, nilComparer)
+
+		if result {
+			t.Error("Expected false for nil comparer")
+		}
+	})
+
+	t.Run("OrderEnumerator[float64] contains with duplicates", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]float64{3.14, 1.41, 3.14, 2.71, 1.41}).OrderBy(comparer.ComparerFloat64)
+
+		if !enumerator.Contains(3.14) {
+			t.Error("Expected to find 3.14")
+		}
+
+		if !enumerator.Contains(1.41) {
+			t.Error("Expected to find 1.41")
+		}
+
+		if enumerator.Contains(9.99) {
+			t.Error("Expected not to find 9.99")
+		}
+	})
+
+	t.Run("OrderEnumeratorAny[struct] with custom comparer", func(t *testing.T) {
+		t.Parallel()
+		type Product struct {
+			ID    int
+			Name  string
+			Price float64
+		}
+
+		products := []Product{
+			{ID: 3, Name: "Gamma", Price: 30.0},
+			{ID: 1, Name: "Alpha", Price: 10.0},
+			{ID: 2, Name: "Beta", Price: 20.0},
+		}
+		var enumerator OrderEnumeratorAny[Product] = FromSliceAny(products).
+			OrderBy(func(a, b Product) int {
+				if a.Price < b.Price {
+					return -1
+				}
+				if a.Price > b.Price {
+					return 1
+				}
+				return 0
+			})
+
+		priceComparer := comparer.ByField(func(p Product) float64 { return p.Price })
+		targetProduct := Product{ID: 99, Name: "Target", Price: 20.0}
+
+		result := enumerator.Contains(targetProduct, priceComparer)
+
+		if !result {
+			t.Error("Expected to find product with price 20.0")
+		}
+	})
+}
+
 func BenchmarkContains(b *testing.B) {
 	b.Run("Enumerator[int] contains at beginning", func(b *testing.B) {
 		items := make([]int, 1000)
@@ -561,6 +743,59 @@ func BenchmarkContains(b *testing.B) {
 			result := enumerator.Contains(2, nilComparer)
 			if result {
 				b.Fatal("Expected false for nil comparer")
+			}
+		}
+	})
+}
+
+func BenchmarkOrderEnumeratorContains(b *testing.B) {
+	b.Run("OrderEnumerator[int] contains at middle", func(b *testing.B) {
+		items := make([]int, 1000)
+		for i := range items {
+			items[i] = 1000 - i
+		}
+		enumerator := FromSlice(items).OrderBy(comparer.ComparerInt)
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result := enumerator.Contains(500)
+			if !result {
+				b.Fatal("Expected to find 500")
+			}
+		}
+	})
+
+	b.Run("OrderEnumeratorAny[string] contains with custom comparer", func(b *testing.B) {
+		items := make([]string, 100)
+		for i := range items {
+			items[i] = fmt.Sprintf("item%03d", 100-i)
+		}
+		var enumerator OrderEnumeratorAny[string] = FromSliceAny(items).
+			OrderBy(comparer.ComparerString)
+
+		comparer := comparer.Default[string]()
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result := enumerator.Contains("item050", comparer)
+			if !result {
+				b.Fatal("Expected to find item050")
+			}
+		}
+	})
+
+	b.Run("OrderEnumerator[int] does not contain", func(b *testing.B) {
+		items := make([]int, 1000)
+		for i := range items {
+			items[i] = i * 2
+		}
+		enumerator := FromSlice(items).OrderBy(comparer.ComparerInt)
+
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			result := enumerator.Contains(999)
+			if result {
+				b.Fatal("Expected not to find 999")
 			}
 		}
 	})
