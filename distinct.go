@@ -195,21 +195,16 @@ func distinctAnyInternal[T any](enumerator func(func(T) bool), comparer comparer
 		return EmptyAny[T]()
 	}
 	return func(yield func(T) bool) {
-		seen := make(map[uint64][]T, 8)
+		seen := newHashSet(comparer)
 
 		enumerator(func(item T) bool {
-			hash := comparer.GetHashCode(item)
-
-			if bucket, exists := seen[hash]; exists {
-				for _, existing := range bucket {
-					if comparer.Equals(item, existing) {
-						return true
-					}
+			if !seen.contains(item) {
+				seen.add(item)
+				if !yield(item) {
+					return false
 				}
 			}
-
-			seen[hash] = append(seen[hash], item)
-			return yield(item)
+			return true
 		})
 	}
 }
