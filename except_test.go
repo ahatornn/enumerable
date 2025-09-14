@@ -647,6 +647,34 @@ func TestExceptAny(t *testing.T) {
 			}
 		}
 	})
+
+	t.Run("early termination for Any", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3, 4, 5, 6, 7, 8})
+		second := FromSliceAny([]int{2, 4})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		actual := []int{}
+		result(func(item int) bool {
+			if len(actual) >= 2 {
+				return false
+			}
+			actual = append(actual, item)
+			return true
+		})
+
+		expected := []int{1, 3}
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
 }
 
 func BenchmarkExcept(b *testing.B) {

@@ -117,10 +117,6 @@ func (e EnumeratorAny[T]) Except(second EnumeratorAny[T], comparer comparer.Equa
 			})
 		}
 
-		if e == nil {
-			return
-		}
-
 		seenSet := newHashSet(comparer)
 		e(func(item T) bool {
 			if !excludeSet.contains(item) && !seenSet.contains(item) {
