@@ -88,16 +88,21 @@ func TestHashSet_Add(t *testing.T) {
 			Id:   2,
 			Name: "cherry",
 		})
+		result4 := hs.add(Product{
+			Id:   1,
+			Name: "banana",
+		})
 
 		assert.True(t, result1)
 		assert.True(t, result2)
 		assert.True(t, result3)
+		assert.False(t, result4)
 
-		result4 := hs.add(Product{
+		result5 := hs.add(Product{
 			Id:   2,
 			Name: "cherry",
 		})
-		assert.False(t, result4)
+		assert.False(t, result5)
 	})
 
 	t.Run("Add integer items", func(t *testing.T) {
