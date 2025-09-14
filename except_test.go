@@ -2,6 +2,8 @@ package enumerable
 
 import (
 	"testing"
+
+	"github.com/ahatornn/enumerable/comparer"
 )
 
 func TestExcept(t *testing.T) {
@@ -393,7 +395,288 @@ func TestExceptBoolean(t *testing.T) {
 	})
 }
 
-// Benchmark для проверки производительности
+func TestExceptAny(t *testing.T) {
+	t.Run("basic exceptAny operation", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3, 4, 5})
+		second := FromSliceAny([]int{2, 4})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 3, 5}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny with duplicates in first", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 2, 3, 3, 4, 5, 5})
+		second := FromSliceAny([]int{2, 4})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 3, 5}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny with duplicates in second", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3, 4, 5})
+		second := FromSliceAny([]int{2, 2, 4, 4, 6, 6})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 3, 5}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny empty second", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3})
+		second := FromSliceAny([]int{})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 2, 3}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny with nil second", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3})
+		var second EnumeratorAny[int] = nil
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 2, 3}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny everything", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3})
+		second := FromSliceAny([]int{1, 2, 3, 4, 5})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		count := 0
+		result(func(item int) bool {
+			count++
+			return true
+		})
+
+		if count != 0 {
+			t.Errorf("Expected 0 items when excluding everything, got %d", count)
+		}
+	})
+
+	t.Run("exceptAny empty first", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{})
+		second := FromSliceAny([]int{1, 2, 3})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny with nil first", func(t *testing.T) {
+		t.Parallel()
+		var first EnumeratorAny[int] = nil
+		second := FromSliceAny([]int{1, 2, 3})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny empty second", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3})
+		second := FromSliceAny([]int{})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 2, 3}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("exceptAny with nil second", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3})
+		var second EnumeratorAny[int] = nil
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		expected := []int{1, 2, 3}
+		actual := []int{}
+
+		result(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
+	t.Run("early termination for Any", func(t *testing.T) {
+		t.Parallel()
+		first := FromSliceAny([]int{1, 2, 3, 4, 5, 6, 7, 8})
+		second := FromSliceAny([]int{2, 4})
+		eqComparer := comparer.Default[int]()
+		result := first.Except(second, eqComparer)
+
+		actual := []int{}
+		result(func(item int) bool {
+			if len(actual) >= 2 {
+				return false
+			}
+			actual = append(actual, item)
+			return true
+		})
+
+		expected := []int{1, 3}
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+}
+
 func BenchmarkExcept(b *testing.B) {
 	b.Run("small except", func(b *testing.B) {
 		first := FromSlice([]int{1, 2, 3, 4, 5})

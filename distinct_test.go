@@ -563,6 +563,31 @@ func TestOrderEnumeratorAnyDistinct(t *testing.T) {
 		}
 	})
 
+	t.Run("remove duplicates from ordered items with Take 2", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([]int{3, 2, 1, 3, 2, 1})
+		eqComparer := comparer.Default[int]()
+		distinct := enumerator.OrderBy(comparer.ComparerInt).Distinct(eqComparer).Take(2)
+
+		expected := []int{1, 2}
+		actual := []int{}
+
+		distinct(func(item int) bool {
+			actual = append(actual, item)
+			return true
+		})
+
+		if len(actual) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(actual))
+		}
+
+		for i, v := range expected {
+			if actual[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, actual[i])
+			}
+		}
+	})
+
 	t.Run("no duplicates from ordered items", func(t *testing.T) {
 		t.Parallel()
 		enumerator := FromSliceAny([]int{5, 4, 3, 2, 1})
