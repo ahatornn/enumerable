@@ -2,6 +2,8 @@ package enumerable
 
 import (
 	"testing"
+
+	"github.com/ahatornn/enumerable/comparer"
 )
 
 func TestForEach(t *testing.T) {
@@ -28,8 +30,6 @@ func TestForEach(t *testing.T) {
 
 	t.Run("for each element in non-empty slice for non-comparable slice", func(t *testing.T) {
 		t.Parallel()
-
-		// Используем slices of slices (не comparable)
 		enumerator := FromSliceAny([][]int{
 			{1, 2},
 			{3, 4},
@@ -325,7 +325,119 @@ func TestForEachEdgeCases(t *testing.T) {
 	})
 }
 
-// Benchmark для проверки производительности
+func TestOrderedForEach(t *testing.T) {
+	t.Run("for each ordered element", func(t *testing.T) {
+		t.Parallel()
+		var results []int
+		FromSlice([]int{5, 4, 3, 2, 1}).
+			OrderBy(comparer.ComparerInt).
+			ForEach(func(n int) {
+				results = append(results, n)
+			})
+
+		expected := []int{1, 2, 3, 4, 5}
+		if len(results) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(results))
+		}
+
+		for i, v := range expected {
+			if results[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, results[i])
+			}
+		}
+	})
+
+	t.Run("for each ordered element for non-comparable slice", func(t *testing.T) {
+		t.Parallel()
+		var results []int
+		FromSliceAny([]int{5, 4, 3, 2, 1}).
+			OrderBy(comparer.ComparerInt).
+			ForEach(func(n int) {
+				results = append(results, n)
+			})
+
+		expected := []int{1, 2, 3, 4, 5}
+		if len(results) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(results))
+		}
+
+		for i, v := range expected {
+			if results[i] != v {
+				t.Errorf("Expected %d at index %d, got %d", v, i, results[i])
+			}
+		}
+	})
+
+	t.Run("for each ordered element in single element slice", func(t *testing.T) {
+		t.Parallel()
+		var results []int
+		FromSlice([]int{42}).
+			OrderBy(comparer.ComparerInt).
+			ForEach(func(n int) {
+				results = append(results, n)
+			})
+
+		expected := []int{42}
+		if len(results) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(results))
+		}
+
+		if results[0] != expected[0] {
+			t.Errorf("Expected %d, got %d", expected[0], results[0])
+		}
+	})
+
+	t.Run("for each ordered element in empty slice", func(t *testing.T) {
+		t.Parallel()
+		callCount := 0
+		FromSlice([]int{}).
+			OrderBy(comparer.ComparerInt).
+			ForEach(func(n int) {
+				callCount++
+			})
+
+		if callCount != 0 {
+			t.Errorf("Expected 0 calls for empty slice, got %d", callCount)
+		}
+	})
+
+	t.Run("for each ordered element in nil enumerator", func(t *testing.T) {
+		t.Parallel()
+		callCount := 0
+		var enumerator Enumerator[int] = nil
+		enumerator.
+			OrderBy(comparer.ComparerInt).
+			ForEach(func(n int) {
+				callCount++
+			})
+
+		if callCount != 0 {
+			t.Errorf("Expected 0 calls for nil enumerator, got %d", callCount)
+		}
+	})
+
+	t.Run("for each ordered string element", func(t *testing.T) {
+		t.Parallel()
+		var results []string
+		FromSlice([]string{"banana", "apple", "cherry", "date"}).
+			OrderBy(comparer.ComparerString).
+			ForEach(func(s string) {
+				results = append(results, s)
+			})
+
+		expected := []string{"apple", "banana", "cherry", "date"}
+		if len(results) != len(expected) {
+			t.Fatalf("Expected length %d, got %d", len(expected), len(results))
+		}
+
+		for i, v := range expected {
+			if results[i] != v {
+				t.Errorf("Expected %s at index %d, got %s", v, i, results[i])
+			}
+		}
+	})
+}
+
 func BenchmarkForEach(b *testing.B) {
 	b.Run("small enumeration", func(b *testing.B) {
 		items := []int{1, 2, 3, 4, 5}
