@@ -72,14 +72,15 @@ func (gi Group[K, T]) Items() []T {
 	return gi.items
 }
 
-type bucketEntry[K any, V comparable] struct {
-	key   K
-	items []V
+type groupingBuilder[K any, V comparable] struct {
+	order    []*uniqueKeyEntry[K, V]
+	lookup   map[uint64][]*uniqueKeyEntry[K, V]
+	comparer comparer.EqualityComparer[K]
 }
 
-type groupingBuilder[K any, V comparable] struct {
-	buckets  map[uint64][]bucketEntry[K, V]
-	comparer comparer.EqualityComparer[K]
+type uniqueKeyEntry[K any, V comparable] struct {
+	key   K
+	items []V
 }
 
 // NewGroupingBuilder creates a new grouping builder that can accumulate elements into groups
@@ -102,7 +103,8 @@ type groupingBuilder[K any, V comparable] struct {
 //	A pointer to a new groupingBuilder[K, V] ready to accept elements via Add()
 func NewGroupingBuilder[K any, V comparable](comparer comparer.EqualityComparer[K]) *groupingBuilder[K, V] {
 	return &groupingBuilder[K, V]{
-		buckets:  make(map[uint64][]bucketEntry[K, V]),
+		order:    []*uniqueKeyEntry[K, V]{},
+		lookup:   make(map[uint64][]*uniqueKeyEntry[K, V]),
 		comparer: comparer,
 	}
 }
@@ -123,20 +125,26 @@ func NewGroupingBuilder[K any, V comparable](comparer comparer.EqualityComparer[
 //	value - the value to add to the group (type V, must be comparable)
 func (gb *groupingBuilder[K, V]) Add(key K, value V) {
 	hash := gb.comparer.GetHashCode(key)
-	bucket := gb.buckets[hash]
+	bucket := gb.lookup[hash]
 
-	for i := range bucket {
-		if gb.comparer.Equals(bucket[i].key, key) {
-			bucket[i].items = append(bucket[i].items, value)
-			gb.buckets[hash] = bucket
-			return
+	var entry *uniqueKeyEntry[K, V]
+	for _, e := range bucket {
+		if gb.comparer.Equals(e.key, key) {
+			entry = e
+			break
 		}
 	}
 
-	gb.buckets[hash] = append(bucket, bucketEntry[K, V]{
-		key:   key,
-		items: []V{value},
-	})
+	if entry != nil {
+		entry.items = append(entry.items, value)
+	} else {
+		newEntry := &uniqueKeyEntry[K, V]{
+			key:   key,
+			items: []V{value},
+		}
+		gb.lookup[hash] = append(bucket, newEntry)
+		gb.order = append(gb.order, newEntry)
+	}
 }
 
 // Result finalizes the grouping process and returns all accumulated groups as a slice.
@@ -153,12 +161,11 @@ func (gb *groupingBuilder[K, V]) Add(key K, value V) {
 //	A slice of type []Group[K, V] containing all groups created by previous Add() calls
 func (gb *groupingBuilder[K, V]) Result() []Group[K, V] {
 	var result []Group[K, V]
-
-	for _, bucket := range gb.buckets {
-		for _, entry := range bucket {
-			result = append(result, Group[K, V](entry))
-		}
+	for _, entry := range gb.order {
+		result = append(result, Group[K, V]{
+			key:   entry.key,
+			items: entry.items,
+		})
 	}
-
 	return result
 }
