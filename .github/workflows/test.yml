@@ -41,8 +41,8 @@ jobs:
             echo "Все файлы отформатированы корректно"
           fi
 
-      - name: Запуск тестов
-        run: go test -v ./... -coverprofile=coverage.txt -timeout=10m
+      - name: Запуск тестов (без benchmark)
+        run: go test -v ./... -bench=^$ -coverprofile=coverage.txt -timeout=10m
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
