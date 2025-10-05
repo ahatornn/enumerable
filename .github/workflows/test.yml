@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     strategy:
       matrix:
@@ -41,7 +42,7 @@ jobs:
           fi
 
       - name: Запуск тестов
-        run: go test -v ./... -coverprofile=coverage.txt
+        run: go test -v ./... -coverprofile=coverage.txt -timeout=5m
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
