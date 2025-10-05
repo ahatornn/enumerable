@@ -708,6 +708,110 @@ func BenchmarkOrderEnumerator_GroupBy(b *testing.B) {
 	})
 }
 
+func TestGroupByEarlyTermination(t *testing.T) {
+	t.Run("early termination during enumeration", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+		groups := source.GroupBy(func(x int) any { return x % 3 })
+
+		yieldCount := 0
+		shouldStopAfter := 2
+
+		resultGroups := make([]grouping.Group[any, int], 0)
+
+		groups(func(group grouping.Group[any, int]) bool {
+			yieldCount++
+			resultGroups = append(resultGroups, group)
+
+			return yieldCount < shouldStopAfter
+		})
+
+		if len(resultGroups) != shouldStopAfter {
+			t.Errorf("Expected %d groups due to early termination, got %d", shouldStopAfter, len(resultGroups))
+		}
+
+		if len(resultGroups) >= 1 && resultGroups[0].Key() != 1 {
+			t.Errorf("Expected first group key to be 1, got %v", resultGroups[0].Key())
+		}
+		if len(resultGroups) >= 2 && resultGroups[1].Key() != 2 {
+			t.Errorf("Expected second group key to be 2, got %v", resultGroups[1].Key())
+		}
+
+		if yieldCount != shouldStopAfter {
+			t.Errorf("Expected yield to be called %d times, got %d", shouldStopAfter, yieldCount)
+		}
+	})
+
+	t.Run("early termination with Take after GroupBy", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{1, 2, 3, 4, 5, 6})
+		result := source.GroupBy(func(x int) any { return x % 2 }).
+			Take(1).
+			ToSlice()
+
+		if len(result) != 1 {
+			t.Errorf("Expected 1 group after Take(1), got %d", len(result))
+		}
+
+		if result[0].Key() == 1 {
+			expectedItems := []int{1, 3, 5}
+			actualItems := result[0].Items()
+			if len(actualItems) != len(expectedItems) {
+				t.Errorf("Expected %d items in first group, got %d", len(expectedItems), len(actualItems))
+			} else {
+				for i, v := range expectedItems {
+					if actualItems[i] != v {
+						t.Errorf("Item %d: expected %d, got %d", i, v, actualItems[i])
+					}
+				}
+			}
+		} else if result[0].Key() == 0 {
+			expectedItems := []int{2, 4, 6}
+			actualItems := result[0].Items()
+			if len(actualItems) != len(expectedItems) {
+				t.Errorf("Expected %d items in first group, got %d", len(expectedItems), len(actualItems))
+			} else {
+				for i, v := range expectedItems {
+					if actualItems[i] != v {
+						t.Errorf("Item %d: expected %d, got %d", i, v, actualItems[i])
+					}
+				}
+			}
+		} else {
+			t.Errorf("Expected first group key to be 1 or 0, got %v", result[0].Key())
+		}
+	})
+
+	t.Run("Take with OrderEnumerator GroupBy", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{4, 1, 3, 2, 5, 6})
+		result := source.OrderBy(comparer.ComparerInt).
+			GroupBy(func(x int) any { return x % 2 }).
+			Take(1).
+			ToSlice()
+
+		if len(result) != 1 {
+			t.Errorf("Expected 1 group after Take(1) on sorted GroupBy, got %d", len(result))
+		}
+
+		if result[0].Key() != 1 {
+			t.Errorf("Expected first group key to be 1 (odd), got %v", result[0].Key())
+		}
+
+		expectedItems := []int{1, 3, 5}
+		actualItems := result[0].Items()
+		if len(actualItems) != len(expectedItems) {
+			t.Errorf("Expected %d items in first group, got %d", len(expectedItems), len(actualItems))
+		} else {
+			for i, v := range expectedItems {
+				if actualItems[i] != v {
+					t.Errorf("Item %d: expected %d, got %d", i, v, actualItems[i])
+				}
+			}
+		}
+	})
+}
+
 func BenchmarkGroupBy(b *testing.B) {
 	b.Run("small group by", func(b *testing.B) {
 		items := make([]int, 100)
