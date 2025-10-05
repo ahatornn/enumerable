@@ -9,10 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     strategy:
       matrix:
-        go-version: [ '1.23', '1.24' ]
+        go-version: [ '1.24', '1.25' ]
 
     steps:
       - name: Checkout кода
@@ -40,8 +41,8 @@ jobs:
             echo "Все файлы отформатированы корректно"
           fi
 
-      - name: Запуск тестов
-        run: go test -v ./... -coverprofile=coverage.txt
+      - name: Запуск тестов (без benchmark)
+        run: go test -v ./... -bench=^$ -coverprofile=coverage.txt -timeout=10m
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5

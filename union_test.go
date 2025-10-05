@@ -499,10 +499,7 @@ func TestUnionEdgeCases(t *testing.T) {
 		items := []int{}
 		union(func(item int) bool {
 			items = append(items, item)
-			if len(items) == 3 {
-				return false
-			}
-			return true
+			return len(items) != 3
 		})
 
 		if len(items) != 3 {
@@ -544,10 +541,7 @@ func TestUnionEdgeCases(t *testing.T) {
 		items := []int{}
 		union(func(item int) bool {
 			items = append(items, item)
-			if len(items) == 3 {
-				return false
-			}
-			return true
+			return len(items) != 3
 		})
 
 		if len(items) != 3 {
@@ -571,10 +565,7 @@ func TestUnionEdgeCases(t *testing.T) {
 		items := []int{}
 		union(func(item int) bool {
 			items = append(items, item)
-			if len(items) == 2 {
-				return false
-			}
-			return true
+			return len(items) != 2
 		})
 
 		if len(items) != 2 {
@@ -598,10 +589,7 @@ func TestUnionEdgeCases(t *testing.T) {
 		items := []int{}
 		union(func(item int) bool {
 			items = append(items, item)
-			if len(items) == 2 {
-				return false
-			}
-			return true
+			return len(items) != 2
 		})
 
 		if len(items) != 2 {
