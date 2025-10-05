@@ -3,6 +3,9 @@ package enumerable
 import (
 	"fmt"
 	"testing"
+
+	"github.com/ahatornn/enumerable/comparer"
+	"github.com/ahatornn/enumerable/grouping"
 )
 
 func TestGroupBy(t *testing.T) {
@@ -290,6 +293,417 @@ func TestGroupBy(t *testing.T) {
 			if len(items) != 1 || items[0] != expectedKey {
 				t.Errorf("Group %d: expected item [%d], got %v", i, expectedKey, items)
 			}
+		}
+	})
+}
+
+func TestOrderEnumerator_GroupBy(t *testing.T) {
+	t.Run("group by with sorted data preserves order", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{4, 1, 3, 2, 5, 6})
+
+		groups := source.OrderBy(comparer.ComparerInt).
+			GroupBy(func(x int) any { return x % 2 }).
+			ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		if groups[0].Key() != 1 || groups[1].Key() != 0 {
+			t.Errorf("Expected group keys [1, 0], got [%v, %v]", groups[0].Key(), groups[1].Key())
+		}
+
+		expectedItems := [][]int{
+			{1, 3, 5},
+			{2, 4, 6},
+		}
+
+		for i, element := range groups {
+			items := element.Items()
+			exp := expectedItems[i]
+			if len(items) != len(exp) {
+				t.Errorf("Group %d: expected %d items, got %d", i, len(exp), len(items))
+				continue
+			}
+			for j, v := range exp {
+				if items[j] != v {
+					t.Errorf("Group %d, item %d: expected %d, got %d", i, j, v, items[j])
+				}
+			}
+		}
+	})
+
+	t.Run("group by string with sorted data", func(t *testing.T) {
+		t.Parallel()
+		type Person struct {
+			Name string
+			Age  int
+		}
+		people := []Person{
+			{"Charlie", 30},
+			{"Alice", 25},
+			{"Bob", 30},
+			{"David", 25},
+		}
+		source := FromSlice(people)
+
+		groups := source.OrderBy(func(a, b Person) int { return a.Age - b.Age }).
+			GroupBy(func(p Person) any { return p.Age }).
+			ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		if groups[0].Key() != 25 || groups[1].Key() != 30 {
+			t.Errorf("Expected keys [25, 30], got [%v, %v]", groups[0].Key(), groups[1].Key())
+		}
+
+		expected := [][]Person{
+			{{"Alice", 25}, {"David", 25}},
+			{{"Charlie", 30}, {"Bob", 30}},
+		}
+
+		for i, group := range groups {
+			items := group.Items()
+			exp := expected[i]
+			if len(items) != len(exp) {
+				t.Errorf("Group %d: expected %d items, got %d", i, len(exp), len(items))
+				continue
+			}
+			for j, p := range exp {
+				if items[j].Name != p.Name || items[j].Age != p.Age {
+					t.Errorf("Group %d, item %d: expected %+v, got %+v", i, j, p, items[j])
+				}
+			}
+		}
+	})
+
+	t.Run("group by with ThenBy sorting", func(t *testing.T) {
+		t.Parallel()
+		type Person struct {
+			Name string
+			Age  int
+		}
+		people := []Person{
+			{"Bob", 30},
+			{"Alice", 30},
+			{"Charlie", 25},
+			{"David", 25},
+		}
+		source := FromSlice(people)
+
+		groups := source.OrderBy(func(a, b Person) int { return a.Age - b.Age }).
+			ThenBy(func(a, b Person) int { return compareStrings(a.Name, b.Name) }).
+			GroupBy(func(p Person) any { return p.Age }).
+			ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		if groups[0].Key() != 25 || groups[1].Key() != 30 {
+			t.Errorf("Expected keys [25, 30], got [%v, %v]", groups[0].Key(), groups[1].Key())
+		}
+
+		expected := [][]Person{
+			{{"Charlie", 25}, {"David", 25}},
+			{{"Alice", 30}, {"Bob", 30}},
+		}
+
+		for i, group := range groups {
+			items := group.Items()
+			exp := expected[i]
+			if len(items) != len(exp) {
+				t.Errorf("Group %d: expected %d items, got %d", i, len(exp), len(items))
+				continue
+			}
+			for j, p := range exp {
+				if items[j].Name != p.Name || items[j].Age != p.Age {
+					t.Errorf("Group %d, item %d: expected %+v, got %+v", i, j, p, items[j])
+				}
+			}
+		}
+	})
+
+	t.Run("empty sorted source", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{})
+
+		groups := source.OrderBy(comparer.ComparerInt).
+			GroupBy(func(x int) any { return x }).
+			ToSlice()
+
+		if len(groups) != 0 {
+			t.Errorf("Expected 0 groups from empty sorted source, got %d", len(groups))
+		}
+	})
+
+	t.Run("single element sorted", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]string{"hello"})
+
+		groups := source.OrderBy(comparer.ComparerString).
+			GroupBy(func(s string) any { return len(s) }).
+			ToSlice()
+
+		if len(groups) != 1 {
+			t.Fatalf("Expected 1 group, got %d", len(groups))
+		}
+
+		if groups[0].Key() != 5 {
+			t.Errorf("Expected key 5, got %v", groups[0].Key())
+		}
+
+		items := groups[0].Items()
+		if len(items) != 1 {
+			t.Fatalf("Expected 1 item in group, got %d", len(items))
+		}
+		if items[0] != "hello" {
+			t.Errorf("Expected item 'hello', got %q", items[0])
+		}
+	})
+
+	t.Run("nil keySelector on sorted data", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{1, 2, 3})
+
+		groups := source.OrderBy(comparer.ComparerInt).
+			GroupBy(nil).
+			ToSlice()
+
+		if len(groups) != 0 {
+			t.Errorf("Expected 0 groups when keySelector is nil, got %d", len(groups))
+		}
+	})
+
+	t.Run("all same key with sorted data", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{30, 10, 20})
+
+		groups := source.OrderBy(comparer.ComparerInt).
+			GroupBy(func(x int) any { return "same" }).
+			ToSlice()
+
+		if len(groups) != 1 {
+			t.Fatalf("Expected 1 group, got %d", len(groups))
+		}
+
+		if groups[0].Key() != "same" {
+			t.Errorf("Expected key 'same', got %v", groups[0].Key())
+		}
+
+		items := groups[0].Items()
+		expected := []int{10, 20, 30}
+		if len(items) != len(expected) {
+			t.Fatalf("Expected %d items, got %d", len(expected), len(items))
+		}
+		for i, v := range expected {
+			if items[i] != v {
+				t.Errorf("Item %d: expected %d, got %d", i, v, items[i])
+			}
+		}
+	})
+
+	t.Run("descending sort before grouping", func(t *testing.T) {
+		t.Parallel()
+		source := FromSlice([]int{1, 4, 2, 3, 6, 5})
+
+		groups := source.OrderByDescending(comparer.ComparerInt).
+			GroupBy(func(x int) any { return x % 2 }).
+			ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		if groups[0].Key() != 0 || groups[1].Key() != 1 {
+			t.Errorf("Expected keys [0, 1], got [%v, %v]", groups[0].Key(), groups[1].Key())
+		}
+
+		expectedItems := [][]int{
+			{6, 4, 2},
+			{5, 3, 1},
+		}
+
+		for i, group := range groups {
+			items := group.Items()
+			exp := expectedItems[i]
+			if len(items) != len(exp) {
+				t.Errorf("Group %d: expected %d items, got %d", i, len(exp), len(items))
+				continue
+			}
+			for j, v := range exp {
+				if items[j] != v {
+					t.Errorf("Group %d, item %d: expected %d, got %d", i, j, v, items[j])
+				}
+			}
+		}
+	})
+
+	t.Run("complex struct sorting before grouping", func(t *testing.T) {
+		t.Parallel()
+		type Product struct {
+			Name     string
+			Price    float64
+			Category string
+		}
+
+		products := []Product{
+			{"Laptop", 1200.0, "Electronics"},
+			{"Phone", 800.0, "Electronics"},
+			{"Desk", 300.0, "Furniture"},
+			{"Chair", 200.0, "Furniture"},
+		}
+		source := FromSlice(products)
+
+		groups := source.OrderByDescending(func(a, b Product) int {
+			if a.Price < b.Price {
+				return -1
+			}
+			if a.Price > b.Price {
+				return 1
+			}
+			return 0
+		}).GroupBy(func(p Product) any { return p.Category }).ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		var electronicsGroup, furnitureGroup *grouping.Group[any, Product]
+		for _, group := range groups {
+			if group.Key() == "Electronics" {
+				electronicsGroup = &group
+			} else if group.Key() == "Furniture" {
+				furnitureGroup = &group
+			}
+		}
+
+		if electronicsGroup == nil || furnitureGroup == nil {
+			t.Fatal("Missing expected groups")
+		}
+
+		electronicsItems := electronicsGroup.Items()
+		if len(electronicsItems) != 2 {
+			t.Errorf("Expected 2 electronics items, got %d", len(electronicsItems))
+		} else {
+			if electronicsItems[0].Name != "Laptop" || electronicsItems[1].Name != "Phone" {
+				t.Errorf("Expected Laptop, Phone in electronics group, got %s, %s",
+					electronicsItems[0].Name, electronicsItems[1].Name)
+			}
+		}
+
+		furnitureItems := furnitureGroup.Items()
+		if len(furnitureItems) != 2 {
+			t.Errorf("Expected 2 furniture items, got %d", len(furnitureItems))
+		} else {
+			if furnitureItems[0].Name != "Desk" || furnitureItems[1].Name != "Chair" {
+				t.Errorf("Expected Desk, Chair in furniture group, got %s, %s",
+					furnitureItems[0].Name, furnitureItems[1].Name)
+			}
+		}
+	})
+
+	t.Run("stability of sorting preserved in grouping", func(t *testing.T) {
+		t.Parallel()
+		type Item struct {
+			Value int
+			ID    int
+		}
+
+		items := []Item{
+			{Value: 2, ID: 1},
+			{Value: 1, ID: 2},
+			{Value: 2, ID: 3},
+			{Value: 1, ID: 4},
+		}
+		source := FromSlice(items)
+
+		groups := source.OrderBy(func(a, b Item) int { return a.Value - b.Value }).
+			GroupBy(func(i Item) any { return i.Value }).
+			ToSlice()
+
+		if len(groups) != 2 {
+			t.Fatalf("Expected 2 groups, got %d", len(groups))
+		}
+
+		var group1, group2 *grouping.Group[any, Item]
+		for _, group := range groups {
+			if group.Key() == 1 {
+				group1 = &group
+			} else if group.Key() == 2 {
+				group2 = &group
+			}
+		}
+
+		if group1 == nil || group2 == nil {
+			t.Fatal("Missing expected groups")
+		}
+
+		items1 := group1.Items()
+		if len(items1) != 2 || items1[0].ID != 2 || items1[1].ID != 4 {
+			t.Errorf("Group 1 should preserve order: expected IDs [2, 4], got [%d, %d]",
+				items1[0].ID, items1[1].ID)
+		}
+
+		items2 := group2.Items()
+		if len(items2) != 2 || items2[0].ID != 1 || items2[1].ID != 3 {
+			t.Errorf("Group 2 should preserve order: expected IDs [1, 3], got [%d, %d]",
+				items2[0].ID, items2[1].ID)
+		}
+	})
+}
+
+func BenchmarkOrderEnumerator_GroupBy(b *testing.B) {
+	b.Run("group by after ascending sort", func(b *testing.B) {
+		items := make([]int, 1000)
+		for i := range items {
+			items[i] = i % 100 // 100 different groups
+		}
+		source := FromSlice(items)
+
+		for i := 0; i < b.N; i++ {
+			_ = source.OrderBy(comparer.ComparerInt).
+				GroupBy(func(x int) any { return x % 10 }).
+				ToSlice()
+		}
+	})
+
+	b.Run("group by after descending sort", func(b *testing.B) {
+		items := make([]int, 1000)
+		for i := range items {
+			items[i] = i % 100
+		}
+		source := FromSlice(items)
+
+		for i := 0; i < b.N; i++ {
+			_ = source.OrderByDescending(comparer.ComparerInt).
+				GroupBy(func(x int) any { return x % 5 }).
+				ToSlice()
+		}
+	})
+
+	b.Run("group by after ThenBy sort", func(b *testing.B) {
+		type Person struct {
+			Age  int
+			Name string
+		}
+		people := make([]Person, 1000)
+		for i := range people {
+			people[i] = Person{
+				Age:  i % 10,
+				Name: fmt.Sprintf("Person%d", i%100),
+			}
+		}
+		source := FromSlice(people)
+
+		for i := 0; i < b.N; i++ {
+			_ = source.OrderBy(func(a, b Person) int { return a.Age - b.Age }).
+				ThenBy(func(a, b Person) int { return compareStrings(a.Name, b.Name) }).
+				GroupBy(func(p Person) any { return p.Age }).
+				ToSlice()
 		}
 	})
 }
