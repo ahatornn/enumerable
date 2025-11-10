@@ -5,8 +5,6 @@ import (
 )
 
 // EqualityComparer defines a type that determines equality and hash codes for values of type T.
-// This approach is similar to IEqualityComparer<T> in C# and allows efficient comparison
-// and hashing of non-comparable types.
 //
 // Type Parameters:
 //
