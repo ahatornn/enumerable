@@ -164,28 +164,3 @@ func TestEmptyPerformance(t *testing.T) {
 		// Если мы дошли до этой точки - тест прошел
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkEmpty(b *testing.B) {
-	b.Run("benchmark empty int", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			enumerator := Empty[int]()
-			enumerator(func(item int) bool {
-				// Этот код никогда не выполнится
-				b.Fatal("This should never be called")
-				return true
-			})
-		}
-	})
-
-	b.Run("benchmark empty string", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			enumerator := Empty[string]()
-			enumerator(func(item string) bool {
-				// Этот код никогда не выполнится
-				b.Fatal("This should never be called")
-				return true
-			})
-		}
-	})
-}

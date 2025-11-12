@@ -34,7 +34,8 @@ func main() {
 		{Title: "Film 13", Director: "Dir10_1", Actors: []string{"Actor3", "Actor5"}, Year: 2023, Rating: 9.0, Tags: []string{"comedy", "war"}},
 	}
 
-	favoriteActors := enumerable.FromSlice([]string{"Actor3", "Actor8"})
+	favoriteActors := []string{"Actor3", "Actor8"}
+	favoriteActorsEnumerable := enumerable.FromSlice(favoriteActors)
 	targetTag := "comedy"
 
 	// Let's assume we are looking for movies that:
@@ -46,7 +47,7 @@ func main() {
 		Where(func(m Movie) bool {
 			return m.Rating > 8.2 &&
 				enumerable.FromSlice(m.Tags).Contains(targetTag) &&
-				enumerable.FromSlice(m.Actors).Intersect(favoriteActors).Any()
+				enumerable.FromSlice(m.Actors).Intersect(favoriteActorsEnumerable).Any()
 		}).
 		OrderByDescending(comparer.KeyComparerInt(func(m Movie) int { return m.Year })).
 		ThenByDescending(comparer.KeyComparerFloat64(func(m Movie) float64 { return m.Rating })).
@@ -54,7 +55,7 @@ func main() {
 		ToSlice()
 
 	fmt.Println("\n--- Using enumerable ---")
-	fmt.Printf("Top 5 movies with tag '%s', rating > 8.2, and actors one of %s)\n", targetTag, favoriteActors.ToSlice())
+	fmt.Printf("Top 5 movies with tag '%s', rating > 8.2, and actors one of %s)\n", targetTag, favoriteActors)
 	fmt.Println("(sorted: year desc., rating desc.):")
 	for i, m := range topMovies {
 		fmt.Printf("  %d. %s (%d) - Actors: %s, Rating: %.1f, Tags: %v\n",

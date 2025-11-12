@@ -742,37 +742,3 @@ func TestOrderEnumeratorTakeWhile(t *testing.T) {
 		}
 	})
 }
-
-func BenchmarkTakeWhile(b *testing.B) {
-	b.Run("small take while", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := 0; i < 1000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			taken := enumerator.TakeWhile(func(n int) bool { return n < 500 })
-			taken(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("no take while", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := 0; i < 1000; i++ {
-			items[i] = i + 1000
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			taken := enumerator.TakeWhile(func(n int) bool { return n < 500 })
-			taken(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}

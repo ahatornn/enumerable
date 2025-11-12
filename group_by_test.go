@@ -656,58 +656,6 @@ func TestOrderEnumerator_GroupBy(t *testing.T) {
 	})
 }
 
-func BenchmarkOrderEnumerator_GroupBy(b *testing.B) {
-	b.Run("group by after ascending sort", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := range items {
-			items[i] = i % 100 // 100 different groups
-		}
-		source := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = source.OrderBy(comparer.ComparerInt).
-				GroupBy(func(x int) any { return x % 10 }).
-				ToSlice()
-		}
-	})
-
-	b.Run("group by after descending sort", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := range items {
-			items[i] = i % 100
-		}
-		source := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = source.OrderByDescending(comparer.ComparerInt).
-				GroupBy(func(x int) any { return x % 5 }).
-				ToSlice()
-		}
-	})
-
-	b.Run("group by after ThenBy sort", func(b *testing.B) {
-		type Person struct {
-			Age  int
-			Name string
-		}
-		people := make([]Person, 1000)
-		for i := range people {
-			people[i] = Person{
-				Age:  i % 10,
-				Name: fmt.Sprintf("Person%d", i%100),
-			}
-		}
-		source := FromSlice(people)
-
-		for i := 0; i < b.N; i++ {
-			_ = source.OrderBy(func(a, b Person) int { return a.Age - b.Age }).
-				ThenBy(func(a, b Person) int { return compareStrings(a.Name, b.Name) }).
-				GroupBy(func(p Person) any { return p.Age }).
-				ToSlice()
-		}
-	})
-}
-
 func TestGroupByEarlyTermination(t *testing.T) {
 	t.Run("early termination during enumeration", func(t *testing.T) {
 		t.Parallel()
@@ -808,32 +756,6 @@ func TestGroupByEarlyTermination(t *testing.T) {
 					t.Errorf("Item %d: expected %d, got %d", i, v, actualItems[i])
 				}
 			}
-		}
-	})
-}
-
-func BenchmarkGroupBy(b *testing.B) {
-	b.Run("small group by", func(b *testing.B) {
-		items := make([]int, 100)
-		for i := range items {
-			items[i] = i % 10
-		}
-		source := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = source.GroupBy(func(x int) any { return x % 10 }).ToSlice()
-		}
-	})
-
-	b.Run("large group by with few keys", func(b *testing.B) {
-		items := make([]int, 10000)
-		for i := range items {
-			items[i] = i % 5
-		}
-		source := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = source.GroupBy(func(x int) any { return x % 5 }).ToSlice()
 		}
 	})
 }

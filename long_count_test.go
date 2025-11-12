@@ -151,27 +151,3 @@ func TestLongCountEdgeCases(t *testing.T) {
 		}
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkLongCount(b *testing.B) {
-	b.Run("small enumeration", func(b *testing.B) {
-		items := []int{1, 2, 3, 4, 5}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = enumerator.LongCount()
-		}
-	})
-
-	b.Run("medium enumeration", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := 0; i < 1000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = enumerator.LongCount()
-		}
-	})
-}
