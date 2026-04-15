@@ -1,7 +1,6 @@
 package enumerable
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/ahatornn/enumerable/comparer"
@@ -425,109 +424,6 @@ func TestThenBy(t *testing.T) {
 
 		if result[2].Index != 1 || result[3].Index != 3 {
 			t.Errorf("Stability not preserved for Secondary=2: got indices %d, %d", result[2].Index, result[3].Index)
-		}
-	})
-}
-
-func BenchmarkThenBy(b *testing.B) {
-	b.Run("then by integers", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := 0; i < 1000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			ordered := enumerator.OrderBy(func(a, b int) int {
-				modA, modB := a%2, b%2
-				if modA < modB {
-					return -1
-				}
-				if modA > modB {
-					return 1
-				}
-				return 0
-			}).ThenBy(func(a, b int) int { return a - b })
-			_ = ordered.ToSlice()
-		}
-	})
-
-	b.Run("then by strings", func(b *testing.B) {
-		type Person struct {
-			FirstName string
-			LastName  string
-		}
-
-		people := make([]Person, 100)
-		for i := 0; i < 100; i++ {
-			people[i] = Person{
-				FirstName: fmt.Sprintf("First%d", i),
-				LastName:  fmt.Sprintf("Last%d", i%10),
-			}
-		}
-		enumerator := FromSlice(people)
-
-		for i := 0; i < b.N; i++ {
-			ordered := enumerator.OrderBy(func(a, b Person) int {
-				return compareStrings(a.LastName, b.LastName)
-			}).ThenBy(func(a, b Person) int {
-				return compareStrings(a.FirstName, b.FirstName)
-			})
-			_ = ordered.ToSlice()
-		}
-	})
-
-	b.Run("multiple then by chaining", func(b *testing.B) {
-		type Record struct {
-			Category string
-			Type     string
-			Name     string
-		}
-
-		records := make([]Record, 200)
-		for i := 0; i < 200; i++ {
-			records[i] = Record{
-				Category: fmt.Sprintf("Cat%d", i%5),
-				Type:     fmt.Sprintf("Type%d", i%10),
-				Name:     fmt.Sprintf("Name%d", i),
-			}
-		}
-		enumerator := FromSlice(records)
-
-		for i := 0; i < b.N; i++ {
-			ordered := enumerator.OrderBy(func(a, b Record) int {
-				return compareStrings(a.Category, b.Category)
-			}).ThenBy(func(a, b Record) int {
-				return compareStrings(a.Type, b.Type)
-			}).ThenBy(func(a, b Record) int {
-				return compareStrings(a.Name, b.Name)
-			})
-			_ = ordered.ToSlice()
-		}
-	})
-
-	b.Run("then by descending", func(b *testing.B) {
-		type Product struct {
-			Category string
-			Price    int
-		}
-
-		products := make([]Product, 100)
-		for i := 0; i < 100; i++ {
-			products[i] = Product{
-				Category: fmt.Sprintf("Cat%d", i%5),
-				Price:    i * 10,
-			}
-		}
-		enumerator := FromSlice(products)
-
-		for i := 0; i < b.N; i++ {
-			ordered := enumerator.OrderBy(func(a, b Product) int {
-				return compareStrings(a.Category, b.Category)
-			}).ThenByDescending(func(a, b Product) int {
-				return a.Price - b.Price
-			})
-			_ = ordered.ToSlice()
 		}
 	})
 }

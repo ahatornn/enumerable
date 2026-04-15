@@ -507,35 +507,3 @@ func TestGroupingBuilder_Result(t *testing.T) {
 		}
 	})
 }
-
-func BenchmarkGroupingBuilder(b *testing.B) {
-	b.Run("add many different keys", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			builder := NewGroupingBuilder[string, int](comparer.Default[string]())
-			for j := 0; j < 100; j++ {
-				builder.Add(string(rune('A'+j%26)), j)
-			}
-			_ = builder.Result()
-		}
-	})
-
-	b.Run("add many same keys", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			builder := NewGroupingBuilder[string, int](comparer.Default[string]())
-			for j := 0; j < 100; j++ {
-				builder.Add("same-key", j)
-			}
-			_ = builder.Result()
-		}
-	})
-
-	b.Run("mixed add operations", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			builder := NewGroupingBuilder[int, string](comparer.Default[int]())
-			for j := 0; j < 1000; j++ {
-				builder.Add(j%100, "value")
-			}
-			_ = builder.Result()
-		}
-	})
-}

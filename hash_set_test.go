@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/ahatornn/enumerable/comparer"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestHashSet_Add(t *testing.T) {
@@ -17,9 +16,15 @@ func TestHashSet_Add(t *testing.T) {
 		result2 := hs.add("banana")
 		result3 := hs.add("cherry")
 
-		assert.True(t, result1)
-		assert.True(t, result2)
-		assert.True(t, result3)
+		if !result1 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result2 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result3 {
+			t.Error("expected add to return true for new item")
+		}
 	})
 
 	t.Run("Add duplicate items", func(t *testing.T) {
@@ -30,8 +35,12 @@ func TestHashSet_Add(t *testing.T) {
 		result1 := hs.add("apple")
 		result2 := hs.add("apple")
 
-		assert.True(t, result1)
-		assert.False(t, result2)
+		if !result1 {
+			t.Error("expected add to return true for new item")
+		}
+		if result2 {
+			t.Error("expected add to return false for duplicate")
+		}
 	})
 
 	t.Run("Add items with hash collision", func(t *testing.T) {
@@ -51,12 +60,20 @@ func TestHashSet_Add(t *testing.T) {
 		result2 := hs.add("banana")
 		result3 := hs.add("cherry")
 
-		assert.True(t, result1)
-		assert.True(t, result2)
-		assert.True(t, result3)
+		if !result1 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result2 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result3 {
+			t.Error("expected add to return true for new item")
+		}
 
 		result4 := hs.add("apple")
-		assert.False(t, result4)
+		if result4 {
+			t.Error("expected add to return false for duplicate")
+		}
 	})
 
 	t.Run("Add struct", func(t *testing.T) {
@@ -93,16 +110,26 @@ func TestHashSet_Add(t *testing.T) {
 			Name: "banana",
 		})
 
-		assert.True(t, result1)
-		assert.True(t, result2)
-		assert.True(t, result3)
-		assert.False(t, result4)
+		if !result1 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result2 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result3 {
+			t.Error("expected add to return true for new item")
+		}
+		if result4 {
+			t.Error("expected add to return false for duplicate")
+		}
 
 		result5 := hs.add(Product{
 			Id:   2,
 			Name: "cherry",
 		})
-		assert.False(t, result5)
+		if result5 {
+			t.Error("expected add to return false for duplicate")
+		}
 	})
 
 	t.Run("Add integer items", func(t *testing.T) {
@@ -114,9 +141,15 @@ func TestHashSet_Add(t *testing.T) {
 		result2 := hs.add(2)
 		result3 := hs.add(1)
 
-		assert.True(t, result1)
-		assert.True(t, result2)
-		assert.False(t, result3)
+		if !result1 {
+			t.Error("expected add to return true for new item")
+		}
+		if !result2 {
+			t.Error("expected add to return true for new item")
+		}
+		if result3 {
+			t.Error("expected add to return false for duplicate")
+		}
 	})
 }
 
@@ -130,9 +163,15 @@ func TestHashSet_Contains(t *testing.T) {
 		hs.add("banana")
 		hs.add("cherry")
 
-		assert.True(t, hs.contains("apple"))
-		assert.True(t, hs.contains("banana"))
-		assert.True(t, hs.contains("cherry"))
+		if !hs.contains("apple") {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains("banana") {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains("cherry") {
+			t.Error("expected contains to return true for existing item")
+		}
 	})
 
 	t.Run("Contains non-existing items", func(t *testing.T) {
@@ -143,9 +182,15 @@ func TestHashSet_Contains(t *testing.T) {
 		hs.add("apple")
 		hs.add("banana")
 
-		assert.False(t, hs.contains("cherry"))
-		assert.False(t, hs.contains("date"))
-		assert.False(t, hs.contains(""))
+		if hs.contains("cherry") {
+			t.Error("expected contains to return false for non-existing item")
+		}
+		if hs.contains("date") {
+			t.Error("expected contains to return false for non-existing item")
+		}
+		if hs.contains("") {
+			t.Error("expected contains to return false for non-existing item")
+		}
 	})
 
 	t.Run("Contains with hash collision", func(t *testing.T) {
@@ -165,12 +210,22 @@ func TestHashSet_Contains(t *testing.T) {
 		hs.add("banana")
 		hs.add("cherry")
 
-		assert.True(t, hs.contains("apple"))
-		assert.True(t, hs.contains("banana"))
-		assert.True(t, hs.contains("cherry"))
+		if !hs.contains("apple") {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains("banana") {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains("cherry") {
+			t.Error("expected contains to return true for existing item")
+		}
 
-		assert.False(t, hs.contains("date"))
-		assert.False(t, hs.contains("grape"))
+		if hs.contains("date") {
+			t.Error("expected contains to return false for non-existing item")
+		}
+		if hs.contains("grape") {
+			t.Error("expected contains to return false for non-existing item")
+		}
 	})
 
 	t.Run("Contains empty hashset", func(t *testing.T) {
@@ -178,8 +233,12 @@ func TestHashSet_Contains(t *testing.T) {
 		eqComparer := comparer.Default[string]()
 		hs := newHashSet(eqComparer)
 
-		assert.False(t, hs.contains("anything"))
-		assert.False(t, hs.contains(""))
+		if hs.contains("anything") {
+			t.Error("expected contains to return false for empty hashset")
+		}
+		if hs.contains("") {
+			t.Error("expected contains to return false for empty hashset")
+		}
 	})
 
 	t.Run("Contains struct", func(t *testing.T) {
@@ -223,10 +282,20 @@ func TestHashSet_Contains(t *testing.T) {
 			Name: "grape",
 		}
 
-		assert.True(t, hs.contains(product1))
-		assert.True(t, hs.contains(product2))
-		assert.True(t, hs.contains(product3))
-		assert.False(t, hs.contains(product4))
-		assert.False(t, hs.contains(product5))
+		if !hs.contains(product1) {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains(product2) {
+			t.Error("expected contains to return true for existing item")
+		}
+		if !hs.contains(product3) {
+			t.Error("expected contains to return true for existing item")
+		}
+		if hs.contains(product4) {
+			t.Error("expected contains to return false for non-existing item")
+		}
+		if hs.contains(product5) {
+			t.Error("expected contains to return false for non-existing item")
+		}
 	})
 }

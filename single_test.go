@@ -743,57 +743,6 @@ func TestSingleTypedErrors(t *testing.T) {
 	})
 }
 
-func BenchmarkSingle(b *testing.B) {
-	b.Run("single element success", func(b *testing.B) {
-		items := []int{42}
-
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice(items)
-			result, err := enumerator.Single()
-			if err != nil || result != 42 {
-				b.Fatalf("Expected 42, got %d, err: %v", result, err)
-			}
-		}
-	})
-
-	b.Run("single element empty", func(b *testing.B) {
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice([]int{})
-			result, err := enumerator.Single()
-			if err == nil || result != 0 {
-				b.Fatalf("Expected error and 0, got %d, err: %v", result, err)
-			}
-		}
-	})
-
-	b.Run("single element multiple", func(b *testing.B) {
-		items := []int{1, 2, 3, 4, 5}
-
-		b.ResetTimer()
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice(items)
-			result, err := enumerator.Single()
-			if err == nil || result != 0 {
-				b.Fatalf("Expected error and 0, got %d, err: %v", result, err)
-			}
-		}
-	})
-
-	b.Run("nil enumerator", func(b *testing.B) {
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			var enumerator Enumerator[int] = nil
-			result, err := enumerator.Single()
-			if err == nil || result != 0 {
-				b.Fatalf("Expected error and 0, got %d, err: %v", result, err)
-			}
-		}
-	})
-}
-
 func TestOrderEnumeratorSingle(t *testing.T) {
 	t.Run("order enumerator single with one element", func(t *testing.T) {
 		t.Parallel()
@@ -1034,63 +983,6 @@ func TestOrderEnumeratorSingleOrDefault(t *testing.T) {
 
 		if resultMultiple != 0 {
 			t.Errorf("Expected zero default value, got %d", resultMultiple)
-		}
-	})
-}
-
-func BenchmarkSingleOrDefault(b *testing.B) {
-	b.Run("single element success", func(b *testing.B) {
-		items := []int{42}
-		defaultValue := -1
-
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice(items)
-			result := enumerator.SingleOrDefault(defaultValue)
-			if result != 42 {
-				b.Fatalf("Expected 42, got %d", result)
-			}
-		}
-	})
-
-	b.Run("empty slice with default", func(b *testing.B) {
-		defaultValue := -1
-
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice([]int{})
-			result := enumerator.SingleOrDefault(defaultValue)
-			if result != defaultValue {
-				b.Fatalf("Expected %d, got %d", defaultValue, result)
-			}
-		}
-	})
-
-	b.Run("multiple elements with default", func(b *testing.B) {
-		items := []int{1, 2, 3, 4, 5}
-		defaultValue := -1
-
-		b.ResetTimer()
-		b.ReportAllocs()
-		for i := 0; i < b.N; i++ {
-			enumerator := FromSlice(items)
-			result := enumerator.SingleOrDefault(defaultValue)
-			if result != defaultValue {
-				b.Fatalf("Expected %d, got %d", defaultValue, result)
-			}
-		}
-	})
-
-	b.Run("nil enumerator with default", func(b *testing.B) {
-		defaultValue := -1
-
-		b.ResetTimer()
-		for i := 0; i < b.N; i++ {
-			var enumerator Enumerator[int] = nil
-			result := enumerator.SingleOrDefault(defaultValue)
-			if result != defaultValue {
-				b.Fatalf("Expected %d, got %d", defaultValue, result)
-			}
 		}
 	})
 }

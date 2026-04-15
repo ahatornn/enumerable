@@ -789,37 +789,3 @@ func TestOrderEnumeratorTakeLast(t *testing.T) {
 		}
 	})
 }
-
-func BenchmarkTakeLast(b *testing.B) {
-	b.Run("small take last", func(b *testing.B) {
-		items := make([]int, 10000)
-		for i := 0; i < 10000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			taken := enumerator.TakeLast(10)
-			taken(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("large take last", func(b *testing.B) {
-		items := make([]int, 10000)
-		for i := 0; i < 10000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			taken := enumerator.TakeLast(1000)
-			taken(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}
