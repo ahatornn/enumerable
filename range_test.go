@@ -241,26 +241,3 @@ func TestRangeEdgeCases(t *testing.T) {
 		}
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkRange(b *testing.B) {
-	b.Run("small range", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			enumerator := Range(0, 10)
-			enumerator(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("large range", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			enumerator := Range(0, 1000)
-			enumerator(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}

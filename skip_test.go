@@ -694,37 +694,3 @@ func TestOrderEnumeratorSkip(t *testing.T) {
 		}
 	})
 }
-
-func BenchmarkSkip(b *testing.B) {
-	b.Run("small skip", func(b *testing.B) {
-		items := make([]int, 1000)
-		for i := 0; i < 1000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			skipped := enumerator.Skip(10)
-			skipped(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("large skip", func(b *testing.B) {
-		items := make([]int, 10000)
-		for i := 0; i < 10000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			skipped := enumerator.Skip(5000)
-			skipped(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}

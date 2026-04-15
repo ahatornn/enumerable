@@ -348,38 +348,3 @@ func TestFromChannelEdgeCases(t *testing.T) {
 		}
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkFromChannel(b *testing.B) {
-	b.Run("small channel", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			ch := make(chan int, 10)
-			for j := 0; j < 10; j++ {
-				ch <- j
-			}
-			close(ch)
-
-			enumerator := FromChannel(ch)
-			enumerator(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("large channel", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			ch := make(chan int, 1000)
-			for j := 0; j < 1000; j++ {
-				ch <- j
-			}
-			close(ch)
-
-			enumerator := FromChannel(ch)
-			enumerator(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}

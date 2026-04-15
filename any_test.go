@@ -252,35 +252,3 @@ func TestAnyEdgeCases(t *testing.T) {
 		}
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkAny(b *testing.B) {
-	b.Run("small enumeration", func(b *testing.B) {
-		items := []int{1, 2, 3, 4, 5}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = enumerator.Any()
-		}
-	})
-
-	b.Run("large enumeration", func(b *testing.B) {
-		items := make([]int, 10000)
-		for i := 0; i < 10000; i++ {
-			items[i] = i
-		}
-		enumerator := FromSlice(items)
-
-		for i := 0; i < b.N; i++ {
-			_ = enumerator.Any()
-		}
-	})
-
-	b.Run("empty enumeration", func(b *testing.B) {
-		enumerator := FromSlice([]int{})
-
-		for i := 0; i < b.N; i++ {
-			_ = enumerator.Any()
-		}
-	})
-}

@@ -680,39 +680,3 @@ func TestUnionBoolean(t *testing.T) {
 		}
 	})
 }
-
-// Benchmark для проверки производительности
-func BenchmarkUnion(b *testing.B) {
-	b.Run("small union", func(b *testing.B) {
-		first := FromSlice([]int{1, 2, 3, 4, 5})
-		second := FromSlice([]int{4, 5, 6, 7, 8})
-
-		for i := 0; i < b.N; i++ {
-			union := first.Union(second)
-			union(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-
-	b.Run("large union with overlap", func(b *testing.B) {
-		firstItems := make([]int, 5000)
-		secondItems := make([]int, 5000)
-		for i := 0; i < 5000; i++ {
-			firstItems[i] = i
-			secondItems[i] = i + 2500 // 50% overlap
-		}
-
-		first := FromSlice(firstItems)
-		second := FromSlice(secondItems)
-
-		for i := 0; i < b.N; i++ {
-			union := first.Union(second)
-			union(func(item int) bool {
-				_ = item
-				return true
-			})
-		}
-	})
-}
