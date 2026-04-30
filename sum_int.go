@@ -83,3 +83,87 @@ func sumIntInternal[T any](enumerator func(func(T) bool), selector func(T) int) 
 	})
 	return sum
 }
+
+// SumInt64 computes the sum of int64 integers obtained by applying a selector function
+// to each element in the enumeration.
+// This operation is useful for calculating totals, aggregates, or numeric summaries.
+//
+// The sum int64 operation will:
+//   - Apply the selector function to each element to extract an int64 value
+//   - Sum all the extracted int64 values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
+//
+// Parameters:
+//
+//	selector - a function that extracts an int64 value from each element
+//
+// Returns:
+//
+//	The sum of all int64 values extracted from the elements
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to sum all values. For large
+// enumerations, this may be expensive.
+//
+// ⚠️ Overflow warning: Integer overflow may occur with very large sums.
+// Consider using arbitrary precision arithmetic if needed.
+//
+// Notes:
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
+func (q Enumerator[T]) SumInt64(selector func(T) int64) int64 {
+	return sumInt64Internal(q, selector)
+}
+
+// SumInt64 computes the sum of int64 integers obtained by applying a selector function
+// to each element in the enumeration.
+// This operation is useful for calculating totals, aggregates, or numeric summaries.
+//
+// The sum int64 operation will:
+//   - Apply the selector function to each element to extract an int64 value
+//   - Sum all the extracted int64 values
+//   - Return the total sum
+//   - Handle nil enumerators gracefully
+//
+// Parameters:
+//
+//	selector - a function that extracts an int64 value from each element
+//
+// Returns:
+//
+//	The sum of all int64 values extracted from the elements
+//
+// ⚠️ Performance note: This is a terminal operation that must iterate
+// through the entire enumeration to sum all values. For large
+// enumerations, this may be expensive.
+//
+// ⚠️ Overflow warning: Integer overflow may occur with very large sums.
+// Consider using arbitrary precision arithmetic if needed.
+//
+// Notes:
+//   - If the enumerator is nil, returns 0
+//   - If the enumeration is empty, returns 0
+//   - Time complexity: O(n) where n is the number of elements
+//   - Space complexity: O(1) - constant space usage
+//   - The enumeration stops only when exhausted or if upstream operations stop it
+//   - Selector function should handle all possible input values safely
+func (q EnumeratorAny[T]) SumInt64(selector func(T) int64) int64 {
+	return sumInt64Internal(q, selector)
+}
+
+func sumInt64Internal[T any](enumerator func(func(T) bool), selector func(T) int64) int64 {
+	if enumerator == nil {
+		return 0
+	}
+	var sum int64
+	enumerator(func(item T) bool {
+		sum += selector(item)
+		return true
+	})
+	return sum
+}

@@ -224,34 +224,266 @@ func TestSumIntWithOperations(t *testing.T) {
 	})
 }
 
-func TestSumIntEdgeCases(t *testing.T) {
+func TestSumInt64(t *testing.T) {
+	t.Run("sum simple int64 values", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{1, 2, 3, 4, 5})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 15 {
+			t.Errorf("Expected sum 15, got %d", sum)
+		}
+	})
+
+	t.Run("sum simple int64 values for non-comparable", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSliceAny([][]int64{
+			{1},
+			{2},
+			{3},
+			{4},
+			{5},
+		})
+
+		sum := enumerator.SumInt64(func(slice []int64) int64 {
+			if len(slice) > 0 {
+				return slice[0]
+			}
+			return 0
+		})
+
+		if sum != 15 {
+			t.Errorf("Expected sum 15, got %d", sum)
+		}
+	})
+
+	t.Run("sum with transformation", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{1, 2, 3, 4})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n * n })
+
+		if sum != 30 {
+			t.Errorf("Expected sum 30, got %d", sum)
+		}
+	})
+
+	t.Run("sum single element", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{42})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 42 {
+			t.Errorf("Expected sum 42, got %d", sum)
+		}
+	})
+
+	t.Run("sum empty slice", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 0 {
+			t.Errorf("Expected sum 0 for empty slice, got %d", sum)
+		}
+	})
+
+	t.Run("sum nil enumerator", func(t *testing.T) {
+		t.Parallel()
+		var enumerator Enumerator[int64] = nil
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 0 {
+			t.Errorf("Expected sum 0 for nil enumerator, got %d", sum)
+		}
+	})
+
+	t.Run("sum with negative numbers", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{-1, -2, 3, 4})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 4 {
+			t.Errorf("Expected sum 4, got %d", sum)
+		}
+	})
+
+	t.Run("sum with zero values", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{0, 0, 5, 0})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 5 {
+			t.Errorf("Expected sum 5, got %d", sum)
+		}
+	})
+}
+
+func TestSumInt64Struct(t *testing.T) {
+	t.Run("sum struct field", func(t *testing.T) {
+		t.Parallel()
+		type Product struct {
+			Name  string
+			Price int64
+		}
+
+		products := []Product{
+			{Name: "Apple", Price: 10},
+			{Name: "Banana", Price: 5},
+			{Name: "Orange", Price: 8},
+		}
+
+		enumerator := FromSlice(products)
+		sum := enumerator.SumInt64(func(p Product) int64 { return p.Price })
+
+		if sum != 23 {
+			t.Errorf("Expected sum 23, got %d", sum)
+		}
+	})
+
+	t.Run("sum struct field with zero values", func(t *testing.T) {
+		t.Parallel()
+		type Product struct {
+			Name  string
+			Price int64
+		}
+
+		products := []Product{
+			{Name: "Free", Price: 0},
+			{Name: "Cheap", Price: 1},
+			{Name: "Free2", Price: 0},
+		}
+
+		enumerator := FromSlice(products)
+		sum := enumerator.SumInt64(func(p Product) int64 { return p.Price })
+
+		if sum != 1 {
+			t.Errorf("Expected sum 1, got %d", sum)
+		}
+	})
+}
+
+func TestSumInt64String(t *testing.T) {
+	t.Run("sum string lengths", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]string{"a", "bb", "ccc"})
+
+		sum := enumerator.SumInt64(func(s string) int64 { return int64(len(s)) })
+
+		if sum != 6 {
+			t.Errorf("Expected sum 6, got %d", sum)
+		}
+	})
+
+	t.Run("sum parsed integers from strings", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]string{"1", "2", "3", "4"})
+
+		sum := enumerator.SumInt64(func(s string) int64 {
+			switch s {
+			case "1":
+				return 1
+			case "2":
+				return 2
+			case "3":
+				return 3
+			case "4":
+				return 4
+			default:
+				return 0
+			}
+		})
+
+		if sum != 10 {
+			t.Errorf("Expected sum 10, got %d", sum)
+		}
+	})
+}
+
+func TestSumInt64WithOperations(t *testing.T) {
+	t.Run("sum after filter", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{1, 2, 3, 4, 5, 6})
+		filtered := enumerator.Where(func(n int64) bool { return n%2 == 0 })
+
+		sum := filtered.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 12 {
+			t.Errorf("Expected sum 12, got %d", sum)
+		}
+	})
+
+	t.Run("sum after take", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{1, 2, 3, 4, 5, 6, 7, 8})
+		taken := enumerator.Take(4)
+
+		sum := taken.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 10 {
+			t.Errorf("Expected sum 10, got %d", sum)
+		}
+	})
+
+	t.Run("sum after distinct", func(t *testing.T) {
+		t.Parallel()
+		enumerator := FromSlice([]int64{1, 2, 2, 3, 3, 4})
+		distinct := enumerator.Distinct()
+
+		sum := distinct.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 10 {
+			t.Errorf("Expected sum 10, got %d", sum)
+		}
+	})
+}
+
+func TestSumInt64EdgeCases(t *testing.T) {
 	t.Run("sum with large numbers", func(t *testing.T) {
 		t.Parallel()
-		enumerator := FromSlice([]int{1000000, 2000000, 3000000})
+		enumerator := FromSlice([]int64{1000000, 2000000, 3000000})
 
-		sum := enumerator.SumInt(func(n int) int { return n })
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
 
 		if sum != 6000000 {
 			t.Errorf("Expected sum 6000000, got %d", sum)
 		}
 	})
 
+	t.Run("sum with numbers exceeding int32", func(t *testing.T) {
+		t.Parallel()
+		large := int64(3000000000)
+		enumerator := FromSlice([]int64{large, large, large})
+
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
+
+		if sum != 9000000000 {
+			t.Errorf("Expected sum 9000000000, got %d", sum)
+		}
+	})
+
 	t.Run("sum with repeat", func(t *testing.T) {
 		t.Parallel()
-		enumerator := Repeat(5, 4)
+		enumerator := Repeat(int64(5), 4)
 
-		sum := enumerator.SumInt(func(n int) int { return n })
+		sum := enumerator.SumInt64(func(n int64) int64 { return n })
 
-		if sum != 20 { // 5 + 5 + 5 + 5 = 20
+		if sum != 20 {
 			t.Errorf("Expected sum 20, got %d", sum)
 		}
 	})
 
 	t.Run("sum with range", func(t *testing.T) {
 		t.Parallel()
-		enumerator := Range(1, 5) // 1, 2, 3, 4, 5
+		enumerator := Range(1, 5)
 
-		sum := enumerator.SumInt(func(n int) int { return n })
+		sum := enumerator.SumInt64(func(n int) int64 { return int64(n) })
 
 		if sum != 15 {
 			t.Errorf("Expected sum 15, got %d", sum)
