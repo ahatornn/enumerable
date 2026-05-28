@@ -22,3 +22,28 @@ var ComparerTime ComparerFunc[time.Time] = func(a, b time.Time) int {
 	}
 	return 0
 }
+
+// KeyComparerTime creates a ComparerFunc[T] that compares elements of type T based on a time.Time key extracted by a key selector function.
+// It uses the predefined ComparerTime to perform the comparison on the extracted time.Time values.
+// This is a convenience function for sorting or ordering operations where the sort key is a 'time.Time'.
+//
+// Type Parameters:
+//
+//	T - the type of the elements to be compared (can be any type)
+//
+// Parameters:
+//
+//	keySelector - a function that extracts a time.Time key (time.Time) from an element of type T
+//
+// Returns:
+//
+//	A new ComparerFunc[T] that compares elements by extracting their time.Time keys using keySelector
+//	and then applying ComparerTime to those keys.
+//
+// Notes:
+//   - This function is a specialized wrapper around the generic KeyComparer function.
+//   - The keySelector function should be deterministic and side-effect free for consistent results.
+//   - Thread safety depends on the implementation of the keySelector function.
+func KeyComparerTime[T any](keySelector func(T) time.Time) ComparerFunc[T] {
+	return KeyComparer(keySelector, ComparerTime)
+}

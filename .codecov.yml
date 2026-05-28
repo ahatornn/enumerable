@@ -1,0 +1,12 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80%
+        threshold: 1%
+  precision: 2
+  round: down
+  range: "70...100"
+
+ignore:
+  - "**/examples/**"
