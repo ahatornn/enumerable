@@ -19,7 +19,7 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 
 - ✅ **Functional pipeline operators**: Chainable methods like Where, Select, Take, Skip, First, Any, All, Count, and more - all evaluated lazily and fully type-safe.
 - ✅ **Lazy iterators** — data is processed on-demand.
-- ✅ **Generics (Go 1.18+)** — type safety without type casting.
+- ✅ **Generics** — type safety without type casting.
 - ✅ **Method chaining** — fluent, readable APIs.
 - ✅ **Efficiency** — minimal allocations, suitable for large datasets.
 - ✅ **Nil-safe operations** — methods safely handle nil sequences without panics.
@@ -29,6 +29,8 @@ It lets you filter, transform, and aggregate data in a clean, readable way — w
 ---
 
 ## 📦 Installation
+
+Requires Go 1.27.4 or later.
 
 Use go get to add the enumerable to your project:
 

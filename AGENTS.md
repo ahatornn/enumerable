@@ -12,7 +12,7 @@ go test -run TestName ./...            # run a single test
 gofmt -w .                             # fix formatting (CI fails on bad format)
 ```
 
-CI matrix: Go 1.24 and 1.25 on ubuntu-latest.
+CI matrix: Go 1.27 on ubuntu-latest.
 
 ## Architecture
 
