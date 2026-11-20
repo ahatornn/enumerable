@@ -12,10 +12,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-go@v5
         with:
           go-version: '1.27'
-      - run: go test ./... -coverprofile=coverage.txt
+          # Встроенный кэш setup-go отключён: его ключ не различает режим сборки
+          # (с coverage / без), из-за чего кэш с «обычными» артефактами делает
+          # каждый coverage-прогон холодным. Кэш управляется явно ниже.
+          cache: false
+
+      - name: Восстановление кэша сборки Go (артефакты coverage-сборки)
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-linux-1.27-coverage-${{ github.run_id }}
+          restore-keys: |
+            go-build-linux-1.27-coverage-
+
+      - name: Тесты + coverage
+        run: go test ./... -coverprofile=coverage.txt
+
+      - name: Сохранение кэша сборки Go (в том числе при падении тестов)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-linux-1.27-coverage-${{ github.run_id }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
