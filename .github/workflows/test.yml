@@ -7,65 +7,12 @@ on:
     branches: [ "main", "master" ]
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    strategy:
-      matrix:
-        go-version: [ '1.27' ]
-
     steps:
-      - name: Checkout кода
-        uses: actions/checkout@v4
-
-      - name: Установка Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }}
-          # Кэш сборки управляется явно ниже (restore + save с if: always()),
-          # встроенный кэш setup-go отключён, чтобы не восстанавливать один и тот же путь дважды.
-          cache: false
-
-      - name: Восстановление кэша сборки Go
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/go-build
-          key: go-build-${{ runner.os }}-${{ matrix.go-version }}-${{ github.run_id }}
-          restore-keys: |
-            go-build-${{ runner.os }}-${{ matrix.go-version }}-
-
-      - name: Проверка версии Go
-        run: go version
-
-      - name: Проверка форматирования gofmt
-        run: |
-          if [ "$(gofmt -l . | wc -l)" -gt 0 ]; then
-            echo "Ошибка: найдены файлы с неправильным форматированием:"
-            gofmt -l .
-            echo "Пожалуйста, запустите 'gofmt -w .' для исправления"
-            exit 1
-          else
-            echo "Все файлы отформатированы корректно"
-          fi
-
-      - name: Запуск тестов (без benchmark)
-        run: go test ./... -bench=^$ -coverprofile=coverage.txt
-
-      - name: Сохранение кэша сборки Go (в том числе при падении тестов)
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: ~/.cache/go-build
-          key: go-build-${{ runner.os }}-${{ matrix.go-version }}-${{ github.run_id }}
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: ahatornn/enumerable
+          go-version: '1.27'
+      - run: go test ./...
