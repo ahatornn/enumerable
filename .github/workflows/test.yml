@@ -5,6 +5,11 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -23,12 +28,20 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
+          # Кэш сборки управляется явно ниже (restore + save с if: always()),
+          # встроенный кэш setup-go отключён, чтобы не восстанавливать один и тот же путь дважды.
+          cache: false
+
+      - name: Восстановление кэша сборки Go
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-${{ runner.os }}-${{ matrix.go-version }}-${{ github.run_id }}
+          restore-keys: |
+            go-build-${{ runner.os }}-${{ matrix.go-version }}-
 
       - name: Проверка версии Go
         run: go version
-
-      - name: Загрузка зависимостей
-        run: go mod download
 
       - name: Проверка форматирования gofmt
         run: |
@@ -42,7 +55,14 @@ jobs:
           fi
 
       - name: Запуск тестов (без benchmark)
-        run: go test -v ./... -bench=^$ -coverprofile=coverage.txt -timeout=10m
+        run: go test ./... -bench=^$ -coverprofile=coverage.txt
+
+      - name: Сохранение кэша сборки Go (в том числе при падении тестов)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-${{ runner.os }}-${{ matrix.go-version }}-${{ github.run_id }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
