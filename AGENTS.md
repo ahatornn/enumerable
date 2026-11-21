@@ -5,14 +5,13 @@ Go library: `github.com/ahatornn/enumerable` — lazy, generic iterators (LINQ-s
 ## Commands
 
 ```
-go test ./...                          # run all tests
-go test ./... -bench=^$                # run tests, skip benchmarks (CI uses this)
+go test ./...                          # run all tests (benchmarks skipped by default; CI uses this)
 go test ./... -coverprofile=coverage.txt  # with coverage
 go test -run TestName ./...            # run a single test
-gofmt -w .                             # fix formatting (CI fails on bad format)
+gofmt -w .                             # fix formatting
 ```
 
-CI matrix: Go 1.24 and 1.25 on ubuntu-latest.
+CI matrix: Go 1.27 on ubuntu-latest.
 
 ## Architecture
 

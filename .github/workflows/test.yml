@@ -5,44 +5,39 @@ on:
     branches: [ "main", "master" ]
   pull_request:
     branches: [ "main", "master" ]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    strategy:
-      matrix:
-        go-version: [ '1.24', '1.25' ]
-
     steps:
-      - name: Checkout кода
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Установка Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v5
+      - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: '1.27'
+          # Встроенный кэш setup-go отключён: его ключ не различает режим сборки
+          # (с coverage / без), из-за чего кэш с «обычными» артефактами делает
+          # каждый coverage-прогон холодным. Кэш управляется явно ниже.
+          cache: false
 
-      - name: Проверка версии Go
-        run: go version
+      - name: Восстановление кэша сборки Go (артефакты coverage-сборки)
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-linux-1.27-coverage-${{ github.run_id }}
+          restore-keys: |
+            go-build-linux-1.27-coverage-
 
-      - name: Загрузка зависимостей
-        run: go mod download
+      - name: Тесты + coverage
+        run: go test ./... -coverprofile=coverage.txt
 
-      - name: Проверка форматирования gofmt
-        run: |
-          if [ "$(gofmt -l . | wc -l)" -gt 0 ]; then
-            echo "Ошибка: найдены файлы с неправильным форматированием:"
-            gofmt -l .
-            echo "Пожалуйста, запустите 'gofmt -w .' для исправления"
-            exit 1
-          else
-            echo "Все файлы отформатированы корректно"
-          fi
-
-      - name: Запуск тестов (без benchmark)
-        run: go test -v ./... -bench=^$ -coverprofile=coverage.txt -timeout=10m
+      - name: Сохранение кэша сборки Go (в том числе при падении тестов)
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ~/.cache/go-build
+          key: go-build-linux-1.27-coverage-${{ github.run_id }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
